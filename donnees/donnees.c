@@ -49,6 +49,7 @@ int donneesControleur(controleurT * control)
 	//(*control).mode = 1;	// -1 : Wait, 1 : Poll
 	(*control).sortie = 0;	// Sortie de SiCP si > 0
 	(*control).appui = 0;	// Appuie sur la souris
+	(*control).modeClavier = 1;	//	1 : commande de la chaîne, 2 : Graphisme
 
 		fprintf(stderr, " Initialisation du système\n");
 	donneesSysteme(&(*control).systeme, &(*control).options);
@@ -62,20 +63,20 @@ int donneesControleur(controleurT * control)
 		fprintf(stderr, " Création du graphe\n");
 	grapheCreation(&(*control).graphe, (*control).options.nombre);
 
-		fprintf(stderr, " Initialisation de la projection\n");
-		fprintf(stderr, "projectionInitialiseCouleurs\n");
+		//fprintf(stderr, " Initialisation de la projection\n");
+		//fprintf(stderr, "projectionInitialiseCouleurs\n");
 	projectionInitialiseCouleurs(&(*control).projection, 222, 111, 222, 255);// r, v, b, fond
-		fprintf(stderr, "projectionInitialiseLongueurs\n");
-	projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);// hauteur, largeur, perspective
-		fprintf(stderr, "projectionInitialisePointDeVue\n");
-	projectionInitialisePointDeVue(&(*control).projection, 3*LARGEUR, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
+		//fprintf(stderr, "projectionInitialiseLongueurs\n");
+	projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);// hauteur, largeur, facteur de distance
+		//fprintf(stderr, "projectionInitialisePointDeVue\n");
+	projectionInitialisePointDeVue(&(*control).projection, PI/2 - 0.27, PI/2 + 0.21);//r=facteur de distance, psi, phi
 	//projectionInitialisePointDeVue(&(*control).projection, 3*LARGEUR, 0.0, 0.0);//r, psi, phi
 
 		fprintf(stderr, " Initialisation SDL\n");
 	interfaceInitialisationSDL();
-		fprintf(stderr, " Création de l'interface SDL\n");
+		//fprintf(stderr, " Création de l'interface SDL\n");
 	interfaceInitialisation(&(*control).interface, (*control).options.fond);
-		fprintf(stderr, " Création de l'interface graphique\n");
+		//fprintf(stderr, " Création du rendu\n");
 	graphiqueInitialisation(&(*control).graphique, &(*control).interface, TAILLE, (*control).options.fond);
 
 	return 0;
@@ -96,7 +97,7 @@ int donneesOptions(optionsT * options)
 	(*options).dt=0.0003;		// discrétisation du temps
 							// 25 images par seconde, SDL_Delay(30);
 							// dt*duree = 0.004
-	(*options).pause=15;		// temps de pause SDL en ms
+	(*options).pause=5;		// temps de pause SDL en ms
 
 	(*options).soliton=3;
 							

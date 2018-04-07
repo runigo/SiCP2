@@ -46,17 +46,19 @@ typedef struct ControleurT controleurT;
 
 		systemeT systeme;		// Modélisation physique de la chaîne
 
-		projectionT projection;	// Paramètre de la projection
+		projectionT projection;		// Paramètre de la projection
 
-		grapheT graphe;		// Graphe de la chaîne
+		grapheT graphe;			// Graphe de la chaîne
 
-		interfaceT interface;		//	Interface SDL
+		interfaceT interface;		//	Fenêtre SDL
 
-		graphiqueT graphique;		//	Interface graphique
+		graphiqueT graphique;		//	Rendu SDL et graphisme
 
-		int sortie; // sortie de SiCP si > 0
+		int sortie;		// sortie de SiCP si > 0
 
-		int appui;	//	1 si le bouton de la souris est appuyé, 0 sinon.
+		int appui;		// 1 si le bouton de la souris est appuyé, 0 sinon.
+
+		int modeClavier;	// 1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
 
 		};
 

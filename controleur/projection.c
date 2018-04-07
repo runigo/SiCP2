@@ -53,9 +53,9 @@ int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int lar
 	(*projection).perspective = perspective;
 	return 0;
 	}
-int projectionInitialisePointDeVue(projectionT * projection, float r, float psi, float phi)
+int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi)
 	{		// Initialise la position de l'observateur et calcul les vecteurs perpendiculaires
-	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
+	vecteurInitialisePolaire(&(*projection).pointDeVue, (*projection).perspective, psi, phi);
 	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).perspective);
 	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).perspective);
 	return 0;
@@ -214,14 +214,6 @@ int projectionInitialiseSupport(projectionT * projection, int nombre)
 		(*projection).support[i].x += -0.6*(*projection).hauteur;
 		}
 
-/*
-	for(i=0;i<14;i++)	//	Initialisation de supInit
-		{
-		(*projection).supInit[i].x[0] = (*projection).support[i].x[0];
-		(*projection).supInit[i].x[1] = (*projection).support[i].x[1];
-		(*projection).supInit[i].x[2] = (*projection).support[i].x[2];
-		}
-*/
 	return 0;
 	}
 
@@ -231,13 +223,15 @@ int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe)
 
 	vecteurT v;
 	int i;
+	int centrageX = (*projection).largeur*0.711;
+	int centrageY = (int)((*projection).hauteur*1.3);//*0.85
 
 	for(i=0;i<14;i++)
 		{
 			// Coordonnees 2D des points du support
 		vecteurDifferenceCartesien(&(*projection).support[i], &(*projection).pointDeVue, &v);
-		(*graphe).supporX[i] = LARGEUR/2 + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
-		(*graphe).supporY[i] = HAUTEUR*0.45 + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
+		(*graphe).supporX[i] = centrageX + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
+		(*graphe).supporY[i] = centrageY + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
 		}
 	if((*projection).pointDeVue.psi<0)
 		{
@@ -283,8 +277,10 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 	pointsT *iterGraph=(*graphe).premier;
 
 	vecteurT v;
-	int centrageX = LARGEUR/2;
-	int centrageY = (int)(HAUTEUR*0.45);
+	//int centrageX = LARGEUR/2;
+	//int centrageY = (int)(HAUTEUR*0.45);
+	int centrageX = (*projection).largeur*0.711;
+	int centrageY = (int)((*projection).hauteur*1.3);//0.85
 
 	do
 		{
@@ -298,8 +294,8 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 
 			// Coordonnees 2D de l'axe
 		vecteurDifferenceCartesien(&(iterGraph->axe), &(*projection).pointDeVue, &v);
-		iterGraph->xa = LARGEUR/2 + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
-		iterGraph->ya = HAUTEUR*0.45 + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
+		iterGraph->xa = centrageX + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
+		iterGraph->ya = centrageY + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
 
 
 
@@ -342,8 +338,5 @@ int projectionSystemChaine3D(systemeT * systeme, projectionT * projection, graph
 	while(iterGraph!=(*graphe).premier);
 	return 0;
 	}
-/*
-void projectionSystemJonction(systemeT * systeme, grapheT * graphe);
-void projectionSystemPendule(systemeT * systeme, grapheT * graphe);
-void projectionInitialiseAxeFixe(grapheT * graphe, int nombre)
-*/
+
+//////////////////////////////////////////////////////////////////////////////////////

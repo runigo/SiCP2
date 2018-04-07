@@ -140,7 +140,9 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y)
 	{
 	graphiqueChangeCouleur(graphique, (*graphique).gris);
-	SDL_RenderDrawLine((*graphique).rendu, X, Y, x, y);
+	SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
+	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
 	graphiqueChangeCouleur(graphique, (*graphique).orange);
 	SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
 	graphiqueChangeCouleur(graphique, (*graphique).vert);
@@ -378,13 +380,18 @@ void graphiquePendule(graphiqueT * graphique, grapheT * graphe)
 	//SDL_Rect coordonnee = {0, 0, (*graphique).taille, (*graphique).taille};
 	SDL_Rect coordonnee = {0, 0, 8, 8};
 
+	// Axe des pendules
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).supporX[12], (*graphe).supporY[12], (*graphe).supporX[13], (*graphe).supporY[13]);
+
+	// Pendules
 	if((*graphe).arriere != 0) // Vue de derrière, la chaîne est dessinée vers les précédents.
 		{iter = iter->precedent;}
 	else {(*graphe).arriere = 0;}
 
 	do
 		{
-		//	Dessin des segments
+		//	Dessin des tiges
 		fixAbs=iter->xa;
 		fixOrd=iter->ya;
 		graphAbs=iter->xm;

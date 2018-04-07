@@ -60,7 +60,7 @@ typedef struct ProjectionT projectionT;
 
 int projectionInitialiseCouleurs(projectionT * projection, int r, int v, int b, int fond);
 int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective);
-int projectionInitialisePointDeVue(projectionT * projection, float r, float psi, float phi);
+int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi);
 
 int projectionSystemChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe);
 

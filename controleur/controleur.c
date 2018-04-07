@@ -38,11 +38,13 @@ int controleurConstructionGraphique(controleurT * controleur);
 int controleurTraiteEvenement(controleurT * controleur);
 
 int controleurActionClavier(controleurT * controleur);
+int controleurClavier2(controleurT * controleur);
 int controleurClavierMaj(controleurT * controleur);
 int controleurClavierCtrl(controleurT * controleur);
 
 int controleurClavier(controleurT * controleur);
 int controleurSouris(controleurT * controleur);
+int controleurDefile(controleurT * controleur);
 void controleurBoutonSouris(controleurT * controleur, int appui);
 
 void controleurChangeMode(controleurT * controleur);
@@ -87,6 +89,8 @@ int controleurSimulationGraphique(controleurT * controleur)
 			//fprintf(stderr, "Prise en compte des actions clavier\n");
 		controleurActionClavier(controleur);
 
+		//projectionChangePsi(&(*controleur).projection, -0.003);
+
 		if((*controleur).interface.evenement.type == SDL_QUIT) (*controleur).sortie = 1;
 		}
 	while((*controleur).sortie == 0);
@@ -96,8 +100,18 @@ int controleurSimulationGraphique(controleurT * controleur)
 
 int controleurProjection(controleurT * controleur)
 	{
+	int largeur;
+	int hauteur;
+		//fprintf(stderr, "projectionInitialiseLongueurs\n");
+	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);
+
+		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
+	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
+
+	projectionInitialiseLongueurs(&(*controleur).projection, hauteur/3, largeur*0.7, 0.9);
+
 	projectionSystemChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
-	//projectionSystemPendule(&(*controleur).systeme, &(*controleur).graphe);
+
 	return (*controleur).sortie;
 	}
 
@@ -170,6 +184,8 @@ int controleurTraiteEvenement(controleurT * controleur)
 		{
 		//case SDL_QUIT:
 			//sortie = 1;break;
+		case SDL_MOUSEWHEEL:
+			sortie = controleurDefile(controleur);break;
 		case SDL_MOUSEMOTION:
 			sortie = controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
@@ -191,8 +207,15 @@ int controleurTraiteEvenement(controleurT * controleur)
 					sortie = controleurClavierCtrl(controleur);break;
 					}
 				else
-					{
-					sortie = controleurClavier(controleur);break;
+					{	//	1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
+					if((*controleur).modeClavier == 2)
+						{
+						sortie = controleurClavier2(controleur);break;
+						}
+					else
+						{
+						sortie = controleurClavier(controleur);break;
+						}
 					}
 				}
 			}
@@ -298,10 +321,6 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_F12:
 			controleurChangeVitesse(controleur, 3.1);break;
 
-	// Support
-		case SDLK_F8:
-			grapheChangeSupport(&(*controleur).graphe);break;
-
 	// Conditions aux limites
 		case SDLK_y:
 			changeDephasage(&(*controleur).systeme, 2*PI);break;
@@ -317,7 +336,7 @@ int controleurClavier(controleurT * controleur)
 			changeConditionsLimites(&(*controleur).systeme, 2); // fixes
 			break;
 		case SDLK_b:
-			fprintf(stderr, "Commande désactivée dans SiCP 1.4.1");
+			fprintf(stderr, "Commande désactivée depuis SiCP 1.4.1");
 			//changeConditionsLimites(&(*controleur).systeme, 3); // libre fixe
 			break;
 		case SDLK_n:
@@ -404,6 +423,112 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_F7:
 			projectionAffichePointDeVue(&(*controleur).projection);
 			break;
+	// Support
+		case SDLK_F8:
+			grapheChangeSupport(&(*controleur).graphe);break;
+
+
+		default:
+			;
+		}
+	return (*controleur).sortie;
+	}
+
+int controleurClavier2(controleurT * controleur)
+	{
+	switch ((*controleur).interface.evenement.key.keysym.sym)
+		{
+	// Sortie
+		case SDLK_ESCAPE:
+			(*controleur).sortie = 1;break;
+	// Mode : attente d'un evenement / pas d'attente
+		case SDLK_RETURN:
+			controleurChangeMode(controleur);break;
+		case SDLK_BACKSPACE:
+			controleurChangeMode(controleur);break;
+
+	// Déplacement du point de vue
+		case SDLK_a:
+			projectionChangePsi(&(*controleur).projection, -0.03);break;
+		case SDLK_z:
+			projectionChangePsi(&(*controleur).projection, 0.03);break;
+		case SDLK_e:
+			projectionChangePhi(&(*controleur).projection, 0.03);break;
+		case SDLK_r:
+			projectionChangePhi(&(*controleur).projection, -0.03);break;
+
+	/*	case SDLK_t:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 4);break;
+		case SDLK_y:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 5);break;
+		case SDLK_u:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 6);break;
+		case SDLK_i:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 7);break;
+		case SDLK_o:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 8);break;
+		case SDLK_p:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 9);break;
+		case SDLK_q:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 10);break;
+		case SDLK_s:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 11);break;
+		case SDLK_d:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 12);break;
+		case SDLK_f:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 13);break;
+		case SDLK_g:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 14);break;
+		case SDLK_h:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 15);break;
+
+
+		// Ecriture des fichiers
+		case SDLK_w:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 10);break;
+		case SDLK_x:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 11);break;
+		case SDLK_c:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 12);break;
+		case SDLK_v:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 13);break;
+		case SDLK_b:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 14);break;
+		case SDLK_n:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, 15);break;
+		case SDLK_d:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, );break;
+		case SDLK_f:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, );break;
+		case SDLK_g:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, );break;
+		case SDLK_:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, );break;
+		case SDLK_:
+			fprintf(stderr, "Sauvegarde du système\n");
+			fichierEcriture(&(*controleur).systeme, );break;*/
 
 		default:
 			;
@@ -559,22 +684,29 @@ int controleurClavierCtrl(controleurT * controleur)
 			controleurChangeMode(controleur);break;
 		case SDLK_BACKSPACE:
 			controleurChangeMode(controleur);break;
-
-	// Enregistrement
-		// Sauvegarde du système fichierEcriture sans effet
-	/*	case SDLK_a:
-			fprintf(stderr, "Sauvegarde du système\n");
-			fichierEcriture(&(*controleur).systeme, 0);break;
+/*
+	// Déplacement du point de vue
+		case SDLK_a:
+			projectionChangePsi(&(*controleur).projection, -0.03);break;
 		case SDLK_z:
-			fprintf(stderr, "Sauvegarde du système\n");
-			fichierEcriture(&(*controleur).systeme, 1);break;
+			projectionChangePsi(&(*controleur).projection, 0.03);break;
 		case SDLK_e:
-			fprintf(stderr, "Sauvegarde du système\n");
-			fichierEcriture(&(*controleur).systeme, 2);break;
+			projectionChangePhi(&(*controleur).projection, 0.03);break;
 		case SDLK_r:
-			fprintf(stderr, "Sauvegarde du système\n");
-			fichierEcriture(&(*controleur).systeme, 3);break;
-		case SDLK_t:
+			projectionChangePhi(&(*controleur).projection, -0.03);break;
+*/
+	// Choix du modeClavier
+
+		case SDLK_F1: // Commande de la chaîne
+			(*controleur).modeClavier = 1;break;
+		case SDLK_F2: // Graphisme
+			(*controleur).modeClavier = 2;break;
+		case SDLK_F3: // Sauvegarde
+			(*controleur).modeClavier = 3;break;
+		case SDLK_F4: // 
+			(*controleur).modeClavier = 4;break;
+
+	/*	case SDLK_t:
 			fprintf(stderr, "Sauvegarde du système\n");
 			fichierEcriture(&(*controleur).systeme, 4);break;
 		case SDLK_y:
@@ -658,20 +790,41 @@ int controleurSouris(controleurT * controleur)
 	float x, y;
 	if((*controleur).appui==1)
 		{
-		//fprintf(stderr, "controleurSouris xrel = %d\n", (*controleur).interface.evenement.motion.xrel);
+			//fprintf(stderr, "controleurSouris xrel = %d\n", (*controleur).interface.evenement.motion.xrel);
 		x=-0.0031*(float)((*controleur).interface.evenement.motion.xrel);
 		y=0.0031*(float)((*controleur).interface.evenement.motion.yrel);
-		//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-		//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
+			//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
+			//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
 		projectionChangePsi(&(*controleur).projection, x);
 		projectionChangePhi(&(*controleur).projection, y);
 		}
 	return (*controleur).sortie;
 	}
 
+int controleurDefile(controleurT * controleur)
+	{
+	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
+		{
+		(*controleur).projection.pointDeVue.r += 0.1;
+		}
+	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
+		{
+		(*controleur).projection.pointDeVue.r -= 0.1;
+		}
+
+	if((*controleur).projection.pointDeVue.r < 0.1) (*controleur).projection.pointDeVue.r = 0.1;
+	if((*controleur).projection.pointDeVue.r > 1.9) (*controleur).projection.pointDeVue.r = 1.9;
+
+	//if(event.wheel.x > 0) // scroll right{}
+	//else if(event.wheel.x < 0) // scroll left{}
+
+	return (*controleur).sortie;
+	}
+
 void controleurBoutonSouris(controleurT * controleur, int appui)
 	{
 	(*controleur).appui=appui;
+
 	return;
 	}
 //////////////////////////////////////////////////////////////////////////////////////

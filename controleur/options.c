@@ -39,6 +39,8 @@ void optionsNombre(optionsT * options, char *opt);
 void optionsPause(optionsT * options, char *opt);
 void optionsSoliton(optionsT * options, char *opt);
 void optionsMode(optionsT * options, char *opt);
+void optionsModeDemo(optionsT * options, char *opt);
+void optionsModeClavier(optionsT * options, char *opt);
 void optionsDuree(optionsT * options, char *opt);
 void optionsAide();
 
@@ -54,6 +56,10 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 			optionsFond(options, opt[i+1]);  // Couleur du fond 
 		if(strcmp(opt[i], "mode")==0 && opt[i+1]!=NULL)
 			optionsMode(options, opt[i+1]);  // Mode -1 : Wait, 1 : Poll
+		if(strcmp(opt[i], "modeDemo")==0 && opt[i+1]!=NULL)
+			optionsModeDemo(options, opt[i+1]);  // 0 : SiCP, 1 Graphique démo, 2 Commande démo
+		if(strcmp(opt[i], "modeClavier")==0 && opt[i+1]!=NULL)
+			optionsModeClavier(options, opt[i+1]);  // 1 : SiCP, 1 Graphique démo, 2 Commande démo
 		if(strcmp(opt[i], "pause")==0 && opt[i+1]!=NULL)
 			optionsPause(options, opt[i+1]);	// temps de pause en ms
 		if(strcmp(opt[i], "duree")==0 && opt[i+1]!=NULL)
@@ -76,12 +82,6 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 			optionsAide();	// Affiche l'aide.
 		if(strcmp(opt[i], "help")==0)
 			optionsAide();	// Affiche l'aide.
-
-/*
-		if(strcmp(opt[i], "th")==0 && opt[i+1]!=NULL)
-			optionsThread(option, opt[i+1]);  // Deux threads
-*/
-
   		i++;
   		}
 		while(i<nb);
@@ -227,6 +227,40 @@ void optionsMode(optionsT * options, char *opt)
 	return;
 	}
 
+		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+void optionsModeDemo(optionsT * options, char *opt)
+	{
+	int modeDemo = atoi(opt);
+	if(modeDemo==0 || modeDemo==1 || modeDemo==2)
+		{
+		(*options).modeDemo = modeDemo;
+		printf("Option modeDemo valide, modeDemo = %d\n", (*options).modeDemo);
+		}
+	else
+		{
+		printf("Option modeDemo non valide, modeDemo = %d\n", (*options).modeDemo);
+		printf("	option modeDemo : modeDemo = 0, 1 ou 2\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+		}
+	return;
+	}
+
+		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+void optionsModeClavier(optionsT * options, char *opt)
+	{
+	int modeClavier = atoi(opt);
+	if(modeClavier==0 || modeClavier==1 || modeClavier==2)
+		{
+		(*options).modeClavier = modeClavier;
+		printf("Option modeClavier valide, modeClavier = %d\n", (*options).modeClavier);
+		}
+	else
+		{
+		printf("Option modeClavier non valide, modeClavier = %d\n", (*options).modeClavier);
+		printf("	option modeClavier : modeClavier = 0, 1 ou 2\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+		}
+	return;
+	}
+
 void optionsDuree(optionsT * options, char *opt)
 	{    	// Nombre d'évolution du système entre les affichages
 	int duree = atoi(opt);
@@ -243,23 +277,6 @@ void optionsDuree(optionsT * options, char *opt)
 	return;
 	}
 
-    	// Un processus ou deux threads
-void optionsThread(optionsT * options, char *opt)
-	{
-	int thread = atoi(opt);
-	if(thread==1 || thread==0)
-		{
-		(*options).thread = thread;
-		printf("Option thread valide, thread = %d\n", (*options).thread);
-		}
-	else
-		{
-		printf("Option thread non valide, thread = %d\n", (*options).thread);
-		printf("	option thread : thread = 0 ou 1\n");
-		}
-	return;
-	}
-
 void optionsAide(void)
 	{
 	printf("\nAIDE DE SiCP\n");
@@ -271,6 +288,8 @@ void optionsAide(void)
 	printf("support	1 ou 0 		: 	avec ou sans dessin du support\n");
 	printf("pause	5 < pause < 555	:	pause entre les affichages en ms\n");
 	printf("mode	mode = -1 ou 1	:	Avec ou sans attente (entrée)\n");  // Mode -1 : Wait, 1 : Poll
+	printf("modeDemo  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+	printf("modeClavier  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 	printf("duree	1 < duree < %d	:	nombre d'évolution du système entre les affichages (F9, F10, F11, F12)\n", DUREE_MAX);
 	printf("dt	%f < dt < %6.3f	discrétisation du temps\n", DT_MIN, DT_MAX);
 	printf("nombre	%d < nombre < %d	Nombre de pendule \n", NOMBRE_MIN, NOMBRE_MAX);
@@ -318,6 +337,11 @@ void optionsAide(void)
 
 	printf("Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci\n");
 	printf("permettent la rotation du point de vue de l'observateur.\n\n");
+
+	printf("	Ctrl F1 : Classique SiCP\n");
+	printf("	Ctrl F2 : Paramètres Graphiques\n");
+	printf("	Ctrl F3 : Paramètres physiques\n");
+	printf("	Ctrl F4 : Paramètres des moteurs\n");
 
 	fprintf(stderr, "\nSortie de SiGP\n");
 	exit(EXIT_FAILURE);

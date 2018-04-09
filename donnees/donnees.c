@@ -86,6 +86,9 @@ int donneesOptions(optionsT * options)
 	{
 		// Préréglage des valeurs optionnelles
 
+	(*options).modeDemo = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+	(*options).modeClavier = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+
 	(*options).mode = 1;		// avec ou sans attente
 	(*options).duree = 91;		// 100 : temps réèl.
 	(*options).fond=240;		// couleur du fond de l'affichage

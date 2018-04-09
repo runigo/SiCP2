@@ -48,10 +48,13 @@ typedef struct OptionsT optionsT;
 		float dt;		// discrétisation du temps
 
 		int nombre;		// nombre de pendule
-		int equation;	// 1 : pendule, 2 : linéarisation, 3 : corde, 4 : dioptre
+		int equation;		// 1 : pendule, 2 : linéarisation, 3 : corde, 4 : dioptre
 
-		int soliton;	// Nombre de soliton initiale
-		int thread;		// Un processus ou deux thread
+		int soliton;		// Nombre de soliton initiale
+
+		int modeDemo;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+		int modeClavier;	// F1 : Classique SiCP F2 : Paramètres Graphiques Ctrl 
+					// F3 : Paramètres physiques Ctrl F4 : Paramètres des moteurs
 
 		};
 

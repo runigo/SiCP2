@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.0.1 simulateur de chaîne de pendules
+SiCP 2.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -30,6 +30,8 @@ termes.
 */
 
 #include "controleur.h"
+
+int controleurEvolution(controleurT * controleur);
 
 int controleurProjection(controleurT * controleur);
 int controleurEvolutionSysteme(controleurT * controleur);
@@ -62,6 +64,9 @@ int controleurDestruction(controleurT * control)
 	fprintf(stderr, "Suppression du graphe\n");
 	grapheSuppression(&(*control).graphe);
 
+	fprintf(stderr, "Suppression de l'horloge\n");
+	tempsSuppression(&(*control).temps);
+
 	fprintf(stderr, "Suppression du rendu\n");
 	graphiqueDestruction(&(*control).graphique);
 
@@ -76,40 +81,56 @@ int controleurDestruction(controleurT * control)
 
 int controleurSimulationGraphique(controleurT * controleur)
 	{
-
-	//fprintf(stderr, "Entrée dans la boucle SDL\n");
 	do	{
-			//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
-		controleurProjection(controleur);
-
-			//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
-		controleurEvolutionSysteme(controleur);
-
-			//fprintf(stderr, "Mise à jour de la fenêtre graphique et pause\n");
-		controleurConstructionGraphique(controleur);
-
 			//fprintf(stderr, "Prise en compte des actions clavier\n");
 		controleurActionClavier(controleur);
-
-		//projectionChangePsi(&(*controleur).projection, -0.003);
-
-		if((*controleur).interface.evenement.type == SDL_QUIT) (*controleur).sortie = 1;
 		}
 	while((*controleur).sortie == 0);
 
 	return 0;
 	}
 
+int controleurActionClavier(controleurT * controleur)
+	{
+	if (SDL_WaitEvent(&(*controleur).interface.evenement))
+		{
+		controleurTraiteEvenement(controleur);
+		}
+	return (*controleur).sortie;
+	}
+
+int controleurEvolution(controleurT * controleur)
+	{
+	//printf("Entrée dans controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
+
+		//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
+		controleurProjection(controleur);
+
+		//fprintf(stderr, "Evolution temporelle du systeme\n");
+	if((*controleur).options.modePause > 0)
+		controleurEvolutionSysteme(controleur);
+
+		//fprintf(stderr, "Mise à jour de la fenêtre graphique\n");
+		controleurConstructionGraphique(controleur);
+
+		//projectionChangePsi(&(*controleur).projection, -0.003);
+
+
+	//printf("Sortie de controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
+
+	return (*controleur).sortie;
+	}
+
 int controleurProjection(controleurT * controleur)
 	{
 	int largeur;
 	int hauteur;
-		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);
 
 		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
+		//fprintf(stderr, "projectionInitialiseLongueurs\n");
+	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);
 	projectionInitialiseLongueurs(&(*controleur).projection, hauteur/3, largeur*0.7, 0.9);
 
 	projectionSystemChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
@@ -144,38 +165,6 @@ int controleurConstructionGraphique(controleurT * controleur)
 		//fprintf(stderr, "Mise à jour de l'affichage\n");
 	graphiqueMiseAJour(&(*controleur).graphique);
 
-		// Pause
-	SDL_Delay((*controleur).options.pause);
-
-	return (*controleur).sortie;
-	}
-
-int controleurActionClavier(controleurT * controleur)
-	{
-	int sortie = 0;
-		//fprintf(stderr, "Traitement des évenements, mode %d\n", (*controleur).mode);
-	if((*controleur).options.mode<0)
-		{
-				// Attente d'un évenement SDL
-		if(SDL_WaitEvent(&(*controleur).interface.evenement))
-			{
-			sortie += controleurTraiteEvenement(controleur);
-			}
-		}
-	else
-		{
-			// Sans attente
-		if( SDL_PollEvent(&(*controleur).interface.evenement) )
-			{
-			sortie += controleurTraiteEvenement(controleur);
-			}
-		}
-
-
-	if((*controleur).interface.evenement.type == SDL_QUIT) sortie += 1;
-
-	(*controleur).sortie += sortie;
-
 	return (*controleur).sortie;
 	}
 
@@ -184,16 +173,18 @@ int controleurTraiteEvenement(controleurT * controleur)
 	int sortie = 0;
 	switch((*controleur).interface.evenement.type)
 		{
-		//case SDL_QUIT:
-			//sortie = 1;break;
-		case SDL_MOUSEWHEEL:
-			sortie = controleurDefile(controleur);break;
+		case SDL_QUIT:
+			(*controleur).sortie = 1;break;
+		//case SDL_MOUSEWHEEL:
+			//sortie = controleurDefile(controleur);break;
 		case SDL_MOUSEMOTION:
 			sortie = controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
 			controleurBoutonSouris(controleur, 1);break;
 		case SDL_MOUSEBUTTONUP:
 			controleurBoutonSouris(controleur, 0);break;
+		case SDL_USEREVENT:
+			controleurEvolution(controleur);break;
 	  case SDL_KEYDOWN:
 			{
 			if ((((*controleur).interface.evenement.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT)
@@ -228,18 +219,13 @@ int controleurTraiteEvenement(controleurT * controleur)
 		default:
 			;
 		}
-
-	if(sortie != 0)
-		{
-		fprintf(stderr, "sortie <> 0\n");
-		(*controleur).sortie = 1;
-		}
-	return sortie;
+	if(sortie!=0) (*controleur).sortie = 1;
+	return (*controleur).sortie;
 	}
 
 void controleurChangeMode(controleurT * controleur)
 	{
-	(*controleur).options.mode=-(*controleur).options.mode;
+	(*controleur).options.modePause=-(*controleur).options.modePause;
 
 	return;
 	}
@@ -282,7 +268,7 @@ int controleurClavier(controleurT * controleur)
 	{
 	switch ((*controleur).interface.evenement.key.keysym.sym)
 		{
-	// Mode : attente d'un evenement / pas d'attente
+	// Mode : évolution du système en pause
 		case SDLK_RETURN:
 			controleurChangeMode(controleur);break;
 		//case SDLK_BACKSPACE:
@@ -419,11 +405,11 @@ int controleurClavier2(controleurT * controleur)
 	{
 	switch ((*controleur).interface.evenement.key.keysym.sym)
 		{
-	// Mode : attente d'un evenement / pas d'attente
+	// Mode : évolution du système en pause
 		case SDLK_RETURN:
 			controleurChangeMode(controleur);break;
-		case SDLK_BACKSPACE:
-			controleurChangeMode(controleur);break;
+		//case SDLK_BACKSPACE:
+			//controleurChangeMode(controleur);break;
 
 	// Déplacement du point de vue
 		case SDLK_a:
@@ -464,11 +450,11 @@ int controleurClavier3(controleurT * controleur)
 	switch ((*controleur).interface.evenement.key.keysym.sym)
 		{
 
-	   		 // Mode : attente d'un evenement / pas d'attente
+	   		 // Mode : évolution du système en pause
 		case SDLK_RETURN:
 			controleurChangeMode(controleur);break;
-		case SDLK_BACKSPACE:
-			controleurChangeMode(controleur);break;
+		//case SDLK_BACKSPACE:
+			//controleurChangeMode(controleur);break;
 
 
 			// Réinitialisation du système
@@ -492,12 +478,12 @@ int controleurClavierMaj(controleurT * controleur)
 		case SDLK_ESCAPE:
 			(*controleur).sortie = 1;break;
 
-    // Mode : attente d'un evenement / pas d'attente
+    // Mode : évolution du système en pause
 
 		case SDLK_RETURN:
 			controleurChangeMode(controleur);break;
-		case SDLK_BACKSPACE:
-			controleurChangeMode(controleur);break;
+		//case SDLK_BACKSPACE:
+			//controleurChangeMode(controleur);break;
 
 
 	// Réinitialisation du système
@@ -519,7 +505,7 @@ int controleurClavierCtrl(controleurT * controleur)
 	// Sortie
 		case SDLK_ESCAPE:
 			(*controleur).sortie = 1;break;
-	// Mode : attente d'un evenement / pas d'attente
+	// Mode : évolution du système en pause
 		case SDLK_RETURN:
 			controleurChangeMode(controleur);break;
 		case SDLK_BACKSPACE:

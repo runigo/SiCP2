@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.0.1 simulateur de chaîne de pendules
+SiCP 2.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -45,11 +45,9 @@ int donneesGraphe(grapheT * graphe, optionsT * options);
 int donneesControleur(controleurT * control)
 	{
 
-	//(*control).duree = (*control).options.duree;	// 100 : temps réèl. Voir options.c
-	//(*control).mode = 1;	// -1 : Wait, 1 : Poll
-	(*control).sortie = 0;	// Sortie de SiCP si > 0
+	(*control).sortie = 0;	// Sortie de SiCP si <> 0
 	(*control).appui = 0;	// Appuie sur la souris
-	(*control).modeClavier = 1;	//	1 : commande de la chaîne, 2 : Graphisme
+	(*control).modeClavier = 1;	//	1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
 
 		fprintf(stderr, " Initialisation du système\n");
 	donneesSysteme(&(*control).systeme, &(*control).options);
@@ -79,6 +77,9 @@ int donneesControleur(controleurT * control)
 		//fprintf(stderr, " Création du rendu\n");
 	graphiqueInitialisation(&(*control).graphique, &(*control).interface, TAILLE, (*control).options.fond);
 
+		fprintf(stderr, " Initialisation horloge SDL\n");
+	tempsCreation(&(*control).temps);
+
 	return 0;
 	}
 
@@ -89,7 +90,7 @@ int donneesOptions(optionsT * options)
 	(*options).modeDemo = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 	(*options).modeClavier = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 
-	(*options).mode = 1;		// avec ou sans attente
+	(*options).modePause = 1;		// avec ou sans attente
 	(*options).duree = 91;		// 100 : temps réèl.
 	(*options).fond=240;		// couleur du fond de l'affichage
 	(*options).support=1;		// Support de la chaîne
@@ -113,7 +114,7 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 		// Initialisation du moteurs
 
 	(*systeme).moteur.dt = (*options).dt;	// discrétisation du temps
-	//(*systeme).moteur.horloge = 0.0;
+
 	(*systeme).moteur.chrono = 0.0;
 
 	(*systeme).moteur.courant=15.0;		// Mémoire courant Josephson si = 0
@@ -121,17 +122,15 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 	(*systeme).moteur.generateur = 0;	// éteint, sinus, carre, impulsion
 	(*systeme).moteur.amplitude=0.3;		// Amplitude du générateur de signaux
-	(*systeme).moteur.frequence=5.0;	// Ffréquence du générateur de signaux
+	(*systeme).moteur.frequence=5.0;	// Fréquence du générateur de signaux
 	(*systeme).moteur.phi=0;
 
 
 		// Caractéristique de la chaîne
 	(*systeme).libreFixe = 0;	// 0 periodique, 1 libre, 2 fixe
 	(*systeme).nombre = (*options).nombre;		// nombre de pendule
-	(*systeme).equation = (*options).equation;	// 1 : pendule pesant
-												// 2 : linéarisation
-												// 3 : corde
-												// 4 : dioptre
+	(*systeme).equation = (*options).equation;	// 1 : pendule pesant, 2 : linéarisation
+												// 3 : corde, 4 : dioptre
 
 		// Paramètres physiques
 	(*systeme).gravitation = 9.81;

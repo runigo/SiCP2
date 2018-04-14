@@ -29,73 +29,61 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
+// Librement inspiré de 
+// http://piconano2015.wixsite.com/soft/code
+// Copyright 2015 par PicoSoft.
 
-#include "interface.h"
+#include "temps.h"
 
-int interfaceInitialisationSDL(void)
+Uint32 callTimer(Uint32 it, void *para);
+
+int tempsCreation(tempsT * temps)
 	{
-		// Initialisation de la SDL
-	//assert(SDL_Init(SDL_INIT_VIDEO) == 0);
-	if(0 != SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
-		{
-		fprintf(stderr, "Erreur SDL_Init : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
+		//fprintf(stderr, " Initialisation du timer, fond = %d\n", fond);
+		// définition d'un User Event
+	(*temps).evenement.type=SDL_USEREVENT;
+
+		// Lancement du Timer principal
+	//(*temps).horloge = SDL_AddTimer(TEMPS_AFFICHAGE, tempsEvenement, temps);
+	(*temps).horloge = SDL_AddTimer(TEMPS_AFFICHAGE, callTimer, temps);
+
+		//int *parametre;
+
+	(*temps).date = 0;          // la référence de temps du programme (nombre de période timer principal)
+	(*temps).dateActuel = 0;          // 
+	(*temps).datePrecedente = 0;         //
 
 	return 0;
 	}
 
-int interfaceInitialisation(interfaceT * interface, int fond)
-	{
-		// Imitialisation de l'interface
-	(*interface).continu = 1;
-	(*interface).fond = fond;
+Uint32 callTimer(Uint32 it, void *para)
+	{	// Callback du timer principal
+		// on crée un event pour passer le wait
+	SDL_Event user_event;
+		// définition d'un User Event
+	user_event.type=SDL_USEREVENT;
 
+	SDL_PushEvent(&user_event);
 
-		// Création de la fenêtre
-	(*interface).fenetre = SDL_CreateWindow("Simulateur de foule", 0, 
-							0, FENETRE_X, FENETRE_Y, 
-							//SDL_WINDOW_FULLSCREEN_DESKTOP |
-							//SDL_WINDOW_MAXIMIZED |
-							SDL_WINDOW_RESIZABLE |
-							SDL_WINDOW_SHOWN
-							);
-	if(NULL == (*interface).fenetre)
-		{
-		fprintf(stderr, "interfaceInitialisation : Erreur SDL_CreateWindow : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
-/*
-		// Création du rendu
-	(*interface).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
-					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if(NULL == (*interface).rendu)
-		{
-		fprintf(stderr, "interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
-*/
-	return 0;
+	(void) para;
+
+	return it;
 	}
-
-int interfaceDestruction(interfaceT * interface)
-	{
-	//SDL_DestroyRenderer((*interface).rendu);
-	SDL_DestroyWindow((*interface).fenetre);
-	return 0;
-	}
-
-int interfaceQuitteSDL(void)
-	{
-	SDL_Quit();
-	return 0;
-	}
-
-////////////////////////////////////////////////////////////////////////
 
 /*
-		// Activation de la transparence
-	//SDL_BLENDMODE_NONE || SDL_BLENDMODE_BLEND || SDL_BLENDMODE_ADD || SDL_BLENDMODE_MOD
-	if(SDL_SetRenderDrawBlendMode((*interface).rendu, SDL_BLENDMODE_BLEND) < 0)
-		fprintf(stderr, "Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
+Uint32 tempsEvenement(Uint32 it, tempsT * temps)
+	{   // Rappel automatique du timer principal
+		// on crée un évenement pour passer le wait
+	SDL_PushEvent(&(*temps).evenement);
+
+	return it;
+	}
 */
+int tempsSuppression(tempsT * temps)
+	{
+	SDL_RemoveTimer((*temps).horloge);  // arret timer
+
+	return 0;
+	}
+
+//////////////////////////////////////////////////////////////////////////////

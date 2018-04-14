@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 1.5  simulateur de chaîne de pendules
+SiCP 2.2  simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -38,7 +38,7 @@ void optionsSupport(optionsT * options, char *opt);
 void optionsNombre(optionsT * options, char *opt);
 void optionsPause(optionsT * options, char *opt);
 void optionsSoliton(optionsT * options, char *opt);
-void optionsMode(optionsT * options, char *opt);
+void optionsModePause(optionsT * options, char *opt);
 void optionsModeDemo(optionsT * options, char *opt);
 void optionsModeClavier(optionsT * options, char *opt);
 void optionsDuree(optionsT * options, char *opt);
@@ -54,8 +54,8 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 		{
 		if(strcmp(opt[i], "fond")==0 && opt[i+1]!=NULL)
 			optionsFond(options, opt[i+1]);  // Couleur du fond 
-		if(strcmp(opt[i], "mode")==0 && opt[i+1]!=NULL)
-			optionsMode(options, opt[i+1]);  // Mode -1 : Wait, 1 : Poll
+		if(strcmp(opt[i], "modePause")==0 && opt[i+1]!=NULL)
+			optionsModePause(options, opt[i+1]);  // Mode -1 : Wait, 1 : Poll
 		if(strcmp(opt[i], "modeDemo")==0 && opt[i+1]!=NULL)
 			optionsModeDemo(options, opt[i+1]);  // 0 : SiCP, 1 Graphique démo, 2 Commande démo
 		if(strcmp(opt[i], "modeClavier")==0 && opt[i+1]!=NULL)
@@ -204,25 +204,25 @@ void optionsSupport(optionsT * options, char *opt)
 		}
 	else
 		{
-		printf("Option mode non valide, support = %d\n", (*options).support);
+		printf("Option support non valide, support = %d\n", (*options).support);
 		printf("	option support = 1 ou 0 : avec ou sans support\n");
 		}
 	return;
 	}
 
 		// Mode  -1 : Wait, 1 : Poll
-void optionsMode(optionsT * options, char *opt)
+void optionsModePause(optionsT * options, char *opt)
 	{
-	int mode = atoi(opt);
-	if(mode==1 || mode==-1)
+	int modePause = atoi(opt);
+	if(modePause==1 || modePause==-1)
 		{
-		(*options).mode = mode;
-		printf("Option mode valide, mode = %d\n", (*options).mode);
+		(*options).modePause = modePause;
+		printf("Option modePause valide, modePause = %d\n", (*options).modePause);
 		}
 	else
 		{
-		printf("Option mode non valide, mode = %d\n", (*options).mode);
-		printf("	option mode : mode = + ou - 1\n");
+		printf("Option modePause non valide, modePause = %d\n", (*options).modePause);
+		printf("	option modePause : modePause = + ou - 1\n");
 		}
 	return;
 	}
@@ -287,7 +287,7 @@ void optionsAide(void)
 	printf("fond	0 < fond < 255	:	couleur du fond de l'affichage\n");
 	printf("support	1 ou 0 		: 	avec ou sans dessin du support\n");
 	printf("pause	5 < pause < 555	:	pause entre les affichages en ms\n");
-	printf("mode	mode = -1 ou 1	:	Avec ou sans attente (entrée)\n");  // Mode -1 : Wait, 1 : Poll
+	printf("modePause	modePause = -1 ou 1	:	Évolution système\n");  // Mode -1 : pause 1 : évolution
 	printf("modeDemo  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 	printf("modeClavier  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 	printf("duree	1 < duree < %d	:	nombre d'évolution du système entre les affichages (F9, F10, F11, F12)\n", DUREE_MAX);

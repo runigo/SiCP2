@@ -29,73 +29,30 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
+// Librement inspiré de 
+// http://piconano2015.wixsite.com/soft/code
+// Copyright 2015 par PicoSoft.
+
+#ifndef _TEMPS_
+#define _TEMPS_
 
 #include "interface.h"
 
-int interfaceInitialisationSDL(void)
-	{
-		// Initialisation de la SDL
-	//assert(SDL_Init(SDL_INIT_VIDEO) == 0);
-	if(0 != SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
+typedef struct TempsT tempsT;
+	struct TempsT
 		{
-		fprintf(stderr, "Erreur SDL_Init : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
+		SDL_Event evenement;	// Evenement
+		SDL_TimerID horloge;          // timer principal
+		//int *parametre;
+		long int date;          // la référence de temps du programme (nombre de période timer principal)
+		long int dateActuel;          // 
+		long int datePrecedente;         //
+		};
 
-	return 0;
-	}
+Uint32 tempsEvenement(Uint32 it, tempsT * temps);
 
-int interfaceInitialisation(interfaceT * interface, int fond)
-	{
-		// Imitialisation de l'interface
-	(*interface).continu = 1;
-	(*interface).fond = fond;
+int tempsCreation(tempsT * temps);
+int tempsSuppression(tempsT * temps);
+void tempsChangeSupport(tempsT * temps);
 
-
-		// Création de la fenêtre
-	(*interface).fenetre = SDL_CreateWindow("Simulateur de foule", 0, 
-							0, FENETRE_X, FENETRE_Y, 
-							//SDL_WINDOW_FULLSCREEN_DESKTOP |
-							//SDL_WINDOW_MAXIMIZED |
-							SDL_WINDOW_RESIZABLE |
-							SDL_WINDOW_SHOWN
-							);
-	if(NULL == (*interface).fenetre)
-		{
-		fprintf(stderr, "interfaceInitialisation : Erreur SDL_CreateWindow : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
-/*
-		// Création du rendu
-	(*interface).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
-					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if(NULL == (*interface).rendu)
-		{
-		fprintf(stderr, "interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
-		}
-*/
-	return 0;
-	}
-
-int interfaceDestruction(interfaceT * interface)
-	{
-	//SDL_DestroyRenderer((*interface).rendu);
-	SDL_DestroyWindow((*interface).fenetre);
-	return 0;
-	}
-
-int interfaceQuitteSDL(void)
-	{
-	SDL_Quit();
-	return 0;
-	}
-
-////////////////////////////////////////////////////////////////////////
-
-/*
-		// Activation de la transparence
-	//SDL_BLENDMODE_NONE || SDL_BLENDMODE_BLEND || SDL_BLENDMODE_ADD || SDL_BLENDMODE_MOD
-	if(SDL_SetRenderDrawBlendMode((*interface).rendu, SDL_BLENDMODE_BLEND) < 0)
-		fprintf(stderr, "Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
-*/
+#endif

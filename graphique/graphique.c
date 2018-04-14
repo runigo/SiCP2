@@ -139,6 +139,7 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 
 void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y)
 	{
+
 	graphiqueChangeCouleur(graphique, (*graphique).gris);
 	SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
 	graphiqueChangeCouleur(graphique, (*graphique).cyan);
@@ -147,6 +148,17 @@ void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y)
 	SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
 	graphiqueChangeCouleur(graphique, (*graphique).vert);
 	SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
+
+	int decalageDroit = 0;
+	int decalageDiag = 1;
+	graphiqueChangeCouleur(graphique, (*graphique).gris);
+	SDL_RenderDrawLine((*graphique).rendu, X-decalageDroit, Y-decalageDiag, x-decalageDroit, y-decalageDiag);
+	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLine((*graphique).rendu, X-decalageDiag, Y-decalageDroit, x-decalageDiag, y-decalageDroit);
+	graphiqueChangeCouleur(graphique, (*graphique).orange);
+	SDL_RenderDrawLine((*graphique).rendu, X+decalageDroit, Y+decalageDiag, x+decalageDroit, y+decalageDiag);
+	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	SDL_RenderDrawLine((*graphique).rendu, X+decalageDiag, Y+decalageDroit, x+decalageDiag, y+decalageDroit);
 
 	return;
 	}

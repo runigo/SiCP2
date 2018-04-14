@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.0.1 simulateur de chaîne de pendules
+SiCP 2.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -39,6 +39,8 @@ termes.
 #include "stdlib.h"
 #include <assert.h>
 
+#define TEMPS_AFFICHAGE 70 // Durée entre les affichages en ms
+
 //#define PI 3.14159265358979323846264338327950288419716939937510582
 //#define PI 3.1415926535897932384626433832795
 #define PI 3.14159265359
@@ -51,7 +53,7 @@ termes.
 
 #define TAILLE 8 // Diamètre des masses
 
-#define EPSILON 0.0003 // Valeur minimale de phi afin d'éviter un ancien bug.
+#define EPSILON 0.000003 // Valeur minimale de phi afin d'éviter un ancien bug.
 
 #define DUREE_MAX 999 // Nombre maximal d'incrémentation du système entre deux affichages.
 
@@ -69,8 +71,8 @@ termes.
 #define COUPLAGE_MAX 99 // Couplage maximal / nombre de pendule
 #define COUPLAGE_MIN 0.003
 
-#define GRAVITATION_MAX 7777 // Gravitation maximal.
-#define GRAVITATION_MIN 0.00007 // Gravitation minimal.
+#define GRAVITATION_MAX 7777 // Gravitation maximale.
+#define GRAVITATION_MIN 0.00007 // Gravitation minimale.
 
 #define MASSE_MAX 7777
 #define MASSE_MIN 0.7

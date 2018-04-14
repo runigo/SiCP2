@@ -41,7 +41,7 @@ typedef struct OptionsT optionsT;
 		int fond;		// couleur du fond de l'affichage
 		int pause;		// pause après l'affichage en ms
 
-		int mode;		// Avec ou sans attente d'évenement
+		int modePause;		// Evolution système
 		int duree;		// Nombre d'évolution du système entre les affichages
 		int support;		// Avec ou sans support
 

@@ -53,7 +53,7 @@ int interfaceInitialisation(interfaceT * interface, int fond)
 
 
 		// Création de la fenêtre
-	(*interface).fenetre = SDL_CreateWindow("Simulateur de foule", 0, 
+	(*interface).fenetre = SDL_CreateWindow("SiCP2", 0, 
 							0, FENETRE_X, FENETRE_Y, 
 							//SDL_WINDOW_FULLSCREEN_DESKTOP |
 							//SDL_WINDOW_MAXIMIZED |

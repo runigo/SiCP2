@@ -39,7 +39,7 @@ termes.
 #include "stdlib.h"
 #include <assert.h>
 
-#define TEMPS_AFFICHAGE 70 // Durée entre les affichages en ms
+#define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
 //#define PI 3.14159265358979323846264338327950288419716939937510582
 //#define PI 3.1415926535897932384626433832795
@@ -63,7 +63,7 @@ termes.
 //#define DT_MIN 0.000000003	//	discrétisation du temps
 
 #define NOMBRE_MIN 2 // Nombre minimal de pendules
-#define NOMBRE_MAX 1099 // Nombre maximal de pendules
+#define NOMBRE_MAX 399 // Nombre maximal de pendules
 
 //#define SOLITON_MAX 19 // Nombre maximal de soliton
 #define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal

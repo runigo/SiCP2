@@ -65,7 +65,7 @@ int controleurDestruction(controleurT * control)
 	grapheSuppression(&(*control).graphe);
 
 	fprintf(stderr, "Suppression de l'horloge\n");
-	tempsSuppression(&(*control).temps);
+	horlogeSuppression(&(*control).horloge);
 
 	fprintf(stderr, "Suppression du rendu\n");
 	graphiqueDestruction(&(*control).graphique);
@@ -103,18 +103,33 @@ int controleurEvolution(controleurT * controleur)
 	{
 	//printf("Entrée dans controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
 
-		//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
-		controleurProjection(controleur);
+		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+	//horlogeChronoDepart(&(*controleur).horloge);
 
-		//fprintf(stderr, "Evolution temporelle du systeme\n");
+		//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
+	controleurProjection(controleur);
+		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+
+
+
 	if((*controleur).options.modePause > 0)
+		{
+		//horlogeChronoDepart(&(*controleur).horloge);
+		//fprintf(stderr, "Evolution temporelle du systeme\n");
 		controleurEvolutionSysteme(controleur);
+		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+		}
+
+	//horlogeChronoDepart(&(*controleur).horloge);
 
 		//fprintf(stderr, "Mise à jour de la fenêtre graphique\n");
-		controleurConstructionGraphique(controleur);
+	controleurConstructionGraphique(controleur);
+		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+
 
 		//projectionChangePsi(&(*controleur).projection, -0.003);
 
+	//fprintf(stderr, "    Durée des évolutions = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
 	//printf("Sortie de controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
 

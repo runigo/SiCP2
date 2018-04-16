@@ -33,57 +33,25 @@ termes.
 // http://piconano2015.wixsite.com/soft/code
 // Copyright 2015 par PicoSoft.
 
-#include "temps.h"
+#ifndef _HORLOGE_
+#define _HORLOGE_
 
-Uint32 callTimer(Uint32 it, void *para);
+#include "graphique.h"
 
-int tempsCreation(tempsT * temps)
-	{
-		//fprintf(stderr, " Initialisation du timer, fond = %d\n", fond);
-		// définition d'un User Event
-	(*temps).evenement.type=SDL_USEREVENT;
+typedef struct HorlogeT horlogeT;
+	struct HorlogeT
+		{
+		SDL_TimerID horloge;	// timer principal
+		long int depart;	// Départ du chronomètre
+		};
 
-		// Lancement du Timer principal
-	//(*temps).horloge = SDL_AddTimer(TEMPS_AFFICHAGE, tempsEvenement, temps);
-	(*temps).horloge = SDL_AddTimer(TEMPS_AFFICHAGE, callTimer, temps);
+Uint32 horlogeEvenement(Uint32 it, horlogeT * horloge);
 
-		//int *parametre;
+int horlogeCreation(horlogeT * horloge);
+int horlogeSuppression(horlogeT * horloge);
+void horlogeChangeSupport(horlogeT * horloge);
 
-	(*temps).date = 0;          // la référence de temps du programme (nombre de période timer principal)
-	(*temps).dateActuel = 0;          // 
-	(*temps).datePrecedente = 0;         //
+int horlogeChronoDepart(horlogeT * horloge);
+int horlogeChronoDuree(horlogeT * horloge);
 
-	return 0;
-	}
-
-Uint32 callTimer(Uint32 it, void *para)
-	{	// Callback du timer principal
-		// on crée un event pour passer le wait
-	SDL_Event user_event;
-		// définition d'un User Event
-	user_event.type=SDL_USEREVENT;
-
-	SDL_PushEvent(&user_event);
-
-	(void) para;
-
-	return it;
-	}
-
-/*
-Uint32 tempsEvenement(Uint32 it, tempsT * temps)
-	{   // Rappel automatique du timer principal
-		// on crée un évenement pour passer le wait
-	SDL_PushEvent(&(*temps).evenement);
-
-	return it;
-	}
-*/
-int tempsSuppression(tempsT * temps)
-	{
-	SDL_RemoveTimer((*temps).horloge);  // arret timer
-
-	return 0;
-	}
-
-//////////////////////////////////////////////////////////////////////////////
+#endif

@@ -33,26 +33,57 @@ termes.
 // http://piconano2015.wixsite.com/soft/code
 // Copyright 2015 par PicoSoft.
 
-#ifndef _TEMPS_
-#define _TEMPS_
+#include "horloge.h"
 
-#include "interface.h"
+/*
+	VARIABLES GLOBALES
+*/
 
-typedef struct TempsT tempsT;
-	struct TempsT
-		{
-		SDL_Event evenement;	// Evenement
-		SDL_TimerID horloge;          // timer principal
-		//int *parametre;
-		long int date;          // la référence de temps du programme (nombre de période timer principal)
-		long int dateActuel;          // 
-		long int datePrecedente;         //
-		};
+SDL_Event user_event;
+int *paramTimer;
 
-Uint32 tempsEvenement(Uint32 it, tempsT * temps);
+/*
+	...............
+*/
 
-int tempsCreation(tempsT * temps);
-int tempsSuppression(tempsT * temps);
-void tempsChangeSupport(tempsT * temps);
+Uint32 callTimer(Uint32 it, void *para);
 
-#endif
+int horlogeCreation(horlogeT * horloge)
+	{
+		//fprintf(stderr, " Initialisation de l'horloge \n");
+
+	user_event.type=SDL_USEREVENT;
+
+		// Lancement du Timer principal
+	(*horloge).horloge = SDL_AddTimer(TEMPS_AFFICHAGE, callTimer, &paramTimer);
+
+	(*horloge).depart = 0;	// Date du départ du chronomètre
+
+	return 0;
+	}
+
+Uint32 callTimer(Uint32 it, void *para)
+	{				// Callback du timer principal
+	SDL_PushEvent(&user_event);
+	(void) para;
+	return it;
+	}
+
+int horlogeSuppression(horlogeT * horloge)
+	{
+	SDL_RemoveTimer((*horloge).horloge);	// Suppression du timer
+	return 0;
+	}
+
+int horlogeChronoDepart(horlogeT * horloge)
+	{
+	(*horloge).depart = SDL_GetTicks();	// Départ du chronomètre
+	return 0;
+	}
+
+int horlogeChronoDuree(horlogeT * horloge)
+	{					// Durée chronométrée
+	return (int)(SDL_GetTicks() - (*horloge).depart);
+	}
+
+//////////////////////////////////////////////////////////////////////////////

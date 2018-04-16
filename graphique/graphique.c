@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.0.1 simulateur de chaîne de pendules
+SiCP 2.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -139,25 +139,25 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 
 void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y)
 	{
-
-	graphiqueChangeCouleur(graphique, (*graphique).gris);
-	SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
+/*
 	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
+	//graphiqueChangeCouleur(graphique, (*graphique).gris);
 	SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
 	graphiqueChangeCouleur(graphique, (*graphique).orange);
 	SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
-	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	//graphiqueChangeCouleur(graphique, (*graphique).vert);
 	SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
-
+*/
 	int decalageDroit = 0;
 	int decalageDiag = 1;
-	graphiqueChangeCouleur(graphique, (*graphique).gris);
+	graphiqueChangeCouleur(graphique, (*graphique).orange);//contraste
 	SDL_RenderDrawLine((*graphique).rendu, X-decalageDroit, Y-decalageDiag, x-decalageDroit, y-decalageDiag);
-	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	//graphiqueChangeCouleur(graphique, (*graphique).gris);
 	SDL_RenderDrawLine((*graphique).rendu, X-decalageDiag, Y-decalageDroit, x-decalageDiag, y-decalageDroit);
-	graphiqueChangeCouleur(graphique, (*graphique).orange);
-	SDL_RenderDrawLine((*graphique).rendu, X+decalageDroit, Y+decalageDiag, x+decalageDroit, y+decalageDiag);
 	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	SDL_RenderDrawLine((*graphique).rendu, X+decalageDroit, Y+decalageDiag, x+decalageDroit, y+decalageDiag);
+	//graphiqueChangeCouleur(graphique, (*graphique).cyan);
 	SDL_RenderDrawLine((*graphique).rendu, X+decalageDiag, Y+decalageDroit, x+decalageDiag, y+decalageDroit);
 
 	return;
@@ -209,7 +209,6 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 	for(i=y[0];i<=y[1];i++)
 		{
 		SDL_RenderDrawLine((*graphique).rendu, a*i+b, i, c*i+d, i);
-		//graphiqueLigneDroite(a*i+b, i, c*i+d, i, couleurG);
 		}
 
 	if(y[1]!=y[2])
@@ -218,7 +217,6 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 	for(i=y[1];i<=y[2];i++)
 		{
 		SDL_RenderDrawLine((*graphique).rendu, a*i+b, i, c*i+d, i);
-		//graphiqueLigneDroite(a*i+b, i, c*i+d, i, couleurG);
 		}
 
 	return;
@@ -226,37 +224,30 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 
 void graphiqueTriangle(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int Bx, int By)
 	{
-	//Uint32 couleurC = SDL_MapRGB(affichage->format, 0, 0, 0);
 	graphiqueTriangleGris(graphique, X, Y, Ax, Ay, Bx, By);
 
 	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 
-	//graphiqueLigneDroite(X, Y, Ax, Ay, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, X, Y, Ax, Ay);
-	//graphiqueLigneDroite(X, Y, Bx, By, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, X, Y, Bx, By);
-	//graphiqueLigneDroite(Ax, Ay, Bx, By, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, Ax, Ay, Bx, By);
+	SDL_RenderDrawLine((*graphique).rendu, X, Y, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, X, Y, Bx, By);
+	SDL_RenderDrawLine((*graphique).rendu, Ax, Ay, Bx, By);
+
 	return;
 	}
 
 void graphiqueRectangle(graphiqueT * graphique, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int Dx, int Dy)
 	{
-	//Uint32 couleurC = SDL_MapRGB(affichage->format, 0, 0, 0);
 
 	graphiqueTriangleGris(graphique, Ax, Ay, Bx, By, Cx, Cy);
 	graphiqueTriangleGris(graphique, Ax, Ay, Cx, Cy, Dx, Dy);
 
 	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 
-	//graphiqueLigneDroite(Bx, By, Ax, Ay, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, Bx, By, Ax, Ay);
-	//graphiqueLigneDroite(Dx, Dy, Ax, Ay, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, Dx, Dy, Ax, Ay);
-	//graphiqueLigneDroite(Cx, Cy, Bx, By, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Bx, By);
-	//graphiqueLigneDroite(Cx, Cy, Dx, Dy, couleurC);
-		SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Dx, Dy);
+	SDL_RenderDrawLine((*graphique).rendu, Bx, By, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, Dx, Dy, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Bx, By);
+	SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Dx, Dy);
+
 	return;
 	}
 

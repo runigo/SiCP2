@@ -1,7 +1,7 @@
 /*
 Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2 simulateur de chaîne de pendules
+SiCP 2.2.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -58,7 +58,7 @@ int controleurDestruction(controleurT * control)
 	{
 
 
-	fprintf(stderr, "Suppression du graphe\n");
+	fprintf(stderr, "Suppression du système\n");
 	systemeSuppression(&(*control).systeme);
 
 	fprintf(stderr, "Suppression du graphe\n");
@@ -145,8 +145,8 @@ int controleurProjection(controleurT * controleur)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
 		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);
-	projectionInitialiseLongueurs(&(*controleur).projection, hauteur/3, largeur*0.7, 0.9);
+	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 2.1);
+	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*RATIO_H_L, largeur, (*controleur).projection.pointDeVue.r);
 
 	projectionSystemChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
 
@@ -166,6 +166,9 @@ int controleurConstructionGraphique(controleurT * controleur)
 
 		//fprintf(stderr, "Nettoyage de l'affichage\n");
 	graphiqueNettoyage(&(*controleur).graphique);
+
+		//fprintf(stderr, "Dessin des Commandes\n");
+	//graphiqueCommandes(&(*controleur).graphique);
 
 		//fprintf(stderr, "Dessin des graphes\n");
 	if((*controleur).graphe.support==0)
@@ -190,8 +193,8 @@ int controleurTraiteEvenement(controleurT * controleur)
 		{
 		case SDL_QUIT:
 			(*controleur).sortie = 1;break;
-		//case SDL_MOUSEWHEEL:
-			//sortie = controleurDefile(controleur);break;
+		case SDL_MOUSEWHEEL:
+			sortie = controleurDefile(controleur);break;
 		case SDL_MOUSEMOTION:
 			sortie = controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
@@ -562,18 +565,33 @@ int controleurDefile(controleurT * controleur)
 	{
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
-		(*controleur).projection.pointDeVue.r += 0.1;
+		(*controleur).projection.pointDeVue.r += 0.011;
+		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
+		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
 		{
-		(*controleur).projection.pointDeVue.r -= 0.1;
+		(*controleur).projection.pointDeVue.r -= 0.011;
+		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
+		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 
-	if((*controleur).projection.pointDeVue.r < 0.1) (*controleur).projection.pointDeVue.r = 0.1;
-	if((*controleur).projection.pointDeVue.r > 1.9) (*controleur).projection.pointDeVue.r = 1.9;
+	if((*controleur).projection.pointDeVue.r < RATIO_R_MIN)
+		{
+		(*controleur).projection.pointDeVue.r = RATIO_R_MIN;
+		fprintf(stderr, "Distance limite = %f\n", (*controleur).projection.pointDeVue.r);
+		}
+	if((*controleur).projection.pointDeVue.r > RATIO_R_MAX)
+		{
+		(*controleur).projection.pointDeVue.r = RATIO_R_MAX;
+		fprintf(stderr, "Distance limite = %f\n", (*controleur).projection.pointDeVue.r);
+		}
 
 	//if(event.wheel.x > 0) // scroll right{}
 	//else if(event.wheel.x < 0) // scroll left{}
+
+	projectionChangePsi(&(*controleur).projection, 0);
+	projectionChangePhi(&(*controleur).projection, 0);
 
 	return (*controleur).sortie;
 	}

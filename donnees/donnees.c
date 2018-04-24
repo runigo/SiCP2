@@ -1,7 +1,7 @@
 /*
 Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2 simulateur de chaîne de pendules
+SiCP 2.2.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -65,7 +65,7 @@ int donneesControleur(controleurT * control)
 		//fprintf(stderr, "projectionInitialiseCouleurs\n");
 	projectionInitialiseCouleurs(&(*control).projection, 222, 111, 222, 255);// r, v, b, fond
 		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.9);// hauteur, largeur, facteur de distance
+	projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 0.47);// hauteur, largeur, ratio de distance
 		//fprintf(stderr, "projectionInitialisePointDeVue\n");
 	projectionInitialisePointDeVue(&(*control).projection, PI/2 - 0.27, PI/2 + 0.21);//r=facteur de distance, psi, phi
 	//projectionInitialisePointDeVue(&(*control).projection, 3*LARGEUR, 0.0, 0.0);//r, psi, phi

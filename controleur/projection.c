@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 1.6 simulateur de chaîne de pendules
+SiCP 2.2.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -223,8 +223,8 @@ int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe)
 
 	vecteurT v;
 	int i;
-	int centrageX = (*projection).largeur*0.711;
-	int centrageY = (int)((*projection).hauteur*1.3);//*0.85
+	int centrageX = (int)( (*projection).largeur * RATIO_C_X );
+	int centrageY = (int)( (*projection).hauteur * RATIO_C_Y );
 
 	for(i=0;i<14;i++)
 		{
@@ -277,10 +277,8 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 	pointsT *iterGraph=(*graphe).premier;
 
 	vecteurT v;
-	//int centrageX = LARGEUR/2;
-	//int centrageY = (int)(HAUTEUR*0.45);
-	int centrageX = (*projection).largeur*0.711;
-	int centrageY = (int)((*projection).hauteur*1.3);//0.85
+	int centrageX = (int)( (*projection).largeur * RATIO_C_X );
+	int centrageY = (int)( (*projection).hauteur * RATIO_C_Y );
 
 	do
 		{

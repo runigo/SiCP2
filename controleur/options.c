@@ -1,7 +1,7 @@
 /*
 Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2  simulateur de chaîne de pendules
+SiCP 2.2.1  simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -335,13 +335,17 @@ void optionsAide(void)
 	printf("	+, - : augmente, diminue la vitesse de la simulation\n");
 	printf("	F9, F10, F11, F12 : diminue, augmente la vitesse de la simulation\n\n");
 
-	printf("Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci\n");
-	printf("permettent la rotation du point de vue de l'observateur.\n\n");
-
 	printf("	Ctrl F1 : Classique SiCP\n");
 	printf("	Ctrl F2 : Paramètres Graphiques\n");
 	printf("	Ctrl F3 : Paramètres physiques\n");
 	printf("	Ctrl F4 : Paramètres des moteurs\n");
+
+	printf("\n	COMMANDE DE LA SOURIS\n\n");
+
+	printf("	Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci\n");
+	printf("	permettent la rotation du point de vue de l'observateur.\n\n");
+	printf("	Lorsque la molette est activée, la distance du point de vue varie.\n");
+
 
 	fprintf(stderr, "\nSortie de SiGP\n");
 	exit(EXIT_FAILURE);

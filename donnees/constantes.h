@@ -1,7 +1,7 @@
 /*
 Copyright avril 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2 simulateur de chaîne de pendules
+SiCP 2.2.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -46,10 +46,18 @@ termes.
 #define PI 3.14159265359
 #define DEUXPI 6.28318530718
 
-#define LARGEUR 999 // Largeur de la fenêtre 990
-#define FENETRE_X LARGEUR // Largeur de la fenêtre 990
+#define LARGEUR 999 // Largeur de la fenêtre
+#define FENETRE_X LARGEUR // Largeur de la fenêtre
 #define HAUTEUR 440 // Hauteur de la fenêtre
 #define FENETRE_Y HAUTEUR // Hauteur de la fenêtre
+
+#define RATIO_H_L 0.536 // Ratio Largeur sur Hauteur de la chaîne
+#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
+#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
+//#define RATIO_C_X 0.391 // Ratio Centrage X Avec Menu
+//#define RATIO_C_Y 0.591 // Ratio Centrage Y Avec Menu
+#define RATIO_R_MIN 0.21 // Ratio Distance minimal
+#define RATIO_R_MAX 0.99 // Ratio Distance maximal
 
 #define TAILLE 8 // Diamètre des masses
 

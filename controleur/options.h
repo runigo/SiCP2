@@ -38,23 +38,20 @@ termes.
 typedef struct OptionsT optionsT;
 	struct OptionsT
 		{
+			// OPTIONS CONTROLEUR
 		int fond;		// couleur du fond de l'affichage
-		int pause;		// pause après l'affichage en ms
-
+		int modeDemo;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+		int modeClavier;	// Ctrl F1 :  SiCP, Ctrl F2 : Graphiques, Ctrl F3 : Paramètres, Ctrl F4 : moteurs
 		int modePause;		// Evolution système
+		int modeMenu;		// Option menu : 0, SiCP : 1, SiCF : 2, SiGP : 3
 		int duree;		// Nombre d'évolution du système entre les affichages
-		int support;		// Avec ou sans support
 
+			// OPTIONS SiCP
 		float dt;		// discrétisation du temps
-
 		int nombre;		// nombre de pendule
 		int equation;		// 1 : pendule, 2 : linéarisation, 3 : corde, 4 : dioptre
-
 		int soliton;		// Nombre de soliton initiale
-
-		int modeDemo;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-		int modeClavier;	// F1 : Classique SiCP F2 : Paramètres Graphiques Ctrl 
-					// F3 : Paramètres physiques Ctrl F4 : Paramètres des moteurs
+		int support;		// Chaîne avec ou sans support
 
 		};
 

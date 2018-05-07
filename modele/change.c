@@ -1,7 +1,7 @@
 /*
-Copyright mars 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiCP 1.5  simulateur de chaîne de pendules
+SiCP 2.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -11,16 +11,16 @@ de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 En contrepartie de l'accessibilité au code source et des droits de copie,
 de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
+offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
 seule une responsabilité restreinte pèse sur l'auteur du programme, le
 titulaire des droits patrimoniaux et les concédants successifs.
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
+A cet égard l'attention de l'utilisateur est attirée sur les risques
 associés au chargement, à l'utilisation, à la modification et/ou au
 développement et à la reproduction du logiciel par l'utilisateur étant
 donné sa spécificité de logiciel libre, qui peut le rendre complexe à
 manipuler et qui le réserve donc à des développeurs et des professionnels
 avertis possédant des connaissances informatiques approfondies. Les
-utilisateurs sont donc invités à charger  et  tester  l'adéquation du
+utilisateurs sont donc invités à charger et tester l'adéquation du
 logiciel à leurs besoins dans des conditions permettant d'assurer la
 sécurité de leurs systèmes et ou de leurs données et, plus généralement,
 à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
@@ -29,7 +29,7 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-#include "systeme.h"
+#include "change.h"
 
 void changeLimite(systemeT * systeme);
 
@@ -37,12 +37,12 @@ void changeLimite(systemeT * systeme);
 
 void changeCouplage(systemeT * systeme, float facteur)
 	{// Multiplie le couplage par facteur
-	float maximum;
+	float couplage;
 	chaineT *iter=(*systeme).premier;
 
-	maximum = (*systeme).couplage * facteur / (*systeme).nombre;
+	couplage = (*systeme).couplage * facteur / (*systeme).nombre;
 
-	if(maximum < COUPLAGE_MAX)
+	if(couplage < COUPLAGE_MAX && couplage > COUPLAGE_MIN)
 		{
 		(*systeme).couplage=(*systeme).couplage*facteur;
 		do
@@ -54,7 +54,7 @@ void changeCouplage(systemeT * systeme, float facteur)
 		}
 	else
 		{
-		printf("Maximum du couplage = %6.3f\n", (*systeme).couplage);
+		printf("Limite du couplage. ");
 		}
 
 	printf("Couplage = %6.3f\n", (*systeme).couplage);
@@ -122,9 +122,9 @@ void changeDissipation(systemeT * systeme, float facteur)
 	iter = (*systeme).premier;
 
 	float dissipation = (*systeme).dissipation * facteur;
-	float dissipationMaximale = DISSIPATION_MAX_DT/(*systeme).moteur.dt;
+	//float dissipationMaximale = DISSIPATION_MAX_DT/(*systeme).moteurs.dt;
 
-	if(dissipation < dissipationMaximale && dissipation > DISSIPATION_MIN)
+	if(dissipation < DISSIPATION_MAX && dissipation > DISSIPATION_MIN)
 		{
 		if(facteur!=0.0)
 			{
@@ -155,11 +155,17 @@ void changeFormeDissipation(systemeT * systeme, int forme)
 	iter=(*systeme).premier;
 	float dissipation = 0.99;
 
+	(*systeme).modeDissipation=2;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
+
 	if ( forme == 0 )
+		{
 		dissipation = 0.0;
+		(*systeme).modeDissipation=0;
+		}
 
 	if (  forme == 1 )
 		{
+		(*systeme).modeDissipation=1;
 		if ( (*systeme).dissipation != 0.0 )
 			{
 			dissipation = (*systeme).dissipation;
@@ -174,9 +180,9 @@ void changeFormeDissipation(systemeT * systeme, int forme)
 		{
 		if ( forme == 2 )
 			{
-			dissipation = iter->pendule.dissipation;
+			dissipation = iter->pendule.dissipation * (*systeme).dissipation;
 			}
-		penduleInitialiseAlpha(&(iter->pendule), dissipation, (*systeme).moteur.dt);
+		penduleInitialiseAlpha(&(iter->pendule), dissipation, (*systeme).moteurs.dt);
 		iter=iter->suivant;
 		}
 	while(iter!=(*systeme).premier);
@@ -187,7 +193,7 @@ void changeFormeDissipation(systemeT * systeme, int forme)
 		printf("Dissipation dernier= %6.3f\n", iter->precedent->pendule.dissipation);
 		}
 	else
-		{ // Cas uniforme (forme=1)
+		{ // Cas uniforme (forme=1 ou 0)
 		printf("Dissipation = %6.3f\n", dissipation);
 		}
 
@@ -231,7 +237,7 @@ void changeLimite(systemeT * systeme)
 		couplage=(*systeme).couplage;
 		}
 
-	penduleInitialiseKapa(&(*systeme).premier->precedent->pendule, couplage, (*systeme).moteur.dt);
+	penduleInitialiseKapa(&(*systeme).premier->precedent->pendule, couplage, (*systeme).moteurs.dt);
 
 	printf("Couplage dernier = %6.3f\n", couplage);
 

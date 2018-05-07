@@ -54,7 +54,7 @@ typedef struct GrapheT grapheT;
 		};
 
 int grapheCreation(grapheT * graphe, int nombre);
-int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond);
+//int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond);
 void grapheSuppression(grapheT * graphe);
 void grapheChangeSupport(grapheT * graphe);
 

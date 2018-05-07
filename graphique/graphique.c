@@ -1,7 +1,7 @@
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2 simulateur de chaîne de pendules
+SiCP 2.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -11,16 +11,16 @@ de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 En contrepartie de l'accessibilité au code source et des droits de copie,
 de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
+offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
 seule une responsabilité restreinte pèse sur l'auteur du programme, le
 titulaire des droits patrimoniaux et les concédants successifs.
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
-associés au chargement,  à l'utilisation,  à la modification et/ou au
+A cet égard l'attention de l'utilisateur est attirée sur les risques
+associés au chargement, à l'utilisation, à la modification et/ou au
 développement et à la reproduction du logiciel par l'utilisateur étant
 donné sa spécificité de logiciel libre, qui peut le rendre complexe à
 manipuler et qui le réserve donc à des développeurs et des professionnels
-avertis possédant  des  connaissances  informatiques approfondies. Les
-utilisateurs sont donc invités à charger  et  tester  l'adéquation du
+avertis possédant des connaissances informatiques approfondies. Les
+utilisateurs sont donc invités à charger et tester l'adéquation du
 logiciel à leurs besoins dans des conditions permettant d'assurer la
 sécurité de leurs systèmes et ou de leurs données et, plus généralement,
 à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
@@ -31,6 +31,7 @@ termes.
 
 #include "graphique.h"
 
+int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur);
 void graphiqueLigne(graphiqueT * graphique, int X, int Y, int x, int y);
 void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y);
 //void graphiqueMasse(graphiqueT * graphique, int abs, int ord);
@@ -50,13 +51,19 @@ int graphiqueDestruction(graphiqueT * graphique)
 
 int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int taille, int fond)
 	{
+	int retour = 0;
 	(void)taille;
+	int largeur;
+	int hauteur;
+	SDL_GetWindowSize((*interface).fenetre, &largeur, &hauteur);
+	(*graphique).largeur=largeur;
+	(*graphique).hauteur=hauteur;
 		// Création du rendu
 	(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
 					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if(NULL == (*graphique).rendu)
 		{
-		fprintf(stderr, "interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
+		fprintf(stderr, "ERREUR interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
 		return EXIT_FAILURE;
 		}
 
@@ -89,36 +96,91 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	//SDL_Texture *masse;
 
+	SDL_Surface *panneau = 0;
+
+	panneau = SDL_LoadBMP("./graphique/sicp.bmp");
+	if (!panneau)
+		{
+		fprintf(stderr,"ERREUR chargement image, sicp.bmp : %s\n",SDL_GetError());
+		retour = 1;
+		}
+	(*graphique).SiCP = SDL_CreateTextureFromSurface((*graphique).rendu, panneau);
+	SDL_FreeSurface(panneau);
+	if ((*graphique).SiCP == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 2;
+		}
+
 	SDL_Surface *image = 0;
 
 	image = SDL_LoadBMP("./graphique/mobile.bmp");
 	if (!image)
 		{
-		fprintf(stderr,"Erreur chargement image, mobile.bmp : %s\n",SDL_GetError());
-		return 0;
+		fprintf(stderr,"ERREUR chargement image, mobile.bmp : %s\n",SDL_GetError());
+		retour = 3;
 		}
 	(*graphique).masse = SDL_CreateTextureFromSurface((*graphique).rendu, image);
 	SDL_FreeSurface(image);
 	if ((*graphique).masse == 0)
 		{
-		fprintf(stderr,"grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
-		return 0;
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 4;
 		}
-
 		// Activation de la transparence
 	//SDL_BLENDMODE_NONE || SDL_BLENDMODE_BLEND || SDL_BLENDMODE_ADD || SDL_BLENDMODE_MOD
 	if(SDL_SetTextureBlendMode((*graphique).masse, SDL_BLENDMODE_MOD) < 0)
-		fprintf(stderr, "grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
+		fprintf(stderr, "ERREUR grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
 
-	return 0;
+
+	return retour;
 }
 
 int graphiqueNettoyage(graphiqueT * graphique)
 	{
 	//int fond = (*graphique).fond;
-	SDL_SetRenderDrawColor((*graphique).rendu, (*graphique).fond.r, (*graphique).fond.g, (*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
-	SDL_RenderClear((*graphique).rendu);
+	//SDL_SetRenderDrawColor((*graphique).rendu, (*graphique).fond.r, (*graphique).fond.g, (*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
 	//SDL_SetRenderDrawColor((*graphique).rendu, 255-(*graphique).fond.r, 255-(*graphique).fond.g, 255-(*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
+	SDL_RenderClear((*graphique).rendu);
+	return 0;
+	}
+
+int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
+	{
+		// Dessine le fond et les commandes sélectionées
+	SDL_Rect coordonnee = {0, 0, (*graphique).largeur, (*graphique).hauteur};
+	SDL_RenderCopy((*graphique).rendu, (*graphique).SiCP, NULL, &coordonnee);
+	
+	int centrage = 5;
+	coordonnee.w=10;
+	coordonnee.h=10;
+	coordonnee.x = (*commandes).boutonsCentre - centrage;	// Positon X de la zone des petits boutons
+	int i;
+	int X, Y, x, y;
+			
+	for(i=0;i<BOUTON_COMMANDES;i++)
+		{
+		if((*commandes).boutonEtat[i]==1)
+			{
+			coordonnee.y = (*commandes).boutonCentre[i] - centrage; // Positon Y des petits boutons
+			//	Dessin des petits boutons
+			SDL_RenderCopy((*graphique).rendu, (*graphique).masse, NULL, &coordonnee);
+			}
+		}
+
+	graphiqueChangeCouleur(graphique, (*graphique).orange);
+	X=(*commandes).rotatifsCentre;
+	for(i=0;i<ROTATIF_COMMANDES;i++)
+		{
+		Y=(*commandes).rotatifCentre[i];
+		x=X+(*commandes).rotatifPositionX[i];
+		y=Y+(*commandes).rotatifPositionY[i];
+		SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
+		SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
+		SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
+		SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
+		}
+
 	return 0;
 	}
 

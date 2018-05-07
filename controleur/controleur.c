@@ -1,7 +1,7 @@
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2.1 simulateur de chaîne de pendules
+SiCP 2.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -14,7 +14,7 @@ de modification et de redistribution accordés par cette licence, il n'est
 offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
 seule une responsabilité restreinte pèse sur l'auteur du programme, le
 titulaire des droits patrimoniaux et les concédants successifs.
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
+A cet égard l'attention de l'utilisateur est attirée sur les risques
 associés au chargement, à l'utilisation, à la modification et/ou au
 développement et à la reproduction du logiciel par l'utilisateur étant
 donné sa spécificité de logiciel libre, qui peut le rendre complexe à
@@ -47,9 +47,14 @@ int controleurClavier(controleurT * controleur);
 int controleurClavier2(controleurT * controleur);
 int controleurClavier3(controleurT * controleur);
 
+int controleurCommandes(controleurT * controleur, int zone);
+
 int controleurSouris(controleurT * controleur);
 int controleurDefile(controleurT * controleur);
+int controleurDefilePointDeVue(controleurT * controleur);
+int controleurDefileCommandes(controleurT * controleur);
 void controleurBoutonSouris(controleurT * controleur, int appui);
+void controleurAfficheSouris(controleurT * controleur);
 
 void controleurChangeMode(controleurT * controleur);
 void controleurChangeVitesse(controleurT * controleur, float facteur);
@@ -106,7 +111,7 @@ int controleurEvolution(controleurT * controleur)
 		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 	//horlogeChronoDepart(&(*controleur).horloge);
 
-		//fprintf(stderr, "Projection du systeme sur la représentation graphique\n");
+		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
 	controleurProjection(controleur);
 		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
@@ -115,7 +120,7 @@ int controleurEvolution(controleurT * controleur)
 	if((*controleur).options.modePause > 0)
 		{
 		//horlogeChronoDepart(&(*controleur).horloge);
-		//fprintf(stderr, "Evolution temporelle du systeme\n");
+		//fprintf(stderr, "Evolution temporelle du système\n");
 		controleurEvolutionSysteme(controleur);
 		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 		}
@@ -140,22 +145,36 @@ int controleurProjection(controleurT * controleur)
 	{
 	int largeur;
 	int hauteur;
+	int x, y;
 
 		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
+		// Réinitialisation des commandes si la fenetre change de taille
+	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
+		{
+		(*controleur).graphique.largeur=largeur;
+		(*controleur).graphique.hauteur=hauteur;
+		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+		}
+
+		// Réinitialisation des commandes de la souris
+	SDL_PumpEvents();
+	SDL_GetMouseState(&x,&y);
+	commandesInitialiseSouris(&(*controleur).commandes, x, y);
+
 		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	//projectionInitialiseLongueurs(&(*control).projection, HAUTEUR/3, LARGEUR*0.7, 2.1);
 	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*RATIO_H_L, largeur, (*controleur).projection.pointDeVue.r);
 
-	projectionSystemChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
+	projectionSystemeChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
+	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes);
 
 	return (*controleur).sortie;
 	}
 
 int controleurEvolutionSysteme(controleurT * controleur)
 	{
-		//fprintf(stderr, "Evolution temporelle du systeme\n");
+		//fprintf(stderr, "Evolution temporelle du système\n");
 	systemeEvolution(&(*controleur).systeme, (*controleur).options.duree);
 
 	return 0;
@@ -168,7 +187,7 @@ int controleurConstructionGraphique(controleurT * controleur)
 	graphiqueNettoyage(&(*controleur).graphique);
 
 		//fprintf(stderr, "Dessin des Commandes\n");
-	//graphiqueCommandes(&(*controleur).graphique);
+	graphiqueCommandes(&(*controleur).graphique, &(*controleur).commandes);
 
 		//fprintf(stderr, "Dessin des graphes\n");
 	if((*controleur).graphe.support==0)
@@ -194,9 +213,9 @@ int controleurTraiteEvenement(controleurT * controleur)
 		case SDL_QUIT:
 			(*controleur).sortie = 1;break;
 		case SDL_MOUSEWHEEL:
-			sortie = controleurDefile(controleur);break;
+			controleurDefile(controleur);break;
 		case SDL_MOUSEMOTION:
-			sortie = controleurSouris(controleur);break;
+			controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
 			controleurBoutonSouris(controleur, 1);break;
 		case SDL_MOUSEBUTTONUP:
@@ -325,7 +344,7 @@ int controleurClavier(controleurT * controleur)
 			//changeConditionsLimites(&(*controleur).systeme, 3); // libre fixe
 			break;
 		case SDLK_n:
-			changeConditionsLimites(&(*controleur).systeme, 4); // fixe libre
+			changeConditionsLimites(&(*controleur).systeme, 3); // fixe libre
 			break;
 
 
@@ -361,29 +380,29 @@ int controleurClavier(controleurT * controleur)
 
 	// Moteur jonction Josephson
 		case SDLK_UP:
-			moteursChangeJosephson(&(*controleur).systeme.moteur,1.1);break;
+			moteursChangeJosephson(&(*controleur).systeme.moteurs,1.1);break;
 		case SDLK_DOWN:
-			moteursChangeJosephson(&(*controleur).systeme.moteur,0.91);break;
+			moteursChangeJosephson(&(*controleur).systeme.moteurs,0.91);break;
 		case SDLK_LEFT:
-			moteursChangeJosephson(&(*controleur).systeme.moteur,-1.0);break;
+			moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break;
 		case SDLK_RIGHT:
-			moteursChangeJosephson(&(*controleur).systeme.moteur,0.0);break;
+			moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break;
 
 	// Moteur générateur de signaux
 		case SDLK_p:
-			moteursChangeFrequence(&(*controleur).systeme.moteur,1.1);break;
+			moteursChangeFrequence(&(*controleur).systeme.moteurs,1.1);break;
 		case SDLK_m:
-			moteursChangeFrequence(&(*controleur).systeme.moteur,0.91);break;
+			moteursChangeFrequence(&(*controleur).systeme.moteurs,0.91);break;
 		case SDLK_u:
-			moteursChangeAmplitude(&(*controleur).systeme.moteur,1.1);break;
+			moteursChangeAmplitude(&(*controleur).systeme.moteurs,1.1);break;
 		case SDLK_j:
-			moteursChangeAmplitude(&(*controleur).systeme.moteur,0.91);break;
+			moteursChangeAmplitude(&(*controleur).systeme.moteurs,0.91);break;
 		case SDLK_o:
-			moteursChangeGenerateur(&(*controleur).systeme.moteur, -1);break;
+			moteursChangeGenerateur(&(*controleur).systeme.moteurs, -1);break;
 		case SDLK_i:
-			moteursChangeGenerateur(&(*controleur).systeme.moteur, 3);break;
+			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 3);break;
 		case SDLK_l:
-			moteursChangeGenerateur(&(*controleur).systeme.moteur, 2);break;
+			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 2);break;
 
 
 	// Choix de la simulation
@@ -394,16 +413,17 @@ int controleurClavier(controleurT * controleur)
 			(*controleur).systeme.equation = 2;break;
 		case SDLK_F3: // Corde
 			(*controleur).systeme.equation = 3;break;
-		case SDLK_F4: // Corde asymétrique
-			(*controleur).systeme.equation = 4;break;
 */
   // Afficher les observables
 
+		case SDLK_F4: // Corde asymétrique
+			controleurAfficheSouris(controleur);
+			break;
 		case SDLK_F5:
 			observablesAfficheEnergie(&(*controleur).systeme);
 			break;
 		case SDLK_F6:
-			moteursAfficheHorloge(&(*controleur).systeme.moteur);
+			moteursAfficheHorloge(&(*controleur).systeme.moteurs);
 			break;
 		case SDLK_F7:
 			projectionAffichePointDeVue(&(*controleur).projection);
@@ -545,6 +565,55 @@ int controleurClavierCtrl(controleurT * controleur)
 	return (*controleur).sortie;
 	}
 
+int controleurCommandes(controleurT * controleur, int zone)
+	{
+	int commande;
+	if(zone==2)
+		{
+		commande = commandeBoutons(&(*controleur).commandes);
+		switch(commande)	//	
+			{
+			case 0:
+				changeConditionsLimites(&(*controleur).systeme, 0);break; // 32	Périodique
+			case 1:
+				changeConditionsLimites(&(*controleur).systeme, 1);break; // 62	Libre
+			case 2:
+				changeConditionsLimites(&(*controleur).systeme, 2);break; // 88 	Fixe
+			case 3:
+				changeConditionsLimites(&(*controleur).systeme, 4);break; // 115	Mixte
+			case 4:
+				changeFormeDissipation(&(*controleur).systeme, 1);break; // 167	Uniforme
+			case 5:
+				changeFormeDissipation(&(*controleur).systeme, 0);break; // 198	Nulle
+			case 6:
+				changeFormeDissipation(&(*controleur).systeme, 2);break; // 230	Extrémité
+			case 7:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break; // 284	Marche
+			case 8:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break; // 311	Arrêt
+			case 9:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break; // 339	Droite
+			case 10:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break; // 367	Gauche
+			case 11:
+				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);break; // 421	Arrêt
+			case 12:
+				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 1);break; // 449	Sinus
+			case 13:
+				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 2);break; // 481	Carré
+			case 14:
+				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 3);break; // 509	Impulsion
+			case 15:
+				changeDephasage(&(*controleur).systeme, 2*PI);break; // 536	Fluxon
+			case 16:
+				changeDephasage(&(*controleur).systeme, -2*PI);break; // 563	Anti F.
+			default:
+				;
+			}
+		}
+	return 0;
+	}
+
 int controleurSouris(controleurT * controleur)
 	{
 	float x, y;
@@ -561,7 +630,65 @@ int controleurSouris(controleurT * controleur)
 	return (*controleur).sortie;
 	}
 
+int controleurDefileCommandes(controleurT * controleur)
+	{
+	int commande;
+	commande = commandeRotatifs(&(*controleur).commandes);
+
+	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
+		{
+		switch(commande)
+			{
+			case 0:
+				changeCouplage(&(*controleur).systeme, 1.1);break;
+			case 1:
+				changeDissipation(&(*controleur).systeme, 1.1);break;
+			case 2:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs, 1.1);break;
+			case 3:
+				moteursChangeAmplitude(&(*controleur).systeme.moteurs, 1.1);break;
+			case 4:
+				moteursChangeFrequence(&(*controleur).systeme.moteurs, 1.1);break;
+			default:
+				;
+			}
+		}
+	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
+		{
+		switch(commande)	
+			{
+			case 0:
+				changeCouplage(&(*controleur).systeme, 0.91);break;
+			case 1:
+				changeDissipation(&(*controleur).systeme, 0.91);break;
+			case 2:
+				moteursChangeJosephson(&(*controleur).systeme.moteurs, 0.91);break;
+			case 3:
+				moteursChangeAmplitude(&(*controleur).systeme.moteurs, 0.91);break;
+			case 4:
+				moteursChangeFrequence(&(*controleur).systeme.moteurs, 0.91);break;
+			default:
+				;
+			}
+		}
+
+	return 0;
+	}
+
 int controleurDefile(controleurT * controleur)
+	{
+	if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
+		{
+		controleurDefileCommandes(controleur);
+		}
+	else
+		{
+		controleurDefilePointDeVue(controleur);
+		}
+	return 0;
+	}
+
+int controleurDefilePointDeVue(controleurT * controleur)
 	{
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
@@ -593,13 +720,43 @@ int controleurDefile(controleurT * controleur)
 	projectionChangePsi(&(*controleur).projection, 0);
 	projectionChangePhi(&(*controleur).projection, 0);
 
-	return (*controleur).sortie;
+	return 0;
 	}
 
 void controleurBoutonSouris(controleurT * controleur, int appui)
 	{
-	(*controleur).appui=appui;
 
+	(*controleur).appui=appui;
+	
+	if(appui==1)
+		{
+		if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
+			{
+			if((*controleur).commandes.sourisX>(*controleur).commandes.boutons)
+				{
+				controleurCommandes(controleur, 2);
+				}
+			else
+				{
+				controleurCommandes(controleur, 1);
+				}
+			}
+		else
+			{
+			controleurCommandes(controleur, 0);
+			}
+		}
 	return;
 	}
+
+void controleurAfficheSouris(controleurT * controleur)
+	{
+	fprintf(stderr, "(*controleur).graphique.hauteur = %d\n", (*controleur).graphique.hauteur);
+	fprintf(stderr, "(*controleur).commandes.sourisY = %d\n", (*controleur).commandes.sourisY);
+	fprintf(stderr, "(*controleur).graphique.largeur = %d\n", (*controleur).graphique.largeur);
+	fprintf(stderr, "(*controleur).commandes.sourisX = %d\n", (*controleur).commandes.sourisX);
+
+	return ;
+	}
+
 //////////////////////////////////////////////////////////////////////////////////////

@@ -51,8 +51,8 @@ int grapheCreation(grapheT * graphe, int nombre)
 	iter=(*graphe).premier;
 	do
 		{
-		iter->xm=LARGEUR/2;
-		iter->ym=HAUTEUR/2;
+		iter->xm=FENETRE_X/2;
+		iter->ym=FENETRE_Y/2;
 		}
 	while(iter!=(*graphe).premier);
 

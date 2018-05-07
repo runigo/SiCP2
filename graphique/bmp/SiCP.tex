@@ -1,0 +1,245 @@
+% SiTS
+%
+% Librement inspiré de
+% TeXtronics oscilloscope
+% Author: Hugues Vermeiren
+% http://www.texample.net/tikz/examples/textronics-oscilloscope/
+\documentclass[a4paper,12pt,oneside]{article}
+\usepackage{tikz}
+%%%<
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage[greek, frenchb]{babel}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{0pt}%
+%%%>
+\begin{comment}
+:Title: TeXtronics oscilloscope
+:Tags: Styles;Scopes;Physics; Fun
+:Author: Hugues Vermeiren
+:Slug: textronics-oscilloscope
+The TeXtronics oscilloscope! It is a basic 2-channels oscilloscope,
+the kind of machine most students have used in their labs.
+
+Ideally, it should be parameterized so as to be able to easily change
+the signals and the positions of the different controls.
+\end{comment}
+
+\begin{document}
+\def\scl{0.6}%scaling factor of the picture
+\sffamily
+\begin{tikzpicture}[
+  scale=\scl,
+  panneaucontroles/.style={yellow!30!brown!20!,rounded corners,draw=black,thick},
+  ecran/.style={green!50!black!60!,draw=black,thick},
+  %trace/.style={green!60!yellow!40!, ultra thick},
+  %axes/.style={thick},
+  petitbouton/.style={white,draw=black, thick}]
+%
+%
+%        ECRAN
+%
+    \fill[white,draw=black,thick](-21,0.7) rectangle (28,30.9);
+%
+%      PANNEAU  COUPLAGE
+%
+  \fill[panneaucontroles] (20.1,24.2) rectangle (27.6,30.4);
+  \begin{scope}[xshift=22.5 cm,yshift=26.9cm]
+    \fill[petitbouton] (3.5,-2.1) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-1.4) {\Large{Mixte}};
+    \fill[petitbouton] (3.5,-0.7) circle (0.3cm);
+    \node[scale=\scl] at (3.5,0.0) {\Large{Fixe}};
+    \fill[petitbouton] (3.5,0.7) circle (0.3cm);
+    \node[scale=\scl] at (3.5,1.4) {\Large{Libre}};
+    \fill[petitbouton] (3.5,2.1) circle (0.3cm);
+    \node[scale=\scl] at (3.5,2.8) {\Large{Périodique}};
+
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Couplage}};
+    \clip[rounded corners] (-2,-2) rectangle (2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
+    \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
+    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+  \end{scope}
+%
+%      PANNEAU  DISSIPATION
+%
+  \fill[panneaucontroles] (20.1,18) rectangle (27.6,23.7);
+  \begin{scope}[xshift=22.7 cm,yshift=20.5cm]
+    \fill[petitbouton] (3.5,-1.5) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-0.8) {\Large{Extrémité}};
+    \fill[petitbouton] (3.5,0.1) circle (0.3cm);
+    \node[scale=\scl] at (3.5,0.9) {\Large{Nulle}};
+    \fill[petitbouton] (3.5,1.7) circle (0.3cm);
+    \node[scale=\scl] at (3.5,2.6) {\Large{Uniforme}};
+
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Dissipation}};
+    \clip[rounded corners] (-2,-2) rectangle (2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
+    \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
+    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+  \end{scope}
+%
+%
+%      PANNEAU  JOSEPHSON
+%
+  \fill[panneaucontroles] (20.1,11.3) rectangle (27.6,17.5);
+  \begin{scope}[xshift=22.7 cm,yshift=14.1cm]
+    \fill[petitbouton] (3.5,-2.1) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-1.4) {\Large{Gauche}};
+    \fill[petitbouton] (3.5,-0.7) circle (0.3cm);
+    \node[scale=\scl] at (3.5,0.0) {\Large{Droite}};
+    \fill[petitbouton] (3.5,0.7) circle (0.3cm);
+    \node[scale=\scl] at (3.5,1.4) {\Large{Arrêt}};
+    \fill[petitbouton] (3.5,2.1) circle (0.3cm);
+    \node[scale=\scl] at (3.5,2.8) {\Large{Marche}};
+
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Josephson}};
+    \clip[rounded corners] (-2,-2) rectangle (2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
+    \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
+    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+
+  \end{scope}
+
+%
+%      PANNEAU  MOTEUR
+%
+  \fill[panneaucontroles] (20.2,1.1) rectangle (27.5,10.8);
+ % \fill[panneaucontroles] (20,13) rectangle (27,19.5);
+  \begin{scope}[xshift=26.2 cm,yshift=2.0cm]
+    \fill[petitbouton] (0,0) circle (0.3cm);
+    \node[scale=\scl] at (0,0.7) {\Large{Anti F.}};
+    \fill[petitbouton] (0,1.4) circle (0.3cm);
+    \node[scale=\scl] at (0,2.1) {\Large{Fluxon}};
+    \fill[petitbouton] (0,2.8) circle (0.3cm);
+    \node[scale=\scl] at (0,3.5) {\Large{Impulsion}};
+    \fill[petitbouton] (0,4.2) circle (0.3cm);
+    \node[scale=\scl] at (0,4.9) {\Large{Carré}};
+    \fill[petitbouton] (0,5.8) circle (0.3cm);
+    \node[scale=\scl] at (0,6.5) {\Large{Sinus}};
+    \fill[petitbouton] (0,7.2) circle (0.3cm);
+    \node[scale=\scl] at (0,7.9) {\Large{Arrêt}};
+  \end{scope}
+  \begin{scope}[xshift=22.7 cm,yshift=7.9cm,scale=0.85]
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Amplitude}};
+    \clip[rounded corners] (-2,-2) rectangle (2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
+    \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
+    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+  \end{scope}
+  \begin{scope}[xshift=22.7 cm,yshift=3.3cm,scale=0.85]
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Fréquence}};
+    \clip[rounded corners] (-2,-2) rectangle (2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
+    \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
+    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+  \end{scope}
+\end{tikzpicture}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%      PANNEAU DESSOUS
+%
+  \fill[panneaucontroles] (0.6,0.5) rectangle (13.5,3.0);
+  \path (0.8,0.9) node[scale=\scl,right]{$\mathbf{TeXtronics\,1 - v.1.01}$};%left
+%
+%         CADRE
+%
+  \fill[green!30!blue!30!,rounded corners,draw=black,thick](0,0) rectangle (27.75,13.25);
+  \fill[fill=black!40!,draw=black,thick,rounded corners](0.25,0.25) rectangle (27.5,13.00);
+ % \fill[white,rounded corners,draw=black,thick](0,0) rectangle (27.75,13.25);
+ % \fill[fill=black!40!,draw=black,thick,rounded corners](0.25,0.25)
+  %  rectangle (27.5,13.00);
+  %On-Off button
+  \draw[rounded corners,thick,blue] (13.9,10.5) rectangle (15.9,12.5);
+  \fill[fill=red,draw=black,thick,rounded corners] (14.4,10.8) rectangle (15.3,11.2);
+  \node[scale=\scl] at (14.8,12) {\textbf{Power}};
+  \node[scale=\scl] at (14.8,11.5) {\textbf{On/Off}};
+  % X-pos
+  \fill[petitbouton] (24.5,9.9) circle (0.3cm);
+  \node[scale={\scl}] at (24.5,10.5) {X-pos};
+  % Y-pos
+  \fill[petitbouton] (14.8,4.9) circle (0.3cm);
+  \node[scale={\scl}] at (14.8,5.5) {Y-pos I};
+  \fill[petitbouton] (26.0,4.9) circle (0.3cm);
+  \node[scale={\scl}] at (26.0,5.5) {Y-pos II};
+  % Time/Div
+  \begin{scope}[xshift=21cm,yshift=9.5cm,scale=1]
+    \node[scale={1.25*\scl}]  at (0,2.4) {Time/Div};
+    \clip[rounded corners] (-2.2,-2) rectangle (2.2,2);
+    \fill[black!30!,rounded corners,draw=black,thick] (-2.2,-2) rectangle (2.2,2);
+    \fill[blue!50!black!20!,draw=black,thick]
+      (45:1.1)--(45:3)--(3,-3)--(-90:3)--(-90:1.1) arc (-90:45:1.1);
+    \fill[green!50!black!40!,draw=black,thick]
+      (45:1.1)--(45:3) arc(45:207:3) --(207:1.1) arc (207:45:1.1);
+    \draw[very thick,rounded corners](-2.2,-2) rectangle (2.2,2);
+    \node[scale={1.25*\scl}] at (-1.6,-1.6) {$s$};
+    \node[scale={1.25*\scl}] at (1.6,-1.6) {$\mu{}\,s$};
+    \node[scale={1.25*\scl}] at (-1.6,1.6) {$m\,s$};
+    \draw[thick] (0,0) circle (1.0);
+    \foreach \i in {-72,-54,...,262} \draw[thick] (\i:1.15)--(\i:1.35);
+    \foreach \i/\j in {-72/.5,-54/1,-36/2,-18/5,0/10,18/20,36/50,54/.1,72/.2,90/.5,
+      108/1,126/2,144/5,162/10,180/20,198/50,216/.1,234/.2,252/.5}
+      \node[scale=\scl,black] at (\i:1.7){\j};
+    \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
+    % Here you set the Time/Div button
+    \draw[ultra thick,red] (-18:0.3)--(-18:1.2);	
+    % X-pos
+  \end{scope}
+
+  %On-Off button
+  \draw[rounded corners,thick,blue] (13.9,10.5) rectangle (15.9,12.5);
+  \fill[fill=red,draw=black,thick,rounded corners] (14.4,10.8) rectangle (15.3,11.2);
+  \node[scale=\scl] at (14.8,12) {\textbf{Power}};
+  \node[scale=\scl] at (14.8,11.5) {\textbf{On/Off}};
+  %
+  % PIEDS
+  %
+  %\fill[black!70!,rounded corners,xshift=2cm] (0,-.5) rectangle (2,0);
+  %\fill[black!70!,rounded corners,xshift=23.75cm] (0,-.5) rectangle (2,0);
+  % Lower left panel
+
+\begin{tikzpicture}[
+  scale=\scl,
+  panneaucontroles/.style={yellow!30!brown!20!,rounded corners,draw=black,thick},
+  ecran/.style={green!50!black!60!,draw=black,thick},
+  trace/.style={green!60!yellow!40!, ultra thick},
+  petitbouton/.style={white,draw=black, thick},
+  axes/.style={thick}]
+  \fill[green!30!blue!30!,rounded corners,draw=black,thick](0,0)
+    rectangle (27.75,13.25);
+  \fill[fill=black!40!,draw=black,thick,rounded corners](0.25,0.25)
+    rectangle (27.5,13.00);
+  % Screen, centered around the origin then shifted for easy plotting
+  \begin{scope}[xshift=7cm,yshift=8cm,samples=150]
+    \fill[black!60!,rounded corners,draw=black,thick](-5.3,-4.3)
+      rectangle (5.3,4.3);
+    \fill[ecran] (-5.0,-4.0) rectangle (5.0,4.0);
+    \draw[trace] plot(\x,{1+2.4*sin((2.5*\x +1) r)}); % r for radians...
+    \draw[trace] plot(\x,{-1+1.25*sin((0.75*\x) r});
+    \draw[thin] (-5.0,-4.0) grid (5.0,4.0);
+    \draw[axes] (-5,0)--(5,0); % Time axis
+    \draw[axes] (0,-4)--(0,4);
+    \foreach \i in {-4.8,-4.6,...,4.8} \draw (\i,-0.1)--(\i,0.1);
+    \foreach \i in {-3.8,-3.6,...,3.8} \draw (-0.1,\i)--(0.1,\i);
+  \end{scope}

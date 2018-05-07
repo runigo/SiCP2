@@ -29,49 +29,43 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-#ifndef _SYSTEME_
-#define _SYSTEME_
+#ifndef _COMMANDES_
+#define _COMMANDES_
 
-#include "chaine.h"
-#include "moteurs.h"
+#include "../donnees/constantes.h"
 
-typedef struct SystemeT systemeT;
-	struct SystemeT
+typedef struct CommandesT commandesT;
+	struct CommandesT
 		{
-		chaineT * premier;	//	Premier pendule couplé
+		int rotatifs; // Positon X de la zone des boutons rotatifs
+		int rotatifsCentre; // Positon X des boutons rotatifs
+		int rotatifCentre[ROTATIF_COMMANDES]; // Positon Y des boutons rotatifs
+		int rotatifX; // Rayon suivant X
+		int rotatifY; // Rayon suivant Y
 
-		moteursT moteurs;		//	Josephson, horloge
-						//	Générateur de signal
+		int rotatifPositionX[ROTATIF_COMMANDES]; // Position du bouton rotatif
+		int rotatifPositionY[ROTATIF_COMMANDES];
 
-		int nombre;		//	Nombre de pendule
-		int equation;		//	Pendule=1, Harmonique=2, Corde=3, Dioptre=4
+		int boutons; // Positon X de la zone des petits boutons
+		int boutonsCentre; // Positon X des petits boutons
+		int boutonCentre[BOUTON_COMMANDES]; // Positon Y des petits boutons
+		int boutonX; // Rayon suivant X
+		int boutonY; // Rayon suivant Y
 
-		float dephasage;	//	déphasage entre les limites
-		int libreFixe;		//	0 : périodiques 1 : libres, 2 : fixes, 
-							//		3 libre-fixe, 4 fixe-libre
+		int boutonEtat[BOUTON_COMMANDES]; // État du petit bouton
 
-		float masse;		//	Masse d'un pendule
-		float longueur;		//	Longueur d'un pendule
+		int sourisX; // position X de la souris
+		int sourisY; // position Y de la souris
 
-		float couplage;		//	Mémoire pour conditions limites
-		float dissipation;	//	Mémoire si alpha = 0.0
-		int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
-
-		float gravitation;	//	Accélération de la pesanteur
-
+		int sourisGauche; // position X de la souris - demiBouton
+		int sourisDroite; // position X de la souris + demiBouton
+		int sourisHaut; // position Y de la souris - demiBouton
+		int sourisBas; // position Y de la souris + demiBouton
 		};
 
-// Création de la chaîne de pendule
-int systemeCreation(systemeT * systeme);
+int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur);
+int commandesInitialiseSouris(commandesT * commandes, int sourisX, int sourisY);
+int commandeBoutons(commandesT * commandes);
+int commandeRotatifs(commandesT * commandes);
 
-// Suppression de la chaîne de pendule
-void systemeSuppression(systemeT * systeme);
-
-// Évolution temporelle du système, "duree" cycle d'évolution
-void systemeEvolution(systemeT * systeme, int duree);
-
-// Réinitialisation des positions
-void systemeInitialisePosition(systemeT * systeme);
 #endif
-
-////////////////////////////////////////////////////////////

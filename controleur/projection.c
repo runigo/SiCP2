@@ -1,7 +1,7 @@
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2.1 simulateur de chaîne de pendules
+SiCP 2.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -14,7 +14,7 @@ de modification et de redistribution accordés par cette licence, il n'est
 offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
 seule une responsabilité restreinte pèse sur l'auteur du programme, le
 titulaire des droits patrimoniaux et les concédants successifs.
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
+A cet égard l'attention de l'utilisateur est attirée sur les risques
 associés au chargement, à l'utilisation, à la modification et/ou au
 développement et à la reproduction du logiciel par l'utilisateur étant
 donné sa spécificité de logiciel libre, qui peut le rendre complexe à
@@ -31,12 +31,128 @@ termes.
 
 #include "projection.h"
 
+float projectionAbsolue(float valeur);
+
 int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe);
-int projectionSystemChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe);
+int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe);
 
 int projectionInitialiseSupport(projectionT * projection, int nombre);
 int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
 
+float projectionAbsolue(float valeur)
+	{
+	if(valeur<0) return -valeur;
+	return valeur;
+	}
+
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes)
+	{		// Projette le système sur les commandes
+	(void)projection;
+	float theta;
+	float ratioRotatif = 0.9;
+
+				//	Projection sur les boutons rotatifs
+	theta = DEUXPI * (*systeme).couplage/(COUPLAGE_MAX * (*systeme).nombre);
+	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta)); //	Couplage
+	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta)); //	Couplage
+
+	theta = DEUXPI * 0.919 *(*systeme).dissipation/DISSIPATION_MAX;
+	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	theta = DEUXPI * 0.93 * projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MAX);	//	Amplitude du moteur josephson
+	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	theta = DEUXPI * 1.29 * log(1+(*systeme).moteurs.amplitude/AMPLITUDE_MAX);	//	Amplitude du moteur périodique
+	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	theta = DEUXPI * 1.35 * log(1+(*systeme).moteurs.frequence/FREQUENCE_MAX);	//	Fréquence du moteurs
+	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+		//int rotatifPositionX[ROTATIF_COMMANDES]; // Position du bouton rotatif
+		//int rotatifPositionY[ROTATIF_COMMANDES];
+
+
+	int i;
+	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
+
+		//int libreFixe;		//	0 : périodiques 1 : libres, 2 : fixes, 
+							//		3 libre-fixe, 4 fixe-libre
+	switch((*systeme).libreFixe)	//	
+		{
+		case 0:
+			(*commandes).boutonEtat[0]=1;break; // 32	Périodique
+		case 1:
+			(*commandes).boutonEtat[1]=1;break; // 62	Libre
+		case 2:
+			(*commandes).boutonEtat[2]=1;break; // 88 	Fixe
+		case 3:
+			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+		case 4:
+			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+		default:
+			;
+		}
+
+	//	int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
+	switch((*systeme).modeDissipation)	//	
+		{
+		case 0:
+			(*commandes).boutonEtat[5]=1;break; // 198	Nulle
+		case 1:
+			(*commandes).boutonEtat[4]=1;break; // 167	Uniforme
+		case 2:
+			(*commandes).boutonEtat[6]=1;break; // 230	Extrémité
+		default:
+			;
+		}
+/*
+	(*commandes).boutonEtat[4]=1;
+	(*commandes).boutonEtat[5]=1;
+	(*commandes).boutonEtat[6]=1;
+*/
+	if((*systeme).moteurs.josephson > 0.0)
+		{
+		(*commandes).boutonEtat[7]=1; // 284	Marche
+		(*commandes).boutonEtat[9]=1; // 339	Droite
+		}
+	else
+		{
+		if((*systeme).moteurs.josephson < 0.0)
+			{
+			(*commandes).boutonEtat[7]=1; // 284	Marche
+			(*commandes).boutonEtat[10]=1; // 367	Gauche
+			}
+		else
+			{
+			(*commandes).boutonEtat[8]=1; // 311	Arrêt
+			}
+		}
+
+	switch((*systeme).moteurs.generateur)	//	0:eteint, 1:sinus, 2:carre, 3:impulsion
+		{
+		case 0:
+			(*commandes).boutonEtat[11]=1;break; // 421	Arrêt
+		case 1:
+			(*commandes).boutonEtat[12]=1;break; // 449	Sinus
+		case 2:
+			(*commandes).boutonEtat[13]=1;break; // 481	Carré
+		case 3:
+			(*commandes).boutonEtat[14]=1;break; // 509	Impulsion
+		default:
+			;
+		}
+
+	/*	float (*systeme).moteurs.phi;			//	Phase
+		float (*systeme).dephasage;	//	déphasage entre les limites
+	(*commandes).boutonEtat[15]=1; // 536	Fluxon
+	(*commandes).boutonEtat[16]=1; // 563	Anti F.
+	*/
+	return 0;
+	}
 
 int projectionInitialiseCouleurs(projectionT * projection, int r, int v, int b, int fond)
 	{		// Initialise la couleur du graphe
@@ -70,15 +186,15 @@ int projectionChangePhi(projectionT * projection, float x)
 	phi = (*projection).pointDeVue.phi + x;
 
 		// phi reste inférieur à PI
-	if(phi > PI-EPSILON)
+	if(phi > PI)
 		{
-		phi = PI-EPSILON;
+		phi = PI;
 		}
 
 		// phi reste supérieur à zéro
-	if(phi < EPSILON)
+	if(phi < 0.0)
 		{
-		phi = EPSILON;
+		phi = 0.0;
 		}
 
 	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
@@ -130,10 +246,10 @@ int projectionAffichePointDeVue(projectionT * projection)
 		Projection du système sur le rendu en perspective
 
 */
-int projectionSystemChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe)
+int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe)
 	{
 		// Projection du système sur la chaîne de pendule 3D
-	projectionSystemChaine3D(systeme, projection, graphe);
+	projectionSystemeChaine3D(systeme, projection, graphe);
 
 		// Initialisation des points du support
 	projectionInitialiseSupport(projection, (*systeme).nombre);
@@ -304,7 +420,7 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 	return 0;
 	}
 
-int projectionSystemChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe)
+int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe)
 	{	//	Projette le système sur une chaîne de pendule en 3 D
 	//float x=0;
 	float i = -(*systeme).nombre/2;

@@ -64,8 +64,7 @@ int donneesControleur(controleurT * controleur)
 
 
 		//fprintf(stderr, " Initialisation de la projection\n");
-		//fprintf(stderr, "projectionInitialiseCouleurs\n");
-	projectionInitialiseCouleurs(&(*controleur).projection, 222, 111, 222, 255);// r, v, b, fond
+	projectionInitialise(&(*controleur).projection);
 		//fprintf(stderr, "projectionInitialiseLongueurs\n");
 	projectionInitialiseLongueurs(&(*controleur).projection, FENETRE_Y/3, FENETRE_X*0.7, 0.57);// hauteur, largeur, ratio de distance
 		//fprintf(stderr, "projectionInitialisePointDeVue\n");

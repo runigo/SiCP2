@@ -64,13 +64,14 @@ void systemeSuppression(systemeT * systeme)
 
 /*------------------------------------------------------------------*/
 
-void systemeInitialisePosition(systemeT * systeme)
+void systemeInitialisePosition(systemeT * systeme, int forme)
 	{
+	float position = 0.0;
 	chaineT *iter=(*systeme).premier;
-
+	if(forme==1) position=1.5;
 	do
 		{
-		penduleInitialisePosition(&iter->pendule, 0.0, 0.0);
+		penduleInitialisePosition(&iter->pendule, position, position);
 		iter=iter->suivant;
 		}
 	while(iter != (*systeme).premier);

@@ -39,6 +39,16 @@ int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grap
 int projectionInitialiseSupport(projectionT * projection, int nombre);
 int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
 
+int projectionInitialise(projectionT * projection)
+	{
+	(*projection).rotation = 0;
+	(*projection).logCouplage = 1.0 / log( (COUPLAGE_MAX/COUPLAGE_MIN) );
+	(*projection).logDissipation = 1.0 / log( DISSIPATION_MAX/DISSIPATION_MIN );
+	(*projection).logJosephson = 1.0 / log( JOSEPHSON_MAX/JOSEPHSON_MIN );
+	(*projection).logAmplitude = 1.0 / log( AMPLITUDE_MAX/AMPLITUDE_MIN );
+	(*projection).logFrequence = 1.0 / log( FREQUENCE_MAX/FREQUENCE_MIN );
+	return 0;
+	}
 float projectionAbsolue(float valeur)
 	{
 	if(valeur<0) return -valeur;
@@ -47,28 +57,31 @@ float projectionAbsolue(float valeur)
 
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes)
 	{		// Projette le système sur les commandes
-	(void)projection;
 	float theta;
 	float ratioRotatif = 0.9;
 
 				//	Projection sur les boutons rotatifs
-	theta = DEUXPI * (*systeme).couplage/(COUPLAGE_MAX * (*systeme).nombre);
-	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta)); //	Couplage
-	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta)); //	Couplage
+	 //	Couplage
+	theta = DEUXPI * (*projection).logCouplage * log( (*systeme).couplage / (COUPLAGE_MIN * (*systeme).nombre) );
+	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	theta = DEUXPI * 0.919 *(*systeme).dissipation/DISSIPATION_MAX;
+	theta = DEUXPI * (*projection).logDissipation * log( (*systeme).dissipation/DISSIPATION_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	theta = DEUXPI * 0.93 * projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MAX);	//	Amplitude du moteur josephson
+	//	Amplitude du moteur josephson
+	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MIN) );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	theta = DEUXPI * 1.29 * log(1+(*systeme).moteurs.amplitude/AMPLITUDE_MAX);	//	Amplitude du moteur périodique
+	//	Amplitude du moteur périodique
+	theta = DEUXPI * (*projection).logAmplitude * log( (*systeme).moteurs.amplitude/AMPLITUDE_MIN );
 	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	theta = DEUXPI * 1.35 * log(1+(*systeme).moteurs.frequence/FREQUENCE_MAX);	//	Fréquence du moteurs
+	//	Fréquence du moteurs
+	theta = DEUXPI * (*projection).logFrequence * log( (*systeme).moteurs.frequence/FREQUENCE_MIN );
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -154,14 +167,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	return 0;
 	}
 
-int projectionInitialiseCouleurs(projectionT * projection, int r, int v, int b, int fond)
-	{		// Initialise la couleur du graphe
-	(*projection).rouge = r;
-	(*projection).vert = v;
-	(*projection).bleu = b;
-	(*projection).fond = fond;
-	return 0;
-	}
 int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective)
 	{		// Fixe la taille de la chaîne et l'effet de perspective
 	(*projection).hauteur = hauteur;

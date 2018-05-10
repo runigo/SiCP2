@@ -48,10 +48,13 @@ typedef struct ProjectionT projectionT;
 		vecteurT vecteurPhi;
 		vecteurT vecteurPsi;
 
-		int rouge;
-		int vert;
-		int bleu;
-		int fond;
+		int rotation;
+
+		float logCouplage;
+		float logDissipation;
+		float logJosephson;
+		float logAmplitude;
+		float logFrequence;
 
 		int hauteur;
 		int largeur;
@@ -59,7 +62,7 @@ typedef struct ProjectionT projectionT;
 		float perspective;
 		};
 
-int projectionInitialiseCouleurs(projectionT * projection, int r, int v, int b, int fond);
+int projectionInitialise(projectionT * projection);
 int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective);
 int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi);
 

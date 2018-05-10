@@ -71,7 +71,7 @@ void systemeSuppression(systemeT * systeme);
 void systemeEvolution(systemeT * systeme, int duree);
 
 // Réinitialisation des positions
-void systemeInitialisePosition(systemeT * systeme);
+void systemeInitialisePosition(systemeT * systeme, int forme);
 #endif
 
 ////////////////////////////////////////////////////////////

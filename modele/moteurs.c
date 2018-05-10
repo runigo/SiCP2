@@ -42,7 +42,7 @@ float moteursGenerateur(moteursT * moteur)
 	float amplitude;
 	float phase;
 
-	phase = (*moteur).phi + (*moteur).frequence * (*moteur).chrono;
+	phase = (*moteur).phi + DEUXPI * (*moteur).frequence * (*moteur).chrono;
 	amplitude = (*moteur).amplitude * sin(phase);
 
 	if((*moteur).generateur==3)
@@ -86,15 +86,15 @@ float moteurJaugeZero(moteursT * moteur)
 			}
 		}
 
-	float phase = (*moteur).frequence * (*moteur).chrono;
+	float phase = DEUXPI * (*moteur).frequence * (*moteur).chrono;
 	if(phase > DEUXPI)
 		{
 		do
 			{
 			//printf("(*moteur).frequence * (*moteur).chrono = %f\n",phase);
-			(*moteur).chrono = (*moteur).chrono - ( (int)(phase/DEUXPI) ) * DEUXPI/(*moteur).frequence;
+			(*moteur).chrono = (*moteur).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteur).frequence;
 			}
-		while((*moteur).frequence * (*moteur).chrono > DEUXPI);
+		while((*moteur).frequence * (*moteur).chrono > 1.0);
 		}
 	else 
 		{
@@ -103,9 +103,9 @@ float moteurJaugeZero(moteursT * moteur)
 			do
 				{
 				//printf("(*moteur).frequence * (*moteur).chrono = %f\n",phase);
-				(*moteur).chrono = (*moteur).chrono - ( (int)(phase/DEUXPI) ) * DEUXPI/(*moteur).frequence;
+				(*moteur).chrono = (*moteur).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteur).frequence;
 				}
-			while((*moteur).frequence * (*moteur).chrono < - DEUXPI);
+			while((*moteur).frequence * (*moteur).chrono < - 1.0);
 			}
 		}
 
@@ -168,11 +168,11 @@ void moteursChangeFrequence(moteursT * moteur, float facteur)
 
 	if((*moteur).frequence * facteur < FREQUENCE_MAX && (*moteur).frequence * facteur > FREQUENCE_MIN)
 		{
-		phase = (*moteur).phi + (*moteur).frequence * (*moteur).chrono;
+		phase = (*moteur).phi + DEUXPI * (*moteur).frequence * (*moteur).chrono;
 
 		(*moteur).frequence = (*moteur).frequence * facteur;
 
-		(*moteur).phi = phase - (*moteur).frequence * (*moteur).chrono;
+		(*moteur).phi = phase - DEUXPI * (*moteur).frequence * (*moteur).chrono;
 
 		}
 	else

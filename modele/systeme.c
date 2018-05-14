@@ -68,10 +68,35 @@ void systemeInitialisePosition(systemeT * systeme, int forme)
 	{
 	float position = 0.0;
 	chaineT *iter=(*systeme).premier;
-	if(forme==1) position=1.5;
+	switch (forme)
+		{
+		case 0:
+			position=0;break;
+		case 1:
+			position=1;break;
+		case 2:
+			position=2;break;
+		case 3:
+			position=3;break;
+		case 4:
+			position=PI-0.1;break;
+		case 5:
+			position=PI-0.2;break;
+		case 6:
+			position=PI-0.3;break;
+		case 7:
+			position=PI-0.4;break;
+		case 8:
+			position=PI-0.5;break;
+		case 9:
+			position=3;break;
+		default:
+			position=0;
+		}
+
 	do
 		{
-		penduleInitialisePosition(&iter->pendule, position, position);
+		penduleInitialisePosition(&iter->pendule, position-0.0000001*iter->pendule.dissipation, position);
 		iter=iter->suivant;
 		}
 	while(iter != (*systeme).premier);

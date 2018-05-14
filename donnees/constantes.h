@@ -71,18 +71,15 @@ termes.
 #define TAILLE_MASSE 8 // Diamètre des masses
 
 
-
-	//	PARAMÈTRES DISCRÉTISATION
+	//	PARAMÈTRES DE DISCRÉTISATION TEMPORELLE
 
 #define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
 #define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
-//#define DUREE_MAX 99 // Nombre d'itération du système par affichage dans SiGP2
 
-#define DT_MIN 0.000003 // Discrétisation minimal du temps
-#define DT 0.0003
+#define DT_MIN 0.00003 // Discrétisation minimal du temps
+#define DT 0.0011
 #define DT_MAX 0.003		//	discrétisation du temps
-//#define DT_MIN 0.000000003	//	discrétisation du temps
 
 
 	//	PARAMÈTRES DE LA CHAINE

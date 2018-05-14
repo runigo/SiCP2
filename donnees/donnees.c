@@ -56,6 +56,11 @@ int donneesControleur(controleurT * controleur)
 		fprintf(stderr, " Création du système\n");
 	systemeCreation(&(*controleur).systeme);
 	changeFormeDissipation(&(*controleur).systeme, 1);
+	changeFormeDissipation(&(*controleur).systeme, 0);
+	changeConditionsLimites(&(*controleur).systeme, (*controleur).systeme.libreFixe);
+	systemeInitialisePosition(&(*controleur).systeme, 9);
+
+
 		fprintf(stderr, " Initialisation du graphe\n");
 	donneesGraphe(&(*controleur).graphe, &(*controleur).options);
 
@@ -106,14 +111,14 @@ int donneesOptions(optionsT * options)
 	(*options).modeMenu = 0;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 
 	(*options).modePause = 1;		// avec ou sans attente
-	(*options).duree = 91;		// 100 : temps réèl.
+	(*options).duree = 100;		// 100 : temps réèl.
 	(*options).fond=240;		// couleur du fond de l'affichage
 
 			// OPTIONS SiCP
-	(*options).dt=0.0003;		// discrétisation du temps
-							// 25 images par seconde, SDL_Delay(30);
+	(*options).dt=DT;		// discrétisation du temps
+							// 
 							// dt*duree = 0.004
-	(*options).soliton=3;
+	(*options).soliton=0;
 	(*options).support=1;		// Support de la chaîne
 	(*options).nombre=133;		// nombre de pendule
 	(*options).equation=1;		// 1 : pendule, 2 : linéarisation,
@@ -132,16 +137,16 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 	(*systeme).moteurs.chrono = 0.0;
 
 	(*systeme).moteurs.courant=3.0;		// Mémoire courant Josephson si = 0
-	(*systeme).moteurs.josephson=-3*(*options).dt*(*options).dt;
+	(*systeme).moteurs.josephson=0;//-3*(*options).dt*(*options).dt;
 
 	(*systeme).moteurs.generateur = 0;	// éteint, sinus, carre, impulsion
 	(*systeme).moteurs.amplitude=0.3;		// Amplitude du générateur de signaux
-	(*systeme).moteurs.frequence=5.0;	// Fréquence du générateur de signaux
+	(*systeme).moteurs.frequence=1.0;	// Fréquence du générateur de signaux
 	(*systeme).moteurs.phi=0;
 
 		// Caractéristique de la chaîne
 
-	(*systeme).libreFixe = 0;	// 0 periodique, 1 libre, 2 fixe
+	(*systeme).libreFixe = 1;	// 0 periodique, 1 libre, 2 fixe
 	(*systeme).nombre = (*options).nombre;		// nombre de pendule
 	(*systeme).equation = (*options).equation;	// 1 : pendule pesant, 2 : linéarisation
 												// 3 : corde, 4 : dioptre
@@ -150,9 +155,9 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 	(*systeme).gravitation = 9.81;
 	(*systeme).masse = 1.0;
-	(*systeme).longueur = 9.81/4/PI/PI; // = 25 cm => période = 1 s
+	(*systeme).longueur = 1.0;// 9.81/4/PI/PI = 25 cm => période = 1 s. Met en évidence une erreur dans le calcul de l'énergie de couplage.
 	(*systeme).dissipation = 0.17;
-	(*systeme).modeDissipation = 1;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
+	(*systeme).modeDissipation = 0;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
 	(*systeme).couplage = 11.1 * (*systeme).nombre;
 	(*systeme).dephasage = (*options).soliton * 2 * PI;
 

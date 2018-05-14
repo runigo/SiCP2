@@ -535,6 +535,30 @@ int controleurClavierMaj(controleurT * controleur)
 		case SDLK_z:
 			fprintf(stderr, "Réinitialisation du système\n");
 			systemeInitialisePosition(&(*controleur).systeme, 1);break;
+		case SDLK_e:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 2);break;
+		case SDLK_r:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 3);break;
+		case SDLK_t:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 4);break;
+		case SDLK_y:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 5);break;
+		case SDLK_u:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 6);break;
+		case SDLK_i:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 7);break;
+		case SDLK_o:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 8);break;
+		case SDLK_p:
+			fprintf(stderr, "Réinitialisation du système\n");
+			systemeInitialisePosition(&(*controleur).systeme, 9);break;
 
 		default:
 			;
@@ -576,13 +600,16 @@ int controleurSouris(controleurT * controleur)
 	float x, y;
 	if((*controleur).appui==1)
 		{
+		if( (*controleur).commandes.sourisX < (*controleur).commandes.rotatifs && (*controleur).commandes.sourisY < (*controleur).commandes.bas )
+			{
 			//fprintf(stderr, "controleurSouris xrel = %d\n", (*controleur).interface.evenement.motion.xrel);
-		x=-0.0031*(float)((*controleur).interface.evenement.motion.xrel);
-		y=0.0031*(float)((*controleur).interface.evenement.motion.yrel);
-			//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-			//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-		projectionChangePsi(&(*controleur).projection, x);
-		projectionChangePhi(&(*controleur).projection, y);
+			x=-0.0031*(float)((*controleur).interface.evenement.motion.xrel);
+			y=0.0031*(float)((*controleur).interface.evenement.motion.yrel);
+				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
+				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
+			projectionChangePsi(&(*controleur).projection, x);
+			projectionChangePhi(&(*controleur).projection, y);
+			}
 		}
 	return (*controleur).sortie;
 	}

@@ -53,10 +53,10 @@ double observablesEnergieHarmoniquePendul(penduleT * pendule, float dt)
 
 double observablesEnergieCouplagePendul(penduleT * pendule, penduleT * suivant, float dt)
 	{	//(*pendule).kapa est négatif
-	double x, y;
+	double x, y;	// CALCUL POUR UN PENDULE DE LONGUEUR = 1 !!!
 	x=(*pendule).actuel;
-	y=(*suivant).actuel - (*pendule).dephasage;
-	return ( - 0.5 * (*pendule).longueur * (*pendule).longueur * (*pendule).masse * (*pendule).kapa *  (x-y) * (x-y) / dt / dt);
+	y=(*suivant).actuel - (*pendule).dephasage; //(*pendule).longueur * (*pendule).longueur * 
+	return ( - 0.5 * (*pendule).masse * (*pendule).kapa *  (x-y) * (x-y) / dt / dt);
 	}
 
 double observablesEnergieCinetiqueSystem(systemeT * systeme)

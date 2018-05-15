@@ -325,13 +325,13 @@ void optionsAide(void)
 	printf("\n	COMMANDE DU CLAVIER\n\n");
 
 	printf("	a, q : augmenter, diminuer le couplage\n");
-	printf("	z, s : augmenter, diminuer la gravitation\n\n");
+	printf("	z, s : augmenter, diminuer la masse\n\n");
 
 	printf("	e, d : diminuer, augmenter la dissipation\n");
 	printf("	r, f : retire, forme la dissipation\n");
 	printf("	v : forme l'extrémité absorbante\n\n");
 
-	printf("	t, g : augmenter, diminuer la masse\n");
+	printf("	t, g : augmenter, diminuer la gravitation\n");
 	printf("	y, h : ajoute, enlève un déphasage de 2pi\n\n");
 
 	printf("	w : conditions aux limites périodique\n");

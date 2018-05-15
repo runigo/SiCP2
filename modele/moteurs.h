@@ -54,6 +54,7 @@ typedef struct MoteursT moteursT;
 float moteursGenerateur(moteursT * m);
 float moteurJaugeZero(moteursT * m);
 
+void moteursChangeEtatJosephson(moteursT * moteur, int etat);
 void moteursChangeJosephson(moteursT * m, float facteur);
 void moteursChangeFrequence(moteursT * m, float facteur);
 void moteursChangeAmplitude(moteursT * m, float facteur);

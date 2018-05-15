@@ -133,6 +133,27 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 		fprintf(stderr, "ERREUR grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
 
 
+	SDL_Surface *lumiereVerte = 0;
+
+	lumiereVerte = SDL_LoadBMP("./graphique/lumiereVerte.bmp");
+	if (!lumiereVerte)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereVerte.bmp : %s\n",SDL_GetError());
+		retour = 5;
+		}
+	(*graphique).lumiereVerte = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereVerte);
+	SDL_FreeSurface(lumiereVerte);
+	if ((*graphique).lumiereVerte == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 6;
+		}
+		// Activation de la transparence
+	//SDL_BLENDMODE_NONE || SDL_BLENDMODE_BLEND || SDL_BLENDMODE_ADD || SDL_BLENDMODE_MOD
+	if(SDL_SetTextureBlendMode((*graphique).lumiereVerte, SDL_BLENDMODE_MOD) < 0)
+		fprintf(stderr, "ERREUR grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
+
+
 	return retour;
 }
 
@@ -179,6 +200,20 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 		SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
 		SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
 		SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
+		}
+
+	centrage = 6;
+	coordonnee.w=12;
+	coordonnee.h=12;
+	coordonnee.y = (*commandes).trianglesCentre - centrage;	// Positon Y de la zone du bas
+	for(i=0;i<TRIANGLE_COMMANDES;i++)
+		{
+		//if((*commandes).boutonEtat[i]==1)
+			//{
+			coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
+			//	Dessin des petits boutons
+			SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereVerte, NULL, &coordonnee);
+			//}
 		}
 
 	return 0;

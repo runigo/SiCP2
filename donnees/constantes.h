@@ -56,7 +56,7 @@ termes.
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
 
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
-#define TRIANGLE_COMMANDES 10 // Nombres de commandes triangulaires
+#define TRIANGLE_COMMANDES 11 // Nombres de commandes triangulaires
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
 

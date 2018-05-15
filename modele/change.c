@@ -81,7 +81,7 @@ void changeGravitation(systemeT * systeme, float facteur)
 		}
 	else
 		{
-		printf("Maximum de la gravité = %6.3f\n", (*systeme).gravitation);
+		printf("Gravité limite atteinte. ");
 		}
 
 	printf("Gravitation = %6.3f\n", (*systeme).gravitation);
@@ -108,7 +108,7 @@ void changeMasse(systemeT * systeme, float facteur)
 		}
 	else
 		{
-		printf("Masse limite atteinte\n");
+		printf("Masse limite atteinte. ");
 		}
 
 	printf("Masse = %6.3f\n", (*systeme).masse);
@@ -140,7 +140,7 @@ void changeDissipation(systemeT * systeme, float facteur)
 		}
 	else
 		{
-		printf("dissipation limite atteinte\n");
+		printf("dissipation limite atteinte. ");
 		}
 
 
@@ -254,7 +254,7 @@ void changeDephasage(systemeT * systeme, float dephasage)
 		}
 	else
 		{
-		printf("dissipation limite atteinte\n");
+		printf("Dephasage limite atteinte. ");
 		}
 	
 	

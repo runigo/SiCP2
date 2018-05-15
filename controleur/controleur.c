@@ -273,33 +273,40 @@ void controleurChangeMode(controleurT * controleur)
 
 void controleurChangeVitesse(controleurT * controleur, float facteur)
 	{
-	if( (*controleur).options.duree > 11 )
+	if(facteur < 0.0)
 		{
-		(*controleur).options.duree = (*controleur).options.duree * facteur;
+		(*controleur).options.duree = 100;
 		}
 	else
 		{
-		if( facteur > 1)
+		if( (*controleur).options.duree > 11 )
 			{
-			(*controleur).options.duree ++;
+			(*controleur).options.duree = (*controleur).options.duree * facteur;
 			}
 		else
 			{
-			if( (*controleur).options.duree > 1 )
+			if( facteur > 1)
 				{
-				(*controleur).options.duree --;
+				(*controleur).options.duree ++;
 				}
 			else
 				{
-				fprintf(stderr, "duree minimale atteinte, ");
+				if( (*controleur).options.duree > 1 )
+					{
+					(*controleur).options.duree --;
+					}
+				else
+					{
+					fprintf(stderr, "duree minimale atteinte, ");
+					}
 				}
 			}
-		}
 
-	if( (*controleur).options.duree > DUREE_MAX)
-		{
-		fprintf(stderr, "duree maximale atteinte, ");
-		(*controleur).options.duree = DUREE_MAX;
+		if( (*controleur).options.duree > DUREE_MAX)
+			{
+			fprintf(stderr, "duree maximale atteinte, ");
+			(*controleur).options.duree = DUREE_MAX;
+			}
 		}
 	fprintf(stderr, "duree = %d\n", (*controleur).options.duree);
 	return;
@@ -725,9 +732,9 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 6: // Extrémité
 				changeFormeDissipation(&(*controleur).systeme, 2);break;
 			case 7: // Marche
-				moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break;
+				moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
 			case 8: // Arrêt
-				moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break;
+				moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0);break;
 			case 9: // Droite
 				moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break;
 			case 10: // Gauche
@@ -754,15 +761,15 @@ int controleurCommandes(controleurT * controleur, int zone)
 		switch(commande)	//	
 			{
 			case 0:
-				(*controleur).projection.rotation=-3;break;
+				(*controleur).projection.rotation=3;break;
 			case 1:
-				(*controleur).projection.rotation=-1;break;
+				(*controleur).projection.rotation=1;break;
 			case 2:
 				(*controleur).projection.rotation=0;break;
 			case 3:
-				(*controleur).projection.rotation=1;break;
+				(*controleur).projection.rotation=-1;break;
 			case 4:
-				(*controleur).projection.rotation=3;break;
+				(*controleur).projection.rotation=-3;break;
 			case 5:
 				controleurChangeVitesse(controleur, 0.32);break;
 			case 6:
@@ -770,8 +777,10 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 7:
 				controleurChangeMode(controleur);break;
 			case 8:
-				controleurChangeVitesse(controleur, 1.1);break;
+				controleurChangeVitesse(controleur, -1.0);break;
 			case 9:
+				controleurChangeVitesse(controleur, 1.1);break;
+			case 10:
 				controleurChangeVitesse(controleur, 3.1);break;
 			default:
 				;

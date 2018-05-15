@@ -201,6 +201,19 @@ void moteursChangeAmplitude(moteursT * moteur, float facteur)
 	return;
 	}
 
+void moteursChangeEtatJosephson(moteursT * moteur, int etat)
+	{
+	if(etat == 0) // Allume / éteint le courant Josephson
+		{
+		(*moteur).josephson = 0.0;
+		}
+	else
+		{
+		(*moteur).josephson = (*moteur).courant * (*moteur).dt * (*moteur).dt;
+		}
+	return;
+	}
+
 void moteursChangeJosephson(moteursT * moteur, float facteur)
 
 				// Règle la valeur du courant Josephson

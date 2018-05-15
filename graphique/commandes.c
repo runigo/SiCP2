@@ -100,11 +100,12 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).triangleCentre[3]=(int)(0.1286701209*largeur); // 149	rotation droite lente
 	(*commandes).triangleCentre[4]=(int)(0.158031088083*largeur); // 183	rotation droite rapide
 
-	(*commandes).triangleCentre[5]=(int)(0.37219343696*largeur); // 431	simulation très ralenti
-	(*commandes).triangleCentre[6]=(int)(0.402417962*largeur); // 466	simulation ralenti
-	(*commandes).triangleCentre[7]=(int)(0.43609671848*largeur); // 505	pause
-	(*commandes).triangleCentre[8]=(int)(0.469775474957*largeur); // 544	simulation accéléré
-	(*commandes).triangleCentre[9]=(int)(0.499136442142*largeur); // 578	simulation trés accéléré
+	(*commandes).triangleCentre[5]=(int)(0.364421416235*largeur); // 422	simulation très ralenti
+	(*commandes).triangleCentre[6]=(int)(0.399827288428*largeur); // 463	simulation ralenti
+	(*commandes).triangleCentre[7]=(int)(0.435233160622*largeur); // 504	pause
+	(*commandes).triangleCentre[8]=(int)(0.463730569948*largeur); // 537	temps réèl
+	(*commandes).triangleCentre[9]=(int)(0.499136442142*largeur); // 578	simulation accéléré
+	(*commandes).triangleCentre[10]=(int)(0.53713298791*largeur); // 622	simulation trés accéléré
 
 	return 0;
 	}

@@ -1,4 +1,4 @@
-% SiTS
+% SiCP
 %
 % Librement inspiré de
 % TeXtronics oscilloscope
@@ -47,6 +47,7 @@ the signals and the positions of the different controls.
 %
   \fill[panneaucontroles] (-20.5,1.1) rectangle (19.5,5.1);
 %
+%       Rotation de la chaîne
   \begin{scope}[xshift=-21.5 cm,yshift=1.1cm]
     \node[scale=\scl] at (5.5,3.3) {\LARGE \textbf{Rotation}};
     \fill[blue!50!black!20!,draw=black,thick,rounded corners] (2.9,1.5)-- (2.9,2.5)-- (2.1,2.0)-- cycle;
@@ -58,11 +59,12 @@ the signals and the positions of the different controls.
     \fill[blue!50!black!20!,draw=black,thick,rounded corners] (8.6,2.0)-- (7.8,1.5)-- (7.8,2.5)-- cycle;
   \end{scope}
 %
+%       Hauteur du point de vue
 %  \begin{scope}[xshift=-15.5 cm,yshift=1.3cm]
 %    \node[scale=\scl] at (5.5,3.3) {\Large \textbf{Hauteur}};
 %    \draw[thick] (5.5,2.7)-- (5.5,0.3);
 %  \end{scope}
-%
+%       Distance du point de vue
 %  \begin{scope}[xshift=-12.5 cm,yshift=1.3cm]
 %    \node[scale=\scl] at (5.5,3.3) {\Large \textbf{Distance}};
 %    \draw[thick] (5.5,2.7)-- (5.5,0.3);
@@ -70,17 +72,26 @@ the signals and the positions of the different controls.
 %
 %
   \begin{scope}[xshift=-5.5 cm,yshift=1.1cm]
-    \node[scale=\scl] at (5.9,3.3) {\LARGE \textbf{Simulation}};
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (2.9,1.5)-- (2.9,2.5)-- (2.1,2.0)-- cycle;
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (3.2,1.5)-- (3.2,2.5)-- (2.4,2.0)-- cycle;
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (4.5,1.5)-- (4.5,2.5)-- (3.7,2.0)-- cycle;
+    \node[scale=\scl] at (6.7,3.3) {\LARGE \textbf{Simulation}};
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (2.5,1.45)-- (2.5,2.55)-- (1.6,2.0)-- cycle;
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (2.8,1.45)-- (2.8,2.55)-- (1.9,2.0)-- cycle;
+
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (4.4,1.45)-- (4.4,2.55)-- (3.5,2.0)-- cycle;
 
     \fill[blue!50!black!20!,draw=black,thick,rounded corners=2pt] (5.35,1.6) rectangle (5.7,2.4);
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (6.6,2.0)-- (5.8,1.5)-- (5.8,2.5)-- cycle;
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=2pt] (5.8,1.6) rectangle (6.15,2.4);
 
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (8.0,2.0)-- (7.2,1.5)-- (7.2,2.5)-- cycle;
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (9.6,2.0)-- (8.8,1.5)-- (8.8,2.5)-- cycle;
-    \fill[blue!50!black!20!,draw=black,thick,rounded corners] (9.3,2.0)-- (8.5,1.5)-- (8.5,2.5)-- cycle;
+   % \fill[blue!50!black!20!,draw=black,thick,rounded corners] (6.6,2.0)-- (5.8,1.5)-- (5.8,2.5)-- cycle;
+
+   % \fill[blue!50!black!20!,draw=black,thick,rounded corners=2pt] (5.35,1.6) rectangle (5.7,2.4);
+   % \fill[blue!50!black!20!,draw=black,thick,rounded corners] (6.6,2.0)-- (5.8,1.5)-- (5.8,2.5)-- cycle;
+
+    \fill[blue!50!black!20!,draw=black,rounded corners=2pt] (7.7,2.0)-- (6.9,1.5)-- (6.9,2.5)-- cycle;
+
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (9.5,2.0)-- (8.6,1.45)-- (8.6,2.55)-- cycle;
+
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (11.5,2.0)-- (10.6,1.45)-- (10.6,2.55)-- cycle;
+    \fill[blue!50!black!20!,draw=black,thick,rounded corners=6pt] (11.2,2.0)-- (10.3,1.45)-- (10.3,2.55)-- cycle;
     %\draw[thick] (2.0,0.8)-- (9.7,0.8);
   \end{scope}
 %
@@ -103,7 +114,7 @@ the signals and the positions of the different controls.
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
     \draw[thick] (0,0) circle (1.0);
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
-    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \foreach \i/\j in {15/2.5,45/1.5,75/1,105/.6,135/.4,165/.25,195/.15,225/.1,255/.05,285/10,315/6,345/4} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
   \end{scope}
 %
@@ -124,7 +135,7 @@ the signals and the positions of the different controls.
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
     \draw[thick] (0,0) circle (1.0);
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
-    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \foreach \i/\j in {15/4,45/2.3,75/1.3,105/.7,135/.4,165/.25,195/.1,225/.07,255/.04,285/25,315/13,345/7} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
   \end{scope}
 %
@@ -148,7 +159,7 @@ the signals and the positions of the different controls.
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
     \draw[thick] (0,0) circle (1.0);
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
-    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \foreach \i/\j in {15/4,45/2.5,75/1.5,105/.9,135/.6,165/.4,195/.2,225/.1,255/.07,285/20,315/12,345/7} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
 
   \end{scope}
@@ -179,7 +190,7 @@ the signals and the positions of the different controls.
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
     \draw[thick] (0,0) circle (1.0);
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
-    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \foreach \i/\j in {15/1.7,45/1.2,75/.9,105/.6,135/.4,165/.3,195/.2,225/.1,255/.07,285/7,315/4,345/2.7} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
   \end{scope}
   \begin{scope}[xshift=22.7 cm,yshift=3.3cm,scale=0.85]
@@ -189,7 +200,7 @@ the signals and the positions of the different controls.
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
     \draw[thick] (0,0) circle (1.0);
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
-    \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
+    \foreach \i/\j in {15/30,45/15,75/7,105/4,135/2,165/.9,195/.4,225/.2,255/.O7,285/350,315/150,345/70} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
   \end{scope}
 \end{tikzpicture}

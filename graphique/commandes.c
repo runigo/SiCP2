@@ -55,7 +55,7 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutonX=(int)(0.0120898100173*largeur); // Rayon suivant X // 14 / 1158
 	(*commandes).boutonsCentre=(int)(0.96286701209*largeur); // 1115 // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
-	(*commandes).boutonY=(int)(0.0182072829132*largeur); // Rayon suivant Y // 13 / 714
+	(*commandes).boutonY=(int)(0.0168067226891*largeur); // Rayon suivant Y // 12 / 714
 	(*commandes).boutonCentre[0]=(int)(0.0574229691877*hauteur); // 41	Périodique
 	(*commandes).boutonCentre[1]=(int)(0.103641456583*hauteur); // 74	Libre
 	(*commandes).boutonCentre[2]=(int)(0.1512605042*hauteur); // 108 	Fixe // Positon Y des petits boutons
@@ -92,20 +92,33 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 		// BOUTONS TRIANGULAIRES SUIVANT Y
 	(*commandes).triangleY=(int)(0.0168067226891*hauteur); // Rayon suivant Y // 12 / 714
 	(*commandes).trianglesCentre=(int)(0.920168067227*hauteur); // 657 // Position Y des petits triangles
+	(*commandes).trianglesLumiere=(int)(0.960784313725*hauteur); // 685 // Position Y des lumière
 		// BOUTONS TRIANGULAIRES SUIVANT X
 	(*commandes).triangleX=(int)(0.0120898100173*largeur); // Rayon suivant X // 14 / 1158
-	(*commandes).triangleCentre[0]=(int)(0.0449050086356*largeur); // 52	rotation gauche rapide
-	(*commandes).triangleCentre[1]=(int)(0.0759930915371*largeur); // 88	rotation gauche lente
-	(*commandes).triangleCentre[2]=(int)(0.103626943005*largeur); // 120 	arrêt
-	(*commandes).triangleCentre[3]=(int)(0.1286701209*largeur); // 149	rotation droite lente
-	(*commandes).triangleCentre[4]=(int)(0.158031088083*largeur); // 183	rotation droite rapide
+	(*commandes).triangleCentre[0]=(int)(0.047495682*largeur); // 	rotation gauche rapide
+	(*commandes).triangleCentre[1]=(int)(0.076856649*largeur); // 	rotation gauche lente
+	(*commandes).triangleCentre[2]=(int)(0.104490501*largeur); //  	arrêt
+	(*commandes).triangleCentre[3]=(int)(0.129533679*largeur); // 	rotation droite lente
+	(*commandes).triangleCentre[4]=(int)(0.158031088*largeur); // 	rotation droite rapide
 
-	(*commandes).triangleCentre[5]=(int)(0.364421416235*largeur); // 422	simulation très ralenti
-	(*commandes).triangleCentre[6]=(int)(0.399827288428*largeur); // 463	simulation ralenti
-	(*commandes).triangleCentre[7]=(int)(0.435233160622*largeur); // 504	pause
-	(*commandes).triangleCentre[8]=(int)(0.463730569948*largeur); // 537	temps réèl
-	(*commandes).triangleCentre[9]=(int)(0.499136442142*largeur); // 578	simulation accéléré
-	(*commandes).triangleCentre[10]=(int)(0.53713298791*largeur); // 622	simulation trés accéléré
+	(*commandes).triangleCentre[5]=(int)(0.240932642*largeur); // 	simulation très ralenti
+	(*commandes).triangleCentre[6]=(int)(0.27806563*largeur); // 	simulation ralenti
+	(*commandes).triangleCentre[7]=(int)(0.311744387*largeur); // 	pause
+	(*commandes).triangleCentre[8]=(int)(0.352331606*largeur); // 	temps réèl
+	(*commandes).triangleCentre[9]=(int)(0.385146805*largeur); // 	simulation accéléré
+	(*commandes).triangleCentre[10]=(int)(0.423143351*largeur); // 	simulation trés accéléré
+
+	(*commandes).triangleCentre[11]=(int)(0.511226252*largeur); // 	1
+	(*commandes).triangleCentre[12]=(int)(0.540587219*largeur); // 	2
+	(*commandes).triangleCentre[13]=(int)(0.568221071*largeur); // 	3
+	(*commandes).triangleCentre[14]=(int)(0.59671848*largeur); // 	4
+	(*commandes).triangleCentre[15]=(int)(0.625215889*largeur); // 	5
+	(*commandes).triangleCentre[16]=(int)(0.654576857*largeur); // 	6
+
+	(*commandes).triangleCentre[17]=(int)(0.713298791*largeur); // 	1
+	(*commandes).triangleCentre[18]=(int)(0.7417962*largeur); // 	2
+	(*commandes).triangleCentre[19]=(int)(0.769430052*largeur); // 	3
+	(*commandes).triangleCentre[20]=(int)(0.799654577*largeur); // 	4
 
 	return 0;
 	}

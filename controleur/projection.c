@@ -55,7 +55,7 @@ float projectionAbsolue(float valeur)
 	return valeur;
 	}
 
-int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes)
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
 	{		// Projette le système sur les commandes
 	float theta;
 	float ratioRotatif = 0.9;
@@ -158,12 +158,47 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}
+	//(*commandes).boutonEtat[15]=0; // 536	Fluxon
+	//(*commandes).boutonEtat[16]=0; // 563	Anti F.
 
-	/*	float (*systeme).moteurs.phi;			//	Phase
-		float (*systeme).dephasage;	//	déphasage entre les limites
-	(*commandes).boutonEtat[15]=1; // 536	Fluxon
-	(*commandes).boutonEtat[16]=1; // 563	Anti F.
-	*/
+	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
+
+	switch((*projection).rotation)	//	
+		{
+		case 3:
+			(*commandes).triangleEtat[0]=1;break; // 
+		case 1:
+			(*commandes).triangleEtat[1]=1;break; // 
+		case 0:
+			(*commandes).triangleEtat[2]=0;break; // 
+		case -1:
+			(*commandes).triangleEtat[3]=1;break; // 
+		case -3:
+			(*commandes).triangleEtat[4]=1;break; // 
+		default:
+			;
+		}
+	if(duree<100)
+		{
+			(*commandes).triangleEtat[5]=1;
+			(*commandes).triangleEtat[6]=1;
+		}
+	else
+		{
+		if(duree>100)
+			{
+			(*commandes).triangleEtat[9]=1;
+			(*commandes).triangleEtat[10]=1;
+			}
+		else
+			{
+			(*commandes).triangleEtat[8]=1;
+			}
+		}
+	if(mode<0)
+		{
+		(*commandes).triangleEtat[7]=2;
+		}
 	return 0;
 	}
 

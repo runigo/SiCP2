@@ -50,6 +50,7 @@ struct GraphiqueT {
 
 	SDL_Texture *masse;
 	SDL_Texture *lumiereVerte;
+	SDL_Texture *lumiereRouge;
 	SDL_Texture *SiCP;
 	int taille;
 

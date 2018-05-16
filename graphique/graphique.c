@@ -148,10 +148,22 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
 		retour = 6;
 		}
-		// Activation de la transparence
-	//SDL_BLENDMODE_NONE || SDL_BLENDMODE_BLEND || SDL_BLENDMODE_ADD || SDL_BLENDMODE_MOD
-	if(SDL_SetTextureBlendMode((*graphique).lumiereVerte, SDL_BLENDMODE_MOD) < 0)
-		fprintf(stderr, "ERREUR grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
+
+	SDL_Surface *lumiereRouge = 0;
+
+	lumiereRouge = SDL_LoadBMP("./graphique/lumiereRouge.bmp");
+	if (!lumiereRouge)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereRouge.bmp : %s\n",SDL_GetError());
+		retour = 7;
+		}
+	(*graphique).lumiereRouge = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereRouge);
+	SDL_FreeSurface(lumiereRouge);
+	if ((*graphique).lumiereRouge == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 8;
+		}
 
 
 	return retour;
@@ -159,9 +171,6 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 int graphiqueNettoyage(graphiqueT * graphique)
 	{
-	//int fond = (*graphique).fond;
-	//SDL_SetRenderDrawColor((*graphique).rendu, (*graphique).fond.r, (*graphique).fond.g, (*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
-	//SDL_SetRenderDrawColor((*graphique).rendu, 255-(*graphique).fond.r, 255-(*graphique).fond.g, 255-(*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
 	SDL_RenderClear((*graphique).rendu);
 	return 0;
 	}
@@ -205,15 +214,22 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 	centrage = 6;
 	coordonnee.w=12;
 	coordonnee.h=12;
-	coordonnee.y = (*commandes).trianglesCentre - centrage;	// Positon Y de la zone du bas
+	coordonnee.y = (*commandes).trianglesLumiere - centrage;	// Positon Y de la zone du bas
 	for(i=0;i<TRIANGLE_COMMANDES;i++)
 		{
-		//if((*commandes).boutonEtat[i]==1)
-			//{
+		if((*commandes).triangleEtat[i]==1)
+			{
 			coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
-			//	Dessin des petits boutons
 			SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereVerte, NULL, &coordonnee);
-			//}
+			}
+		else
+			{
+				if((*commandes).triangleEtat[i]==2)
+				{
+				coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
+				SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereRouge, NULL, &coordonnee);
+				}
+			}
 		}
 
 	return 0;

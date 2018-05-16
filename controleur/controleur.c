@@ -48,6 +48,7 @@ int controleurClavier2(controleurT * controleur);
 int controleurClavier3(controleurT * controleur);
 
 int controleurCommandes(controleurT * controleur, int zone);
+int controleurInitialiseParametres(controleurT * controleur, int forme);
 
 int controleurSouris(controleurT * controleur);
 int controleurDefile(controleurT * controleur);
@@ -171,7 +172,7 @@ int controleurProjection(controleurT * controleur)
 	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*RATIO_H_L, largeur, (*controleur).projection.pointDeVue.r);
 
 	projectionSystemeChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
-	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes);
+	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).options.duree, (*controleur).options.modePause);
 
 	return (*controleur).sortie;
 	}
@@ -782,6 +783,26 @@ int controleurCommandes(controleurT * controleur, int zone)
 				controleurChangeVitesse(controleur, 1.1);break;
 			case 10:
 				controleurChangeVitesse(controleur, 3.1);break;
+			case 11:
+				systemeInitialisePosition(&(*controleur).systeme, 0);break;
+			case 12:
+				systemeInitialisePosition(&(*controleur).systeme, 1);break;
+			case 13:
+				systemeInitialisePosition(&(*controleur).systeme, 2);break;
+			case 14:
+				systemeInitialisePosition(&(*controleur).systeme, 4);break;
+			case 15:
+				systemeInitialisePosition(&(*controleur).systeme, 5);break;
+			case 16:
+				systemeInitialisePosition(&(*controleur).systeme, 6);break;
+			case 17:
+				controleurInitialiseParametres(controleur, 0);break;
+			case 18:
+				controleurInitialiseParametres(controleur, 1);break;
+			case 19:
+				controleurInitialiseParametres(controleur, 2);break;
+			case 20:
+				controleurInitialiseParametres(controleur, 3);break;
 			default:
 				;
 			}
@@ -789,6 +810,30 @@ int controleurCommandes(controleurT * controleur, int zone)
 	return 0;
 	}
 
+int controleurInitialiseParametres(controleurT * controleur, int forme)
+	{
+	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
+	changeConditionsLimites(&(*controleur).systeme, 1); // Libre
+	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0); // Josephson
+
+	switch(forme)
+		{
+		case 0:
+			changeCouplage(&(*controleur).systeme, 1.1);
+			changeConditionsLimites(&(*controleur).systeme, 1);break;
+		case 1:
+			changeDissipation(&(*controleur).systeme, 1.1);break;
+		case 2:
+			moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+		case 3:
+			changeConditionsLimites(&(*controleur).systeme, 0);break;
+		case 4:
+			changeConditionsLimites(&(*controleur).systeme, 0);break;
+		default:
+			;
+		}
+	return 0;
+	}
 int controleurDefileCommandes(controleurT * controleur, int zone)
 	{
 	int commande;

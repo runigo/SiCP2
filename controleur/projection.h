@@ -67,7 +67,7 @@ int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int lar
 int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi);
 
 int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe);
-int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes);
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
 
 void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);
 

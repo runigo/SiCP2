@@ -77,10 +77,11 @@ typedef struct CommandesT commandesT;
 		// BOUTONS TRIANGULAIRES SUIVANT Y
 		int triangleY; // Rayon suivant Y
 		int trianglesCentre; //  Position Y des petits triangles
+		int trianglesLumiere; //  Position Y des lumières
 		// BOUTONS TRIANGULAIRES SUIVANT X
 		int triangleX; // Rayon suivant X 
 		int triangleCentre[TRIANGLE_COMMANDES]; // Centre suivant X
-		int triangleEtat[TRIANGLE_COMMANDES]; // État du petit bouton
+		int triangleEtat[TRIANGLE_COMMANDES]; // État de la commande
 
 		};
 

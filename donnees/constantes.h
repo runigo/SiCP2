@@ -49,14 +49,16 @@ termes.
 
 	//	PARAMÈTRES GRAPHIQUES
 
-#define FENETRE_X 1158 // Largeur de la fenêtre
-#define FENETRE_Y 714 // Hauteur de la fenêtre
+//#define FENETRE_X 1158 // Largeur de la fenêtre
+//#define FENETRE_Y 714 // Hauteur de la fenêtre
+#define FENETRE_X 868 // Largeur de la fenêtre
+#define FENETRE_Y 535 // Hauteur de la fenêtre
 
 #define BOUTON_COMMANDES 17 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
 
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
-#define TRIANGLE_COMMANDES 11 // Nombres de commandes triangulaires
+#define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
 

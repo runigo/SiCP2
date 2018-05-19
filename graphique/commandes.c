@@ -53,7 +53,7 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutons=(int)(0.946459412781*largeur); // 1096 / 1158
 		// PETITS BOUTONS SUIVANT X
 	(*commandes).boutonX=(int)(0.0120898100173*largeur); // Rayon suivant X // 14 / 1158
-	(*commandes).boutonsCentre=(int)(0.96286701209*largeur); // 1115 // Positon X des petits boutons
+	(*commandes).boutonsCentre=(int)(0.964594127807*largeur); // 1117 // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.0168067226891*largeur); // Rayon suivant Y // 12 / 714
 	(*commandes).boutonCentre[0]=(int)(0.0574229691877*hauteur); // 41	Périodique
@@ -64,11 +64,11 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutonCentre[5]=(int)(0.3431372549*hauteur); // 245	Nulle
 	(*commandes).boutonCentre[6]=(int)(0.396358543417*hauteur); // 283	Extrémité
 	(*commandes).boutonCentre[7]=(int)(0.478991596639*hauteur); // 342	Marche
-	(*commandes).boutonCentre[8]=(int)(0.525210084034*hauteur); // 375	Arrêt
+	(*commandes).boutonCentre[8]=(int)(0.526610644258*hauteur); // 376	Arrêt
 	(*commandes).boutonCentre[9]=(int)(0.574229691877*hauteur); // 410	Droite
 	(*commandes).boutonCentre[10]=(int)(0.62324929972*hauteur); // 445	Gauche
-	(*commandes).boutonCentre[11]=(int)(0.700280112045*hauteur); // 500	Arrêt
-	(*commandes).boutonCentre[12]=(int)(0.750700280112*hauteur); // 536	Sinus
+	(*commandes).boutonCentre[11]=(int)(0.701680672269*hauteur); // 501	Arrêt
+	(*commandes).boutonCentre[12]=(int)(0.752100840336*hauteur); // 537	Sinus
 	(*commandes).boutonCentre[13]=(int)(0.801120448179*hauteur); // 572	Carré
 	(*commandes).boutonCentre[14]=(int)(0.851540616246*hauteur); // 608	Impulsion
 	(*commandes).boutonCentre[15]=(int)(0.908963585434*hauteur); // 649	Fluxon

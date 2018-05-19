@@ -312,10 +312,12 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 	int i;
 
 	if(y[0]!=y[1])
-		a=(float)(x[1]-x[0])/(y[1]-y[0]); b=x[0]-a*y[0];
+		{a=(float)(x[1]-x[0])/(y[1]-y[0]);}
+	b=x[0]-a*y[0];
 
 	if(y[0]!=y[2])
-		c=(float)(x[2]-x[0])/(y[2]-y[0]); d=x[0]-c*y[0];
+		{c=(float)(x[2]-x[0])/(y[2]-y[0]);}
+	d=x[0]-c*y[0];
 
 	graphiqueChangeCouleur(graphique, (*graphique).gris);
 
@@ -325,7 +327,8 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 		}
 
 	if(y[1]!=y[2])
-		a=(float)(x[2]-x[1])/(y[2]-y[1]); b=x[1]-a*y[1];
+		{a=(float)(x[2]-x[1])/(y[2]-y[1]);}
+	b=x[1]-a*y[1];
 
 	for(i=y[1];i<=y[2];i++)
 		{

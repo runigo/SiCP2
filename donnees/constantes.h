@@ -51,8 +51,8 @@ termes.
 
 //#define FENETRE_X 1158 // Largeur de la fenêtre
 //#define FENETRE_Y 714 // Hauteur de la fenêtre
-#define FENETRE_X 868 // Largeur de la fenêtre
-#define FENETRE_Y 535 // Hauteur de la fenêtre
+#define FENETRE_X 892 // Largeur de la fenêtre
+#define FENETRE_Y 550 // Hauteur de la fenêtre
 
 #define BOUTON_COMMANDES 17 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
@@ -97,24 +97,24 @@ termes.
 	//	PARAMÈTRES  CHAINE ET CORDE
 
 #define COUPLAGE_MAX 99 // Couplage maximal / nombre de pendule
-#define COUPLAGE_MIN 0.333
+#define COUPLAGE_MIN 0.099
 
-#define GRAVITATION_MAX 7777 // Gravitation maximale.
-#define GRAVITATION_MIN 0.00007 // Gravitation minimale.
+#define GRAVITATION_MAX 77 // Gravitation maximale.
+#define GRAVITATION_MIN 0.07 // Gravitation minimale.
 
-#define MASSE_MAX 7777
+#define MASSE_MAX 77
 #define MASSE_MIN 0.7
 
 #define DISSIPATION_MAX 33	//	Coeficient de frottement visqueux maximal
-#define DISSIPATION_MIN 0.03	//	Valeur minimale
+#define DISSIPATION_MIN 0.033	//	Valeur minimale
 
-#define FREQUENCE_MAX 411	//	Valeur maximale de la fréquence du moteur
-#define FREQUENCE_MIN 0.07	//	Valeur minimale de la fréquence du moteur
+#define FREQUENCE_MAX 77	//	Valeur maximale de la fréquence du moteur
+#define FREQUENCE_MIN 0.077	//	Valeur minimale de la fréquence du moteur
 
 #define AMPLITUDE_MAX 7.7	//	Valeur maximale de l'amplitude du moteur
-#define AMPLITUDE_MIN 0.07	//	Valeur minimale de l'amplitude du moteur
+#define AMPLITUDE_MIN 0.077	//	Valeur minimale de l'amplitude du moteur
 
-#define JOSEPHSON_MAX 27.7	//	Valeur maximale de l'amplitude du courant josephson
-#define JOSEPHSON_MIN 0.07	//	Valeur minimale de l'amplitude du courant josephson
+#define JOSEPHSON_MAX 77.7	//	Valeur maximale de l'amplitude du courant josephson
+#define JOSEPHSON_MIN 0.077	//	Valeur minimale de l'amplitude du courant josephson
 
 #endif

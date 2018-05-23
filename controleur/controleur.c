@@ -88,7 +88,6 @@ int controleurDestruction(controleurT * control)
 int controleurSimulationGraphique(controleurT * controleur)
 	{
 	do	{
-			//fprintf(stderr, "Prise en compte des actions clavier\n");
 		controleurActionClavier(controleur);
 		}
 	while((*controleur).sortie == 0);
@@ -107,43 +106,22 @@ int controleurActionClavier(controleurT * controleur)
 
 int controleurEvolution(controleurT * controleur)
 	{
-	//printf("Entrée dans controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
-
-		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-	//horlogeChronoDepart(&(*controleur).horloge);
-
-		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
+	
 	controleurProjection(controleur);
-		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-
-
 
 	if((*controleur).options.modePause > 0)
 		{
-		//horlogeChronoDepart(&(*controleur).horloge);
-		//fprintf(stderr, "Evolution temporelle du système\n");
 		controleurEvolutionSysteme(controleur);
-		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 		}
 
-	//horlogeChronoDepart(&(*controleur).horloge);
-
-		//fprintf(stderr, "Mise à jour de la fenêtre graphique\n");
 	controleurConstructionGraphique(controleur);
-		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-
-
-		//projectionChangePsi(&(*controleur).projection, -0.003);
-
-	//fprintf(stderr, "    Durée des évolutions = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-
-	//printf("Sortie de controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
 
 	return (*controleur).sortie;
 	}
 
 int controleurProjection(controleurT * controleur)
 	{
+		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
 	int largeur;
 	int hauteur;
 	int x, y;
@@ -155,7 +133,7 @@ int controleurProjection(controleurT * controleur)
 		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
-		// Réinitialisation des commandes si la fenetre change de taille
+		// Réinitialisation des commandes si la fenêtre change de taille
 	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
 		{
 		(*controleur).graphique.largeur=largeur;
@@ -187,7 +165,6 @@ int controleurEvolutionSysteme(controleurT * controleur)
 
 int controleurConstructionGraphique(controleurT * controleur)
 	{
-
 		//fprintf(stderr, "Nettoyage de l'affichage\n");
 	graphiqueNettoyage(&(*controleur).graphique);
 
@@ -428,7 +405,7 @@ int controleurClavier(controleurT * controleur)
 */
   // Afficher les observables
 
-		case SDLK_F4: // Corde asymétrique
+		case SDLK_F4:
 			controleurAfficheSouris(controleur);
 			break;
 		case SDLK_F5:
@@ -610,11 +587,8 @@ int controleurSouris(controleurT * controleur)
 		{
 		if( (*controleur).commandes.sourisX < (*controleur).commandes.rotatifs && (*controleur).commandes.sourisY < (*controleur).commandes.bas )
 			{
-			//fprintf(stderr, "controleurSouris xrel = %d\n", (*controleur).interface.evenement.motion.xrel);
 			x=-0.0031*(float)((*controleur).interface.evenement.motion.xrel);
 			y=0.0031*(float)((*controleur).interface.evenement.motion.yrel);
-				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
 			projectionChangePsi(&(*controleur).projection, x);
 			projectionChangePhi(&(*controleur).projection, y);
 			}
@@ -647,14 +621,10 @@ int controleurDefilePointDeVue(controleurT * controleur)
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
 		(*controleur).projection.pointDeVue.r += 0.011;
-		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
-		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
 		{
 		(*controleur).projection.pointDeVue.r -= 0.011;
-		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
-		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 
 	if((*controleur).projection.pointDeVue.r < RATIO_R_MIN)
@@ -667,9 +637,6 @@ int controleurDefilePointDeVue(controleurT * controleur)
 		(*controleur).projection.pointDeVue.r = RATIO_R_MAX;
 		fprintf(stderr, "Distance limite = %f\n", (*controleur).projection.pointDeVue.r);
 		}
-
-	//if(event.wheel.x > 0) // scroll right{}
-	//else if(event.wheel.x < 0) // scroll left{}
 
 	projectionChangePsi(&(*controleur).projection, 0);
 	projectionChangePhi(&(*controleur).projection, 0);
@@ -917,7 +884,6 @@ void controleurAfficheSouris(controleurT * controleur)
 	fprintf(stderr, "(*controleur).commandes.sourisY = %d\n", (*controleur).commandes.sourisY);
 	fprintf(stderr, "(*controleur).graphique.largeur = %d\n", (*controleur).graphique.largeur);
 	fprintf(stderr, "(*controleur).commandes.sourisX = %d\n", (*controleur).commandes.sourisX);
-
 	return ;
 	}
 

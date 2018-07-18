@@ -73,13 +73,13 @@ void systemeInitialisePosition(systemeT * systeme, int forme)
 		case 0:
 			position=0;break;
 		case 1:
-			position=1;break;
+			position=0;break;
 		case 2:
-			position=2;break;
+			position=1;break;
 		case 3:
-			position=3;break;
+			position=1;break;
 		case 4:
-			position=PI-0.1;break;
+			position=PI-0.01;break;
 		case 5:
 			position=PI-0.2;break;
 		case 6:

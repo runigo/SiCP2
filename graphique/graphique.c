@@ -166,6 +166,42 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 		}
 
 
+
+	SDL_Surface *lumiereJaune = 0;
+
+	lumiereJaune = SDL_LoadBMP("./graphique/lumiereJaune.bmp");
+	if (!lumiereJaune)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereJaune.bmp : %s\n",SDL_GetError());
+		retour = 7;
+		}
+	(*graphique).lumiereJaune = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereJaune);
+	SDL_FreeSurface(lumiereJaune);
+	if ((*graphique).lumiereJaune == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 8;
+		}
+
+
+
+	SDL_Surface *lumiereOrange = 0;
+
+	lumiereOrange = SDL_LoadBMP("./graphique/lumiereOrange.bmp");
+	if (!lumiereOrange)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereOrange.bmp : %s\n",SDL_GetError());
+		retour = 7;
+		}
+	(*graphique).lumiereOrange = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereOrange);
+	SDL_FreeSurface(lumiereOrange);
+	if ((*graphique).lumiereOrange == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 8;
+		}
+
+
 	return retour;
 }
 
@@ -229,6 +265,18 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 				coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
 				SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereRouge, NULL, &coordonnee);
 				}
+				else
+					{
+					coordonnee.x=(*commandes).lineairePositionX;	//	Droite duree < DUREE
+					if((*commandes).triangleEtat[5]==-1 || (*commandes).triangleEtat[10]==-1)
+						{
+						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
+						}
+					if((*commandes).triangleEtat[6]==-1 || (*commandes).triangleEtat[9]==-1)
+						{
+						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereJaune, NULL, &coordonnee);
+						}
+					}
 			}
 		}
 
@@ -540,123 +588,3 @@ void graphiquePendule(graphiqueT * graphique, grapheT * graphe)
 
 //////////////////////////////////////////////////////////////////////////////
 
-/*
-void graphiqueMasse(graphiqueT * graphique, grapheT * graphe, int taille)
-	{
-	SDL_Rect coordonnee = {0, 0, taille, taille};
-
-	pointsT *iterGraph=(*graphe).premier;
-
-	int centrage = (taille)/2;
-
-	do
-		{
-		coordonnee.x = iterGraph->xm-centrage;
-		coordonnee.y = iterGraph->ym-centrage;
-
-		if(iterGraph->zm!=-1) // dessine les masse
-			SDL_RenderCopy((*graphique).rendu, (*graphe).mobile, NULL, &coordonnee);
-
-		iterGraph = iterGraph->suivant;
-		}
-	while(iterGraph!=(*graphe).premier);
-
-	return;
-	}
-*/
-/*
-	VERSION 1.6
-int graphiqueInitialise(int fond)
-	{
-		//fprintf(stderr, " Initialisation de la SDL, fond = %d\n", fond);
-
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		{
-		fprintf(stderr, "Erreur à l'initialisation de la SDL : %s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
-		}
-	else fprintf(stderr, "SDL initialisé\n");
-
-	atexit(SDL_Quit);
-
-	affichage = SDL_SetVideoMode(LARGEUR, HAUTEUR, 32, SDL_SWSURFACE);
-
-	if (affichage == NULL)
-		{
-		fprintf(stderr, "Impossible d'activer le mode graphique : %s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
-		}
-	else
-		{
-		fprintf(stderr, "Mode graphique activé\n");
-		}
-
-	SDL_WM_SetCaption("Chaîne de pendules", NULL);
-
-	Uint32 clrFond = SDL_MapRGB(affichage->format, fond, fond, fond);
-	SDL_FillRect(affichage, NULL, clrFond);
-
-	return 0;
-	}
-
-int graphiqueNettoyage(int couleurFond)
-	{
-	Uint32 couleurF=SDL_MapRGB(affichage->format,couleurFond,couleurFond,couleurFond);
-	SDL_FillRect(affichage, NULL, couleurF);
-	return 0;
-	}
-
-int graphiqueMiseAJour(void)
-	{
-	SDL_UpdateRect(affichage, 0, 0, 0, 0);
-	return 0;
-	}
-
-void graphiqueAffichePixel(int x, int y, Uint32 couleur)
-	{
-	*((Uint32*)(affichage->pixels) + x + y * affichage->w) = couleur;
-	return;
-	}
-
-void graphiqueAffichePixelVerif(int x, int y, Uint32 couleur)
-	{
-	if (x>=0 && x < affichage->w && y>=0 && y < affichage->h)
-		graphiqueAffichePixel(x, y, couleur);
-	else 
-		if(x>=0 && x < affichage->w) graphiqueAffichePixel(x, 2, couleur);
-	return;
-	}
-
-void graphiqueLigneDroite(int X, int Y, int x, int y, Uint32 couleur)
-	{
-	int i, abs, ord;
-	int min, max;
-	float a;
-
-	max=X-x; min=Y-y;
-	if(max<0) max=-max; if(min<0) min=-min;
-	if(max<min) max=min;
-
-	for(i=0;i<=max;i++)
-		{
-		a=i/(float)max;
-		abs=(X+(int)(a*(x-X)));
-		ord=(Y+(int)(a*(y-Y)));
-		graphiqueAffichePixelVerif(abs, ord, couleur);
-		}
-	return;
-	}
-*/
-
-/*
-	VARIABLE GLOBALE
-*/
-
-//SDL_Surface* affichage;
-
-/*
-	...............
-*/
-
-//void graphiqueAffichePixel (int x, int y, Uint32 couleur);
-//void graphiquegraphiqueAffichePixelVerif(int x, int y, Uint32 couleur);

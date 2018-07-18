@@ -75,8 +75,11 @@ termes.
 
 	//	PARAMÈTRES DE DISCRÉTISATION TEMPORELLE
 
+	//	DT * DUREE = TEMPS_AFFICHAGE
+
 #define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
+#define DUREE 100 // Nombre implicite d'incrémentation du système entre deux affichages.
 #define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
 
 #define DT_MIN 0.00003 // Discrétisation minimal du temps
@@ -88,6 +91,7 @@ termes.
 
 #define ABSORPTION 2.1 // Facteur de l'extrémité absorbante
 #define NOMBRE_MIN 2 // Nombre minimal de pendules
+#define NOMBRE 133 // Nombre implicite de pendules
 #define NOMBRE_MAX 399 // Nombre maximal de pendules
 
 //#define SOLITON_MAX 19 // Nombre maximal de soliton
@@ -105,7 +109,7 @@ termes.
 #define MASSE_MAX 77
 #define MASSE_MIN 0.7
 
-#define DISSIPATION_MAX 33	//	Coeficient de frottement visqueux maximal
+#define DISSIPATION_MAX 333	//	Coeficient de frottement visqueux maximal
 #define DISSIPATION_MIN 0.033	//	Valeur minimale
 
 #define FREQUENCE_MAX 77	//	Valeur maximale de la fréquence du moteur

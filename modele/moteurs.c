@@ -214,10 +214,11 @@ void moteursChangeEtatJosephson(moteursT * moteur, int etat)
 	return;
 	}
 
-void moteursChangeJosephson(moteursT * moteur, float facteur)
+int moteursChangeJosephson(moteursT * moteur, float facteur)
 
 				// Règle la valeur du courant Josephson
 	{
+	int limite=0;
 	if(facteur == 0) // Allume / éteint le courant Josephson
 		{
 		if((*moteur).josephson == 0)
@@ -247,12 +248,48 @@ void moteursChangeJosephson(moteursT * moteur, float facteur)
 		else
 			{
 			printf("Courant Josephson limite atteint. ");
+			limite=1;
 			}
 		}
 
 	printf("Courant Josephson = %6.3f\n", (*moteur).josephson / (*moteur).dt / (*moteur).dt);
 
-	return;
+	return limite;
+	}
+int moteursChangeJosephsonMoyenne(moteursT * moteur)
+	{	// Réglage du moteur josephson à une amplitude moyenne
+	float moyenne = sqrt(JOSEPHSON_MAX * JOSEPHSON_MIN );
+	float courant = (*moteur).josephson / (*moteur).dt / (*moteur).dt;
+	if(courant < 0) courant = -courant;
+
+	if(courant > moyenne)
+		{
+		do
+			{
+			if(moteursChangeJosephson(moteur, 0.91)==0)
+				{
+				courant = (*moteur).josephson / (*moteur).dt / (*moteur).dt;
+				if(courant < 0) courant = -courant;
+				}
+			else { printf("\n  ERREUR moteursChangeJosephsonMoyenne\n"); return 1; }
+			}
+		while(courant > moyenne);
+		}
+	else
+		{
+		do
+			{
+			if(moteursChangeJosephson(moteur, 1.1)==0)
+				{
+				courant = (*moteur).josephson / (*moteur).dt / (*moteur).dt;
+				if(courant < 0) courant = -courant;
+				}
+			else { printf("\n  ERREUR moteursChangeJosephsonMoyenne\n"); return 1; }
+			}
+		while(courant < moyenne);
+		}
+
+	return 0;
 	}
 
 void moteursAfficheHorloge(moteursT * m)

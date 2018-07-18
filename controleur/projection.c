@@ -178,23 +178,26 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}
-	if(duree<100)
+
+		//	Vitesse de la simulation
+	if(duree<DUREE)
 		{
-			(*commandes).triangleEtat[5]=1;
-			(*commandes).triangleEtat[6]=1;
+			if(duree==1) (*commandes).triangleEtat[5]=-1; else (*commandes).triangleEtat[6]=-1;
+			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
 		}
 	else
 		{
-		if(duree>100)
+		if(duree>DUREE)
 			{
-			(*commandes).triangleEtat[9]=1;
-			(*commandes).triangleEtat[10]=1;
+			if(duree==DUREE_MAX) (*commandes).triangleEtat[10]=-1; else (*commandes).triangleEtat[9]=-1;
+			(*commandes).lineairePositionX=(int)((*commandes).A * duree + (*commandes).B);
 			}
 		else
 			{
 			(*commandes).triangleEtat[8]=1;
 			}
 		}
+
 	if(mode<0)
 		{
 		(*commandes).triangleEtat[7]=2;

@@ -35,10 +35,12 @@ termes.
 #include "systeme.h"
 
 // Variation des parametres
-void changeCouplage(systemeT * systeme, float facteur);
+int changeCouplage(systemeT * systeme, float facteur);
+int changeCouplageMoyenne(systemeT * systeme);
 void changeGravitation(systemeT * systeme, float facteur);
 void changeMasse(systemeT * systeme, float facteur);
-void changeDissipation(systemeT * systeme, float facteur);
+int changeDissipation(systemeT * systeme, float facteur);
+int changeDissipationMoyenne(systemeT * systemes);
 void changeFormeDissipation(systemeT * systeme, int forme);
 	// 0 : supprime, 1 : uniforme, 2 : ajoute extrémite absorbante
 

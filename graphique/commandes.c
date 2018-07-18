@@ -120,6 +120,17 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).triangleCentre[19]=(int)(0.769430052*largeur); // 	3
 	(*commandes).triangleCentre[20]=(int)(0.799654577*largeur); // 	4
 
+		//	Vitesse de la simulation
+
+	(*commandes).a=(0.27806563*largeur-0.240932642*largeur)/(DUREE-2);
+	//(*commandes).a=(((*commandes).triangleCentre[6]-(*commandes).triangleCentre[5])/(DUREE-2)));
+	(*commandes).b=0.240932642*largeur-(*commandes).a;	//	Droite duree < DUREE
+	//(*commandes).b=((*commandes).triangleCentre[5]-(*commandes).a);	//	Droite duree < DUREE
+	(*commandes).A=(0.423143351*largeur-0.385146805*largeur)/(DUREE_MAX-DUREE-1);
+	//(*commandes).A=(((*commandes).triangleCentre[10]-(*commandes).triangleCentre[9])/(DUREE_MAX-DUREE-1));
+	(*commandes).B=0.385146805*largeur-(*commandes).A*(DUREE+1);	//	Droite duree > DUREE
+	//(*commandes).B=((*commandes).triangleCentre[9]-(*commandes).A*(DUREE+1));	//	Droite duree > DUREE
+
 	return 0;
 	}
 

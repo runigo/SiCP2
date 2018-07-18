@@ -35,9 +35,10 @@ void changeLimite(systemeT * systeme);
 
 /*--------------------------------------------------------------*/
 
-void changeCouplage(systemeT * systeme, float facteur)
+int changeCouplage(systemeT * systeme, float facteur)
 	{// Multiplie le couplage par facteur
 	float couplage;
+	int limite=0;
 	chaineT *iter=(*systeme).premier;
 
 	couplage = (*systeme).couplage * facteur / (*systeme).nombre;
@@ -55,11 +56,47 @@ void changeCouplage(systemeT * systeme, float facteur)
 	else
 		{
 		printf("Limite du couplage. ");
+		limite=1;
 		}
 
 	printf("Couplage = %6.3f\n", (*systeme).couplage);
 
-	return;
+	return limite;
+	}
+
+int changeCouplageMoyenne(systemeT * systeme)
+	{// Fixe le couplage à un couplage moyen
+	float couplage;
+	float moyenne = sqrt(COUPLAGE_MAX * COUPLAGE_MIN );
+
+	couplage = (*systeme).couplage / (*systeme).nombre;
+
+	if(couplage > moyenne)
+		{
+		do
+			{
+			if(changeCouplage(systeme, 0.91)==0)
+				{
+				couplage = (*systeme).couplage / (*systeme).nombre;
+				}
+			else { printf("\n  ERREUR changeCouplageMoyen\n"); return 1; }
+			}
+		while(couplage > moyenne);
+		}
+	else
+		{
+		do
+			{
+			if(changeCouplage(systeme, 1.1)==0)
+				{
+				couplage = (*systeme).couplage / (*systeme).nombre;
+				}
+			else { printf("\n  ERREUR changeCouplageMoyen\n"); return 1; }
+			}
+		while(couplage < moyenne);
+		}
+
+	return 0;
 	}
 
 void changeGravitation(systemeT * systeme, float facteur)
@@ -116,10 +153,11 @@ void changeMasse(systemeT * systeme, float facteur)
 	return;
 	}
 
-void changeDissipation(systemeT * systeme, float facteur)
+int changeDissipation(systemeT * systeme, float facteur)
 	{// Multiplie la dissipation par facteur
 	chaineT *iter;
 	iter = (*systeme).premier;
+	int limite=0;
 
 	float dissipation = (*systeme).dissipation * facteur;
 	//float dissipationMaximale = DISSIPATION_MAX_DT/(*systeme).moteurs.dt;
@@ -141,13 +179,47 @@ void changeDissipation(systemeT * systeme, float facteur)
 	else
 		{
 		printf("dissipation limite atteinte. ");
+		limite=1;
 		}
 
 
 	printf("Dissipation = %6.3f\n", (*systeme).dissipation);
 
-	return;
+	return limite;
 	}
+int changeDissipationMoyenne(systemeT * systeme)
+	{// Fixe la dissipation à une dissipation moyennne
+	float dissipation = (*systeme).dissipation;
+	float moyenne = sqrt(DISSIPATION_MAX * DISSIPATION_MIN );
+
+	if(dissipation > moyenne)
+		{
+		do
+			{
+			if(changeDissipation(systeme, 0.91)==0)
+				{
+				dissipation = (*systeme).dissipation;
+				}
+			else { printf("\n  ERREUR changeDissipationMoyenne\n"); return 1; }
+			}
+		while(dissipation > moyenne);
+		}
+	else
+		{
+		do
+			{
+			if(changeDissipation(systeme, 1.1)==0)
+				{
+				dissipation = (*systeme).dissipation;
+				}
+			else { printf("\n  ERREUR changeDissipationMoyenne\n"); return 1; }
+			}
+		while(dissipation < moyenne);
+		}
+
+	return 0;
+	}
+
 
 void changeFormeDissipation(systemeT * systeme, int forme)
 	{// initialise une dissipation nulle(0), uniforme(1) ou extremite absorbante(2)

@@ -55,7 +55,8 @@ float moteursGenerateur(moteursT * m);
 float moteurJaugeZero(moteursT * m);
 
 void moteursChangeEtatJosephson(moteursT * moteur, int etat);
-void moteursChangeJosephson(moteursT * m, float facteur);
+int moteursChangeJosephson(moteursT * m, float facteur);
+int moteursChangeJosephsonMoyenne(moteursT * m);	// Réglage du moteur josephson
 void moteursChangeFrequence(moteursT * m, float facteur);
 void moteursChangeAmplitude(moteursT * m, float facteur);
 void moteursChangeGenerateur(moteursT * m, int i);

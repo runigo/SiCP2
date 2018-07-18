@@ -111,7 +111,7 @@ int donneesOptions(optionsT * options)
 	(*options).modeMenu = 0;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 
 	(*options).modePause = 1;		// avec ou sans attente
-	(*options).duree = 100;		// 100 : temps réèl.
+	(*options).duree = DUREE;		// 100 : temps réèl.
 	(*options).fond=240;		// couleur du fond de l'affichage
 
 			// OPTIONS SiCP
@@ -120,7 +120,7 @@ int donneesOptions(optionsT * options)
 							// dt*duree = 0.004
 	(*options).soliton=0;
 	(*options).support=1;		// Support de la chaîne
-	(*options).nombre=133;		// nombre de pendule
+	(*options).nombre=133;		// Nombre implicite de pendule
 	(*options).equation=1;		// 1 : pendule, 2 : linéarisation,
 							//	 3 : corde, 4 : dioptre
 

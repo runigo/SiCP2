@@ -82,6 +82,11 @@ typedef struct CommandesT commandesT;
 		int triangleX; // Rayon suivant X 
 		int triangleCentre[TRIANGLE_COMMANDES]; // Centre suivant X
 		int triangleEtat[TRIANGLE_COMMANDES]; // État de la commande
+		int lineairePositionX; // Position de simulation <> DUREE
+		float a;
+		float b;	//	Droite duree < DUREE
+		float A;
+		float B;	//	Droite duree > DUREE
 
 		};
 

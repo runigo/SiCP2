@@ -55,7 +55,7 @@ double observablesEnergieCouplagePendul(penduleT * pendule, penduleT * suivant, 
 	{	//(*pendule).kapa est négatif
 	double x, y;	// CALCUL POUR UN PENDULE DE LONGUEUR = 1 !!!
 	x=(*pendule).actuel;
-	y=(*suivant).actuel - (*pendule).dephasage; //(*pendule).longueur * (*pendule).longueur * 
+	y=(*suivant).actuel + (*pendule).dephasage; //(*pendule).longueur * (*pendule).longueur * 
 	return ( - 0.5 * (*pendule).masse * (*pendule).kapa *  (x-y) * (x-y) / dt / dt);
 	}
 

@@ -386,7 +386,7 @@ void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay,
 	return;
 	}
 
-void graphiqueTriangle(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int Bx, int By)
+void graphiqueTrianglePlein(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int Bx, int By)
 	{
 	graphiqueTriangleGris(graphique, X, Y, Ax, Ay, Bx, By);
 
@@ -399,13 +399,156 @@ void graphiqueTriangle(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int
 	return;
 	}
 
-void graphiqueRectangle(graphiqueT * graphique, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int Dx, int Dy)
+void graphiqueRectanglePlein(graphiqueT * graphique, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int Dx, int Dy)
 	{
 
 	graphiqueTriangleGris(graphique, Ax, Ay, Bx, By, Cx, Cy);
 	graphiqueTriangleGris(graphique, Ax, Ay, Cx, Cy, Dx, Dy);
 
 	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+
+	SDL_RenderDrawLine((*graphique).rendu, Bx, By, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, Dx, Dy, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Bx, By);
+	SDL_RenderDrawLine((*graphique).rendu, Cx, Cy, Dx, Dy);
+
+	return;
+	}
+
+void graphiquePenduleSupportPlein(graphiqueT * graphique, grapheT * graphe)
+	{
+//                                                J   I
+//                                             L   K
+//                                               M
+//                                               
+//                                                H   G
+//                                             F   E
+//               N
+
+
+//             D   C
+//         B   A
+
+	int Ax, Ay, Bx, By;
+	int Ex, Ey, Fx, Fy, Gx, Gy, Hx, Hy;
+	int Ix, Iy, Jx, Jy, Kx, Ky, Lx, Ly;
+	int Nx, Ny;
+
+		//	Point du support
+	Ax = (*graphe).supporX[0]; Ay = (*graphe).supporY[0];
+	Bx = (*graphe).supporX[1]; By = (*graphe).supporY[1];
+
+	Ex = (*graphe).supporX[4]; Ey = (*graphe).supporY[4];
+	Fx = (*graphe).supporX[5]; Fy = (*graphe).supporY[5];
+	Gx = (*graphe).supporX[6]; Gy = (*graphe).supporY[6];
+	Hx = (*graphe).supporX[7]; Hy = (*graphe).supporY[7];
+	Ix = (*graphe).supporX[8]; Iy = (*graphe).supporY[8];
+	Jx = (*graphe).supporX[9]; Jy = (*graphe).supporY[9];
+	Kx = (*graphe).supporX[10]; Ky = (*graphe).supporY[10];
+	Lx = (*graphe).supporX[11]; Ly = (*graphe).supporY[11];
+
+	Nx = (*graphe).supporX[13]; Ny = (*graphe).supporY[13];
+
+
+		// Boitier moteur et montant avant
+	if((*graphe).arriere <= 0) // Vue de devant
+		{
+			// Boitier moteur	
+		if((*graphe).gauche <= 0) // Montant gauche
+			{
+			graphiqueRectanglePlein(graphique, Ex, Ey, Gx, Gy, Ix, Iy, Kx, Ky);
+			}
+		else// Montant droit
+			{
+			graphiqueRectanglePlein(graphique, Fx, Fy, Hx, Hy, Jx, Jy, Lx, Ly);
+			}
+
+			// Face avant
+		graphiqueRectanglePlein(graphique, Fx, Fy, Ex, Ey, Kx, Ky, Lx, Ly);
+
+		if((*graphe).dessous <= 0) // Vue de dessus
+			{
+				// Chassis
+			graphiqueRectanglePlein(graphique, Ax, Ay, Bx, By, Fx, Fy, Ex, Ey);
+				// Dessus moteur
+			graphiqueRectanglePlein(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
+			}
+		}
+	else // Vue de derriere
+		{
+		if((*graphe).dessous <= 0) // Vue de dessus
+			{
+				// Chassis
+			graphiqueRectanglePlein(graphique, Ax, Ay, Bx, By, Fx, Fy, Ex, Ey);
+				// Palier avant
+			graphiqueTrianglePlein(graphique, Nx, Ny, Ax, Ay, Bx, By);
+			}
+		else // Vue de dessous
+			{
+				// Palier avant
+			graphiqueTrianglePlein(graphique, Nx, Ny, Ax, Ay, Bx, By);
+			}
+		}
+
+
+		// Chaine de pendule
+	graphiquePendule(graphique, graphe);
+
+
+		// Boitier moteur et montant avant	
+	if((*graphe).arriere > 0) // Vue de derrière
+		{
+			// Boitier moteur	
+		if((*graphe).gauche <= 0) // Montant gauche
+			{
+			graphiqueRectanglePlein(graphique, Ex, Ey, Gx, Gy, Ix, Iy, Kx, Ky);
+			}
+		else// Montant droit
+			{
+			graphiqueRectanglePlein(graphique, Fx, Fy, Hx, Hy, Jx, Jy, Lx, Ly);
+			}
+			// Face arrière
+		graphiqueRectanglePlein(graphique, Hx, Hy, Gx, Gy, Ix, Iy, Jx, Jy);
+
+		if((*graphe).dessous > 0) // Vue de dessous
+			{	// Chassis
+			graphiqueRectanglePlein(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			}
+		else
+			{	// Dessus moteur
+			graphiqueRectanglePlein(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
+			}
+		}
+	else // Vue de devant
+		{
+		if((*graphe).dessous <= 0) // Vue de dessus
+			{	// Palier avant
+			graphiqueTrianglePlein(graphique, Nx, Ny, Ax, Ay, Bx, By);
+			}
+		else // Vue de dessous
+			{
+				// Palier avant
+			graphiqueTrianglePlein(graphique, Nx, Ny, Ax, Ay, Bx, By);
+				// Chassis
+			graphiqueRectanglePlein(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			}
+		}
+
+	return;
+	}
+
+void graphiqueTriangle(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int Bx, int By)
+	{
+
+	SDL_RenderDrawLine((*graphique).rendu, X, Y, Ax, Ay);
+	SDL_RenderDrawLine((*graphique).rendu, X, Y, Bx, By);
+	SDL_RenderDrawLine((*graphique).rendu, Ax, Ay, Bx, By);
+
+	return;
+	}
+
+void graphiqueRectangle(graphiqueT * graphique, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int Dx, int Dy)
+	{
 
 	SDL_RenderDrawLine((*graphique).rendu, Bx, By, Ax, Ay);
 	SDL_RenderDrawLine((*graphique).rendu, Dx, Dy, Ax, Ay);
@@ -450,28 +593,31 @@ void graphiquePenduleSupport(graphiqueT * graphique, grapheT * graphe)
 	Nx = (*graphe).supporX[13]; Ny = (*graphe).supporY[13];
 
 
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 		// Boitier moteur et montant avant
 	if((*graphe).arriere <= 0) // Vue de devant
 		{
 			// Boitier moteur	
-		if((*graphe).gauche <= 0) // Montant gauche
+		//if((*graphe).gauche <= 0) // Montant gauche
 			{
 			graphiqueRectangle(graphique, Ex, Ey, Gx, Gy, Ix, Iy, Kx, Ky);
 			}
-		else// Montant droit
+		//else// Montant droit
 			{
 			graphiqueRectangle(graphique, Fx, Fy, Hx, Hy, Jx, Jy, Lx, Ly);
 			}
 
 			// Face avant
 		graphiqueRectangle(graphique, Fx, Fy, Ex, Ey, Kx, Ky, Lx, Ly);
+			// Face arrière
+		graphiqueRectangle(graphique, Hx, Hy, Gx, Gy, Ix, Iy, Jx, Jy);
 
 		if((*graphe).dessous <= 0) // Vue de dessus
 			{
 				// Chassis
 			graphiqueRectangle(graphique, Ax, Ay, Bx, By, Fx, Fy, Ex, Ey);
 				// Dessus moteur
-			graphiqueRectangle(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
+			//graphiqueRectangle(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
 			}
 		}
 	else // Vue de derriere
@@ -494,29 +640,33 @@ void graphiquePenduleSupport(graphiqueT * graphique, grapheT * graphe)
 		// Chaine de pendule
 	graphiquePendule(graphique, graphe);
 
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 
 		// Boitier moteur et montant avant	
 	if((*graphe).arriere > 0) // Vue de derrière
 		{
 			// Boitier moteur	
-		if((*graphe).gauche <= 0) // Montant gauche
+		//if((*graphe).gauche <= 0) // Montant gauche
 			{
 			graphiqueRectangle(graphique, Ex, Ey, Gx, Gy, Ix, Iy, Kx, Ky);
 			}
-		else// Montant droit
+		//else// Montant droit
 			{
 			graphiqueRectangle(graphique, Fx, Fy, Hx, Hy, Jx, Jy, Lx, Ly);
 			}
 			// Face arrière
 		graphiqueRectangle(graphique, Hx, Hy, Gx, Gy, Ix, Iy, Jx, Jy);
+			// Face avant
+		graphiqueRectangle(graphique, Fx, Fy, Ex, Ey, Kx, Ky, Lx, Ly);
 
 		if((*graphe).dessous > 0) // Vue de dessous
 			{	// Chassis
-			graphiqueRectangle(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			//graphiqueRectangle(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			graphiqueRectangle(graphique, Ax, Ay, Bx, By, Fx, Fy, Ex, Ey);
 			}
 		else
 			{	// Dessus moteur
-			graphiqueRectangle(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
+			//graphiqueRectangle(graphique, Kx, Ky, Ix, Iy, Jx, Jy, Lx, Ly);
 			}
 		}
 	else // Vue de devant
@@ -530,7 +680,8 @@ void graphiquePenduleSupport(graphiqueT * graphique, grapheT * graphe)
 				// Palier avant
 			graphiqueTriangle(graphique, Nx, Ny, Ax, Ay, Bx, By);
 				// Chassis
-			graphiqueRectangle(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			//graphiqueRectangle(graphique, Ax, Ay, Bx, By, Hx, Hy, Gx, Gy);
+			graphiqueRectangle(graphique, Ax, Ay, Bx, By, Fx, Fy, Ex, Ey);
 			}
 		}
 

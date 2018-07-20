@@ -69,10 +69,20 @@ void grapheChangeSupport(grapheT * graphe)
 	{
 	if((*graphe).support==1)
 		{(*graphe).support=0;
-		printf("Support transparent\n");}
+		printf("Support invisible\n");}
 	else
-		{(*graphe).support=1;
-		printf("Support apparent\n");}
+		{
+		if((*graphe).support==0)
+			{
+			(*graphe).support=-1;
+			printf("Support transparent\n");
+			}
+		else
+			{
+			(*graphe).support=1;
+			printf("Support plein\n");
+			}
+		}
 	}
 
 //////////////////////////////////////////////////////////////////

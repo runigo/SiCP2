@@ -68,6 +68,7 @@ int graphiqueNettoyage(graphiqueT * graphique);
 int graphiqueMiseAJour(graphiqueT * graphique);
 
 int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes);
+void graphiquePenduleSupportPlein(graphiqueT * graphique, grapheT * graphe);
 void graphiquePenduleSupport(graphiqueT * graphique, grapheT * graphe);
 void graphiquePendule(graphiqueT * graphique, grapheT * graphe);
 

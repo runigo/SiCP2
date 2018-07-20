@@ -201,7 +201,14 @@ int controleurConstructionGraphique(controleurT * controleur)
 		}
 	else
 		{
-		graphiquePenduleSupport(&(*controleur).graphique, &(*controleur).graphe);
+		if((*controleur).graphe.support==1)
+			{
+			graphiquePenduleSupport(&(*controleur).graphique, &(*controleur).graphe);
+			}
+		else
+			{
+			graphiquePenduleSupportPlein(&(*controleur).graphique, &(*controleur).graphe);
+			}
 		}
 
 		//fprintf(stderr, "Mise à jour de l'affichage\n");

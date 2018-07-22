@@ -1,9 +1,9 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-Boltzmann 1.0 simulateur pour les sciences physiques
-Ce logiciel est un programme informatique servant à simuler différents 
-phénomènes physiques et à en donner une représentation graphique.
+SiCP 2.3.1 simulateur de chaîne de pendules
+Ce logiciel est un programme informatique servant à simuler l'équation
+d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
@@ -57,7 +57,7 @@ termes.
 #define BOUTON_COMMANDES 17 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
 
-#define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
+#define LINEAIRE_COMMANDES 4 // Nombres de commandes linéaires
 #define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme

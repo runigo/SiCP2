@@ -1,7 +1,7 @@
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.2.1  simulateur de chaîne de pendules
+SiCP 2.3.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -37,7 +37,6 @@ void optionsFond(optionsT * options, char *opt);
 void optionsPause(optionsT * options, char *opt);
 void optionsModePause(optionsT * options, char *opt);
 void optionsModeDemo(optionsT * options, char *opt);
-void optionsModeClavier(optionsT * options, char *opt);
 void optionsDuree(optionsT * options, char *opt);
 
 void optionsModeMenu(optionsT * options, int menu);	// Option menu : 0, SiCP : 1, SiCF : 2, SiGP : 3
@@ -64,8 +63,6 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 			optionsModePause(options, opt[i+1]);  // Mode système en pause
 		if(strcmp(opt[i], "modeDemo")==0 && opt[i+1]!=NULL)
 			optionsModeDemo(options, opt[i+1]);  // 0 : SiCP, 1 Graphique démo, 2 Commande démo
-		if(strcmp(opt[i], "modeClavier")==0 && opt[i+1]!=NULL)
-			optionsModeClavier(options, opt[i+1]);  // 1 : SiCP, 1 Graphique démo, 2 Commande démo
 		if(strcmp(opt[i], "duree")==0 && opt[i+1]!=NULL)
 			optionsDuree(options, opt[i+1]);	// Nombre d'évolution du système entre les affichages
 
@@ -201,7 +198,7 @@ void optionsPause(optionsT * options, char *opt)
 void optionsSupport(optionsT * options, char *opt)
 	{
 	int support = atoi(opt);
-	if(support==1 || support==0)
+	if(support==-1 || support==1 || support==0)
 		{
 		(*options).support = support;
 		printf("Option support valide, support = %d\n", (*options).support);
@@ -209,7 +206,7 @@ void optionsSupport(optionsT * options, char *opt)
 	else
 		{
 		printf("Option support non valide, support = %d\n", (*options).support);
-		printf("	option support = 1 ou 0 : avec ou sans support\n");
+		printf("	option support = -1, +1 ou 0 : support plein, supporttransparent, sans support\n");
 		}
 	return;
 	}
@@ -264,23 +261,6 @@ void optionsModeDemo(optionsT * options, char *opt)
 	return;
 	}
 
-		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-void optionsModeClavier(optionsT * options, char *opt)
-	{
-	int modeClavier = atoi(opt);
-	if(modeClavier==0 || modeClavier==1 || modeClavier==2)
-		{
-		(*options).modeClavier = modeClavier;
-		printf("Option modeClavier valide, modeClavier = %d\n", (*options).modeClavier);
-		}
-	else
-		{
-		printf("Option modeClavier non valide, modeClavier = %d\n", (*options).modeClavier);
-		printf("	option modeClavier : modeClavier = 0, 1 ou 2\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-		}
-	return;
-	}
-
 void optionsDuree(optionsT * options, char *opt)
 	{    	// Nombre d'évolution du système entre les affichages
 	int duree = atoi(opt);
@@ -297,7 +277,6 @@ void optionsDuree(optionsT * options, char *opt)
 	return;
 	}
 
-
 void optionsAide(void)
 	{
 	printf("\nAIDE DE SiCP\n");
@@ -309,8 +288,7 @@ void optionsAide(void)
 	printf("support	1 ou 0 		: 	avec ou sans dessin du support\n");
 	printf("pause	5 < pause < 555	:	pause entre les affichages en ms\n");
 	printf("modePause	modePause = -1 ou 1	:	Évolution système\n");  // Mode -1 : pause 1 : évolution
-	printf("modeDemo  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-	printf("modeClavier  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+	//printf("modeDemo  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
 	printf("duree	1 < duree < %d	:	nombre d'évolution du système entre les affichages (F9, F10, F11, F12)\n", DUREE_MAX);
 	printf("dt	%f < dt < %6.3f	discrétisation du temps\n", DT_MIN, DT_MAX);
 	printf("nombre	%d < nombre < %d	Nombre de pendule \n", NOMBRE_MIN, NOMBRE_MAX);

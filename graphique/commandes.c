@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.3.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -82,12 +82,13 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 
 		// BOUTONS LINEAIRES SUIVANT Y
 	(*commandes).lineaireY=(int)(0.0392156862745*hauteur); // 693-636/2 =  / 714 // Rayon suivant Y
-	(*commandes).lineairesCentre=(int)(0.930672268908*hauteur); // 693+636/2 =  / 714 // Position Y des boutons linéaires
+	(*commandes).lineairesCentre=(int)(0.958181818182*hauteur); // 693+636/2 =  / 714 // Position Y des boutons linéaires
 		// BOUTONS LINEAIRES SUIVANT X
 	(*commandes).lineaireX=(int)(0.0306563039724*largeur); // 332-261/2 / 1158	Rayon suivant X
-	(*commandes).lineaireCentre[0]=(int)(0.225388601036*largeur); // 261	Hauteur
-	(*commandes).lineaireCentre[1]=(int)(0.286701208981*largeur); // 332	Distance
-	(*commandes).lineaireCentre[2]=(int)(0.43609671848*largeur); // 414+596/2	Simulation	
+	(*commandes).lineaireCentre[0]=(int)(0.20067264574*largeur); // 261	Hauteur
+	(*commandes).lineaireCentre[1]=(int)(0.20067264574*largeur); // 332	Distance
+	(*commandes).lineaireCentre[2]=(int)(0.257847533632*largeur); // 414+596/2	Simulation < temps réèl
+	(*commandes).lineaireCentre[3]=(int)(0.406950672646*largeur); // 414+596/2	Simulation > temps réèl	
 
 		// BOUTONS TRIANGULAIRES SUIVANT Y
 	(*commandes).triangleY=(int)(0.0168067226891*hauteur); // Rayon suivant Y // 12 / 714

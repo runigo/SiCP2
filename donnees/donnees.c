@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.3.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -47,8 +47,7 @@ int donneesControleur(controleurT * controleur)
 
 	(*controleur).sortie = 0;	// Sortie de SiCP si <> 0
 	(*controleur).appui = 0;	// Appuie sur la souris
-	(*controleur).modeClavier = 1;	//	1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
-	(*controleur).modeMenu = (*controleur).options.modeMenu;		// 0 : Menu, 1 SiCP, 2 SiGP
+	(*controleur).modeMenu = (*controleur).options.modeMenu;		// 0 : Menu, 1 SiCP, 2SiCF, 3 SiGP
 
 		fprintf(stderr, " Initialisation du système\n");
 	donneesSysteme(&(*controleur).systeme, &(*controleur).options);

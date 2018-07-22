@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.3.1 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -39,13 +39,9 @@ int controleurConstructionGraphique(controleurT * controleur);
 
 int controleurTraiteEvenement(controleurT * controleur);
 
-int controleurActionClavier(controleurT * controleur);
+int controleurClavier(controleurT * controleur);
 int controleurClavierMaj(controleurT * controleur);
 int controleurClavierCtrl(controleurT * controleur);
-
-int controleurClavier(controleurT * controleur);
-int controleurClavier2(controleurT * controleur);
-int controleurClavier3(controleurT * controleur);
 
 int controleurCommandes(controleurT * controleur, int zone);
 int controleurInitialiseParametres(controleurT * controleur, int forme);
@@ -88,21 +84,15 @@ int controleurDestruction(controleurT * control)
 
 int controleurSimulationGraphique(controleurT * controleur)
 	{
-	do	{	//fprintf(stderr, "Prise en compte des actions clavier\n");
-		controleurActionClavier(controleur);
+	do	{
+		if (SDL_WaitEvent(&(*controleur).interface.evenement))
+			{
+			controleurTraiteEvenement(controleur);
+			}
 		}
 	while((*controleur).sortie == 0);
 
 	return 0;
-	}
-
-int controleurActionClavier(controleurT * controleur)
-	{
-	if (SDL_WaitEvent(&(*controleur).interface.evenement))
-		{
-		controleurTraiteEvenement(controleur);
-		}
-	return (*controleur).sortie;
 	}
 
 int controleurEvolution(controleurT * controleur)
@@ -132,9 +122,6 @@ int controleurEvolution(controleurT * controleur)
 	controleurConstructionGraphique(controleur);
 		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
-
-		//projectionChangePsi(&(*controleur).projection, -0.003);
-
 	//fprintf(stderr, "    Durée des évolutions = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
 	//printf("Sortie de controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
@@ -155,7 +142,7 @@ int controleurProjection(controleurT * controleur)
 		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
-		// Réinitialisation des commandes si la fenetre change de taille
+		// Réinitialisation des commandes si la fenêtre change de taille
 	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
 		{
 		(*controleur).graphique.largeur=largeur;
@@ -234,7 +221,7 @@ int controleurTraiteEvenement(controleurT * controleur)
 			controleurBoutonSouris(controleur, 0);break;
 		case SDL_USEREVENT:
 			controleurEvolution(controleur);break;
-	  case SDL_KEYDOWN:
+		case SDL_KEYDOWN:
 			{
 			if ((((*controleur).interface.evenement.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT)
 			|| (((*controleur).interface.evenement.key.keysym.mod & KMOD_RSHIFT) == KMOD_RSHIFT))
@@ -249,19 +236,8 @@ int controleurTraiteEvenement(controleurT * controleur)
 					sortie = controleurClavierCtrl(controleur);break;
 					}
 				else
-					{	//	1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
-					if((*controleur).modeClavier == 3)
-						{
-						sortie = controleurClavier3(controleur);break;
-						}
-					if((*controleur).modeClavier == 2)
-						{
-						sortie = controleurClavier2(controleur);break;
-						}
-					else
-						{
-						sortie = controleurClavier(controleur);break;
-						}
+					{
+					sortie = controleurClavier(controleur);break;
 					}
 				}
 			}
@@ -283,7 +259,7 @@ void controleurChangeVitesse(controleurT * controleur, float facteur)
 	{
 	if(facteur < 0.0)
 		{
-		(*controleur).options.duree = 100;
+		(*controleur).options.duree = DUREE;
 		}
 	else
 		{
@@ -389,7 +365,7 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_z:
 			changeMasse(&(*controleur).systeme, 1.7);break;
 		case SDLK_s:
-			changeMasse(&(*controleur).systeme, 0.6);break;
+			changeMasse(&(*controleur).systeme, 0.59);break;
 
 	// Gravitation
 		case SDLK_t:
@@ -451,73 +427,6 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_F8:
 			grapheChangeSupport(&(*controleur).graphe);break;
 
-
-		default:
-			;
-		}
-	return (*controleur).sortie;
-	}
-
-int controleurClavier2(controleurT * controleur)
-	{
-	switch ((*controleur).interface.evenement.key.keysym.sym)
-		{
-	// Mode : évolution du système en pause
-		case SDLK_RETURN:
-			controleurChangeMode(controleur);break;
-		//case SDLK_BACKSPACE:
-			//controleurChangeMode(controleur);break;
-
-	// Déplacement du point de vue
-		case SDLK_a:
-			projectionChangePhi(&(*controleur).projection, 0.01);break;
-		case SDLK_z:
-			projectionChangePhi(&(*controleur).projection, 0.01);break;
-		case SDLK_e:
-			projectionChangePhi(&(*controleur).projection, 0.09);break;
-		case SDLK_r:
-			projectionChangePhi(&(*controleur).projection, 0.09);break;
-
-		case SDLK_q:
-			projectionChangePsi(&(*controleur).projection, -0.09);break;
-		case SDLK_s:
-			projectionChangePsi(&(*controleur).projection, -0.01);break;
-		case SDLK_d:
-			projectionChangePsi(&(*controleur).projection, 0.01);break;
-		case SDLK_f:
-			projectionChangePsi(&(*controleur).projection, 0.09);break;
-
-		case SDLK_w:
-			projectionChangePhi(&(*controleur).projection, -0.01);break;
-		case SDLK_x:
-			projectionChangePhi(&(*controleur).projection, -0.01);break;
-		case SDLK_c:
-			projectionChangePhi(&(*controleur).projection, -0.09);break;
-		case SDLK_v:
-			projectionChangePhi(&(*controleur).projection, -0.09);break;
-
-		default:
-			;
-		}
-	return (*controleur).sortie;
-	}
-
-int controleurClavier3(controleurT * controleur)
-	{
-	switch ((*controleur).interface.evenement.key.keysym.sym)
-		{
-
-	   		 // Mode : évolution du système en pause
-		case SDLK_RETURN:
-			controleurChangeMode(controleur);break;
-		//case SDLK_BACKSPACE:
-			//controleurChangeMode(controleur);break;
-
-
-			// Réinitialisation du système
-		case SDLK_a:
-			fprintf(stderr, "Réinitialisation du système\n");
-			systemeInitialisePosition(&(*controleur).systeme, 0);break;
 
 		default:
 			;
@@ -595,7 +504,7 @@ int controleurClavierCtrl(controleurT * controleur)
 			controleurChangeMode(controleur);break;
 
 	// Choix du modeClavier
-		case SDLK_F1: // Commande de la chaîne
+	/*	case SDLK_F1: // Commande de la chaîne
 			(*controleur).modeClavier = 1;break;
 		case SDLK_F2: // Graphisme
 			(*controleur).modeClavier = 2;break;
@@ -603,6 +512,35 @@ int controleurClavierCtrl(controleurT * controleur)
 			(*controleur).modeClavier = 3;break;
 		case SDLK_F4: // 
 			(*controleur).modeClavier = 4;break;
+	*/
+
+	// Déplacement du point de vue
+		case SDLK_a:
+			projectionChangePhi(&(*controleur).projection, 0.01);break;
+		case SDLK_z:
+			projectionChangePhi(&(*controleur).projection, 0.01);break;
+		case SDLK_e:
+			projectionChangePhi(&(*controleur).projection, 0.09);break;
+		case SDLK_r:
+			projectionChangePhi(&(*controleur).projection, 0.09);break;
+
+		case SDLK_q:
+			projectionChangePsi(&(*controleur).projection, -0.09);break;
+		case SDLK_s:
+			projectionChangePsi(&(*controleur).projection, -0.01);break;
+		case SDLK_d:
+			projectionChangePsi(&(*controleur).projection, 0.01);break;
+		case SDLK_f:
+			projectionChangePsi(&(*controleur).projection, 0.09);break;
+
+		case SDLK_w:
+			projectionChangePhi(&(*controleur).projection, -0.01);break;
+		case SDLK_x:
+			projectionChangePhi(&(*controleur).projection, -0.01);break;
+		case SDLK_c:
+			projectionChangePhi(&(*controleur).projection, -0.09);break;
+		case SDLK_v:
+			projectionChangePhi(&(*controleur).projection, -0.09);break;
 
 		default:
 			;
@@ -612,6 +550,7 @@ int controleurClavierCtrl(controleurT * controleur)
 
 int controleurSouris(controleurT * controleur)
 	{
+				// Action des mouvements de la souris
 	float x, y;
 	if((*controleur).appui==1)
 		{
@@ -631,6 +570,8 @@ int controleurSouris(controleurT * controleur)
 
 int controleurDefile(controleurT * controleur)
 	{
+				// Action des mouvements de la mollette
+
 	if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
 		{
 		controleurDefileCommandes(controleur, 1);
@@ -651,6 +592,8 @@ int controleurDefile(controleurT * controleur)
 
 int controleurDefilePointDeVue(controleurT * controleur)
 	{
+				// Action des mouvements de la mollette dans la zone 1
+
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
 		(*controleur).projection.pointDeVue.r += 0.011;
@@ -686,6 +629,7 @@ int controleurDefilePointDeVue(controleurT * controleur)
 
 void controleurBoutonSouris(controleurT * controleur, int appui)
 	{
+				// Action du bouton gauche de la souris
 
 	(*controleur).appui=appui;
 	
@@ -719,6 +663,9 @@ void controleurBoutonSouris(controleurT * controleur, int appui)
 
 int controleurCommandes(controleurT * controleur, int zone)
 	{
+				// Action du bouton gauche de la souris
+				// dans les zones 2 et 3
+
 	int commande;
 	if(zone==2)
 		{
@@ -846,6 +793,7 @@ int controleurInitialiseParametres(controleurT * controleur, int forme)
 	}
 int controleurInitialiseFluxons(controleurT * controleur)
 	{
+	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
 	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
 	changeDephasage(&(*controleur).systeme, -6*PI); // Ajoute 3 fluxons
 
@@ -870,7 +818,7 @@ int controleurInitialiseFluxons(controleurT * controleur)
 	}
 int controleurDefileCommandes(controleurT * controleur, int zone)
 	{
-	int commande;
+	int commande = -1;
 	if(zone==1)
 		{
 		commande = commandeRotatifs(&(*controleur).commandes);
@@ -919,6 +867,14 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 			{
 			switch(commande)
 				{
+				case 0:
+					controleurDefilePointDeVue(controleur);break;
+				case 1:
+					controleurDefilePointDeVue(controleur);break;
+				case 2:
+					controleurChangeVitesse(controleur, 1.1);break;
+				case 3:
+					controleurChangeVitesse(controleur, 1.1);break;
 				default:
 					;
 				}
@@ -928,15 +884,13 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 			switch(commande)	
 				{
 				case 0:
-					changeCouplage(&(*controleur).systeme, 0.91);break;
+					controleurDefilePointDeVue(controleur);break;
 				case 1:
-					changeDissipation(&(*controleur).systeme, 0.91);break;
+					controleurDefilePointDeVue(controleur);break;
 				case 2:
-					moteursChangeJosephson(&(*controleur).systeme.moteurs, 0.91);break;
+					controleurChangeVitesse(controleur, 0.91);break;
 				case 3:
-					moteursChangeAmplitude(&(*controleur).systeme.moteurs, 0.91);break;
-				case 4:
-					moteursChangeFrequence(&(*controleur).systeme.moteurs, 0.91);break;
+					controleurChangeVitesse(controleur, 0.91);break;
 				default:
 					;
 				}

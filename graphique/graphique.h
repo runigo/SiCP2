@@ -44,6 +44,7 @@ struct GraphiqueT {
 	SDL_Color fond;
 	SDL_Color contraste;
 	SDL_Color orange;
+	SDL_Color jaune;
 	SDL_Color gris;
 	SDL_Color cyan;
 	SDL_Color vert;

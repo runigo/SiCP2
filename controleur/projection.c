@@ -480,8 +480,10 @@ int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grap
 
 			// Masse
 		iterGraph->masse.x = iterGraph->axe.x;
-		iterGraph->masse.y = (*projection).hauteur * sin(iterSystem->pendule.nouveau);
-		iterGraph->masse.z = (*projection).hauteur * cos(iterSystem->pendule.nouveau);
+		iterGraph->sinTheta = sin(iterSystem->pendule.nouveau);
+		iterGraph->cosTheta = cos(iterSystem->pendule.nouveau);
+		iterGraph->masse.y = (*projection).hauteur * iterGraph->sinTheta;
+		iterGraph->masse.z = (*projection).hauteur * iterGraph->cosTheta;
 
 		//if(x>0) iterGraph->position=1;
 		//else iterGraph->position=0;

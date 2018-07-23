@@ -43,6 +43,9 @@ typedef struct PointsT pointsT;
 
 		vecteurT masse;	// Coordonnees 3D de la masse
 
+		float sinTheta;
+		float cosTheta;
+
 		int xm;		// Absisse 2D de la masse
 		int ym;		// Ordonnée 2D de la masse
 

@@ -33,7 +33,7 @@ termes.
 
 int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur);
 void graphiqueLigne(graphiqueT * graphique, int X, int Y, int x, int y);
-void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y);
+void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y, float sinT, float cosT);
 //void graphiqueMasse(graphiqueT * graphique, int abs, int ord);
 
 void graphiqueTriangleGris(graphiqueT * graphique, int X, int Y, int Ax, int Ay, int Bx, int By);
@@ -81,6 +81,10 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	(*graphique).orange.g = 127;
 	(*graphique).orange.b = 40;
 	(*graphique).orange.a = 255;
+	(*graphique).jaune.r = 255;
+	(*graphique).jaune.g = 255;
+	(*graphique).jaune.b = 0;
+	(*graphique).jaune.a = 255;
 	(*graphique).gris.r = 127;
 	(*graphique).gris.g = 127;
 	(*graphique).gris.b = 127;
@@ -298,28 +302,25 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 	return 0;  
 	}
 
-void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y)
+void graphiqueTige(graphiqueT * graphique, int X, int Y, int x, int y, float sinT, float cosT)
 	{
-/*
-	graphiqueChangeCouleur(graphique, (*graphique).cyan);
-	SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
-	//graphiqueChangeCouleur(graphique, (*graphique).gris);
-	SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
-	graphiqueChangeCouleur(graphique, (*graphique).orange);
-	SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
-	//graphiqueChangeCouleur(graphique, (*graphique).vert);
-	SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
-*/
 	int decalageDroit = 0;
 	int decalageDiag = 1;
-	graphiqueChangeCouleur(graphique, (*graphique).orange);//contraste
-	SDL_RenderDrawLine((*graphique).rendu, X-decalageDroit, Y-decalageDiag, x-decalageDroit, y-decalageDiag);
-	//graphiqueChangeCouleur(graphique, (*graphique).gris);
-	SDL_RenderDrawLine((*graphique).rendu, X-decalageDiag, Y-decalageDroit, x-decalageDiag, y-decalageDroit);
-	graphiqueChangeCouleur(graphique, (*graphique).vert);
-	SDL_RenderDrawLine((*graphique).rendu, X+decalageDroit, Y+decalageDiag, x+decalageDroit, y+decalageDiag);
+	float sinCarre=sinT*sinT;
+	int sinusC = (int)(125*sinCarre);
+	(void)cosT;
+
+		// Horizontales 		    R	  V	  B
+	SDL_SetRenderDrawColor((*graphique).rendu, sinusC, 55+sinusC, 125+sinusC, 255-sinusC);
 	//graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLine((*graphique).rendu, X-decalageDroit, Y-decalageDiag, x-decalageDroit, y-decalageDiag);
+	SDL_RenderDrawLine((*graphique).rendu, X+decalageDroit, Y+decalageDiag, x+decalageDroit, y+decalageDiag);
+
+		// Verticale
+	SDL_SetRenderDrawColor((*graphique).rendu, 250-sinusC, 250-sinusC, 25, 255);
+	//graphiqueChangeCouleur(graphique, (*graphique).jaune);
 	SDL_RenderDrawLine((*graphique).rendu, X+decalageDiag, Y+decalageDroit, x+decalageDiag, y+decalageDroit);
+	SDL_RenderDrawLine((*graphique).rendu, X-decalageDiag, Y-decalageDroit, x-decalageDiag, y-decalageDroit);
 
 	return;
 	}
@@ -714,7 +715,7 @@ void graphiquePendule(graphiqueT * graphique, grapheT * graphe)
 		fixOrd=iter->ya;
 		graphAbs=iter->xm;
 		graphOrd=iter->ym;
-		graphiqueTige(graphique, fixAbs, fixOrd, graphAbs, graphOrd);
+		graphiqueTige(graphique, fixAbs, fixOrd, graphAbs, graphOrd, iter->sinTheta, iter->cosTheta);
 
 		//	Dessin des masses
 		coordonnee.x = iter->xm - centrage;

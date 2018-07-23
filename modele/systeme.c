@@ -77,7 +77,7 @@ void systemeInitialisePosition(systemeT * systeme, int forme)
 		case 2:
 			position=1;break;
 		case 3:
-			position=1;break;
+			position=2;break;
 		case 4:
 			position=PI-0.01;break;
 		case 5:

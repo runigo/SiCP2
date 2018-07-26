@@ -118,7 +118,7 @@ int donneesOptions(optionsT * options)
 							// 
 							// dt*duree = 0.004
 	(*options).soliton=0;
-	(*options).support=1;		// Support de la chaîne
+	(*options).support=-1;		// Support de la chaîne
 	(*options).nombre=133;		// Nombre implicite de pendule
 	(*options).equation=1;		// 1 : pendule, 2 : linéarisation,
 							//	 3 : corde, 4 : dioptre
@@ -178,7 +178,7 @@ int donneesGraphe(grapheT * graphe, optionsT * options)
 	(*graphe).bleu=150;
 	(*graphe).vert=200;
 	(*graphe).fond=(*options).fond;	//	Couleur du fond
-	(*graphe).support=(*options).support;	//	Couleur du fond
+	(*graphe).support=(*options).support;	//	Apparence du support
 	(*graphe).dessous = 0;	// Vue de dessous
 	(*graphe).gauche = 0;		// Vue de gauche
 	return 0;

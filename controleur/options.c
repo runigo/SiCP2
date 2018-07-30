@@ -1,7 +1,7 @@
 /*
 Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.1 simulateur de chaîne de pendules
+SiCP 2.3.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -53,7 +53,6 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 	{
 	int i=0;
 	//fprintf(stderr, "\nNombre d'options : %d\n", nb);
-	// TODO int Moteur;	//	0:eteint, 1:sinus, 2:carre, 3:impulsion
 
 	do
 		{
@@ -211,7 +210,7 @@ void optionsSupport(optionsT * options, char *opt)
 	return;
 	}
 
-		// Mode  -1 : Wait, 1 : Poll
+		// Mode  -1 : Pause, 1 : Simulation
 void optionsModePause(optionsT * options, char *opt)
 	{
 	int modePause = atoi(opt);
@@ -279,17 +278,17 @@ void optionsDuree(optionsT * options, char *opt)
 
 void optionsAide(void)
 	{
-	printf("\nAIDE DE SiCP\n");
+	printf("\nAIDE DE SiCP2\n");
 
 	printf("\n	OPTIONS DE LA LIGNE DE COMMANDE ()\n\n");
 
   // Couleur du fond 
-	printf("fond	0 < fond < 255	:	couleur du fond de l'affichage\n");
-	printf("support	1 ou 0 		: 	avec ou sans dessin du support\n");
-	printf("pause	5 < pause < 555	:	pause entre les affichages en ms\n");
-	printf("modePause	modePause = -1 ou 1	:	Évolution système\n");  // Mode -1 : pause 1 : évolution
+	//printf("fond	0 < fond < 255	:	couleur du fond de l'affichage\n");
+	printf("support	0, 1 ou -1 		graphisme du support\n");
+	//printf("pause	5 < pause < 555	:	pause entre les affichages en ms\n");
+	printf("modePause	 -1 ou 1	Évolution système\n");  // Mode -1 : pause 1 : évolution
 	//printf("modeDemo  = 0, 1 ou 2	:	SiCP, 1 Graphique démo, 2 Commande démo\n");	// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-	printf("duree	1 < duree < %d	:	nombre d'évolution du système entre les affichages (F9, F10, F11, F12)\n", DUREE_MAX);
+	printf("duree	1 < duree < %d	:	nombre d'évolution du système entre les affichages \n", DUREE_MAX);
 	printf("dt	%f < dt < %6.3f	discrétisation du temps\n", DT_MIN, DT_MAX);
 	printf("nombre	%d < nombre < %d	Nombre de pendule \n", NOMBRE_MIN, NOMBRE_MAX);
 	int soliton = (int)(0.1 + DEPHASAGE_MAX/DEUXPI);
@@ -328,22 +327,45 @@ void optionsAide(void)
 	printf("	p, m : augmenter, diminuer la fréquence\n\n");
 
 	printf("	F5, F6, F7 : affiche les observables\n\n");
+	printf("	F8 : Représentation du support de la chaîne\n\n");
 
 	printf("	Entrée : change le mode temporel\n\n");
 
 	printf("	+, - : augmente, diminue la vitesse de la simulation\n");
 	printf("	F9, F10, F11, F12 : diminue, augmente la vitesse de la simulation\n\n");
 
-	printf("	Ctrl F1 : Classique SiCP\n");
-	printf("	Ctrl F2 : Paramètres Graphiques\n");
-	printf("	Ctrl F3 : Paramètres physiques\n");
-	printf("	Ctrl F4 : Paramètres des moteurs\n");
+	//printf("	Ctrl F1 : Classique SiCP\n");
+	//printf("	Ctrl F2 : Paramètres Graphiques\n");
+	//printf("	Ctrl F3 : Paramètres physiques\n");
+	//printf("	Ctrl F4 : Paramètres des moteurs\n");
 
-	printf("\n	COMMANDE DE LA SOURIS\n\n");
+	printf("\n	COMMANDE DE LA SOURIS DANS LA ZONE DE LA CHAÎNE\n\n");
 
 	printf("	Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci\n");
 	printf("	permettent la rotation du point de vue de l'observateur.\n\n");
+
 	printf("	Lorsque la molette est activée, la distance du point de vue varie.\n");
+
+
+	printf("\n	COMMANDE DE LA SOURIS DANS LA ZONE DE DROITE\n\n");
+
+	printf("	La molette permet la variation des paramètres.\n\n");
+
+	printf("	Le bouton de la souris permet de changer\n");
+	printf("		les conditions aux limites,\n");
+	printf("		la forme de la dissipation,\n");
+	printf("		l'amplitude du courant josephson,\n");
+	printf("		l'amplitude du moteur périodique,\n");
+	printf("		la fréquence du moteur périodique\n");
+
+
+	printf("\n	COMMANDE DE LA SOURIS DANS LA ZONE DU BAS\n\n");
+
+	printf("	Le bouton de la souris permet de changer\n");
+	printf("		la rotation automatique du point de vue,\n");
+	printf("		la célérité de la simulation,\n");
+	printf("		l'initialisation de la position de la chaîne,\n");
+	printf("		l'initialisation des paramètres de la chaîne,\n");
 
 
 	fprintf(stderr, "\nSortie de SiGP\n");

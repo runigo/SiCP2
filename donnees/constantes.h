@@ -1,7 +1,7 @@
 /*
 Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.1 simulateur de chaîne de pendules
+SiCP 2.3.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -82,9 +82,9 @@ termes.
 #define DUREE 100 // Nombre implicite d'incrémentation du système entre deux affichages.
 #define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
 
-#define DT_MIN 0.00003 // Discrétisation minimal du temps
+#define DT_MIN 0.00003 // Discrétisation minimale du temps
 #define DT 0.0011
-#define DT_MAX 0.003		//	discrétisation du temps
+#define DT_MAX 0.003		//	discrétisation maximale du temps
 
 
 	//	PARAMÈTRES DE LA CHAINE

@@ -1,7 +1,7 @@
 /*
 Copyright juillet 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.1 simulateur de chaîne de pendules
+SiCP 2.3.2 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -46,6 +46,7 @@ int controleurClavierCtrl(controleurT * controleur);
 int controleurCommandes(controleurT * controleur, int zone);
 int controleurInitialiseParametres(controleurT * controleur, int forme);
 int controleurInitialiseFluxons(controleurT * controleur);
+int controleurInitialiseNulle(controleurT * controleur);
 
 int controleurSouris(controleurT * controleur);
 int controleurDefile(controleurT * controleur);
@@ -766,19 +767,17 @@ int controleurCommandes(controleurT * controleur, int zone)
 
 int controleurInitialiseParametres(controleurT * controleur, int forme)
 	{
-	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
-	changeConditionsLimites(&(*controleur).systeme, 1); // Libre
-	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0); // Josephson
 
 	switch(forme)
 		{
 		case 0:
-			changeCouplage(&(*controleur).systeme, 1.1);
-			changeConditionsLimites(&(*controleur).systeme, 1);break;
+			controleurInitialiseNulle(controleur);break;
 		case 1:
-			changeDissipation(&(*controleur).systeme, 1.1);break;
+			controleurInitialiseNulle(controleur);break;
 		case 2:
-			moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+			controleurInitialiseNulle(controleur);
+			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 1);
+			changeFormeDissipation(&(*controleur).systeme, 2);break;
 		case 3:
 			controleurInitialiseFluxons(controleur);
 			changeDissipation(&(*controleur).systeme, 0.33);break;
@@ -787,14 +786,40 @@ int controleurInitialiseParametres(controleurT * controleur, int forme)
 			changeFormeDissipation(&(*controleur).systeme, 2);	// Extrémitée absorbante
 			break;
 		default:
-			;
+			controleurInitialiseNulle(controleur);break;
 		}
 	return 0;
 	}
-int controleurInitialiseFluxons(controleurT * controleur)
+
+int controleurInitialiseNulle(controleurT * controleur)
 	{
 	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
 	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
+
+		// Condition au limites libres
+	changeConditionsLimites(&(*controleur).systeme, 1);
+
+		// Réglage du couplage
+	changeCouplageMoyenne(&(*controleur).systeme);
+
+		// Réglage de la dissipation
+	changeDissipationMoyenne(&(*controleur).systeme);
+	changeFormeDissipation(&(*controleur).systeme, 0);
+
+		// Réglage du moteur josephson
+	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs, 0);
+	//moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
+
+		// Réglage du moteur périodique
+	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
+
+	return 0;
+	}
+
+int controleurInitialiseFluxons(controleurT * controleur)
+	{
+			controleurInitialiseNulle(controleur);
+
 	changeDephasage(&(*controleur).systeme, -6*PI); // Ajoute 3 fluxons
 
 		// Condition au limites périodique
@@ -811,11 +836,9 @@ int controleurInitialiseFluxons(controleurT * controleur)
 	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs, 1);
 	moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
 
-		// Réglage du moteur périodique
-	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
-
 	return 0;
 	}
+
 int controleurDefileCommandes(controleurT * controleur, int zone)
 	{
 	int commande = -1;

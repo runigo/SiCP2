@@ -63,8 +63,13 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if(NULL == (*graphique).rendu)
 		{
-		fprintf(stderr, "ERREUR interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
-		return EXIT_FAILURE;
+		(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
+						SDL_RENDERER_SOFTWARE);
+		if(NULL == (*graphique).rendu)
+			{
+			fprintf(stderr, "ERREUR interfaceInitialisation : Erreur SDL_CreateRenderer : %s \n", SDL_GetError());
+			return EXIT_FAILURE;
+			}
 		}
 
 
@@ -102,7 +107,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *panneau = 0;
 
-	panneau = SDL_LoadBMP("./graphique/sicp.bmp");
+	panneau = SDL_LoadBMP("sicp.bmp");
 	if (!panneau)
 		{
 		fprintf(stderr,"ERREUR chargement image, sicp.bmp : %s\n",SDL_GetError());
@@ -118,7 +123,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *image = 0;
 
-	image = SDL_LoadBMP("./graphique/mobile.bmp");
+	image = SDL_LoadBMP("mobile.bmp");
 	if (!image)
 		{
 		fprintf(stderr,"ERREUR chargement image, mobile.bmp : %s\n",SDL_GetError());
@@ -139,7 +144,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *lumiereVerte = 0;
 
-	lumiereVerte = SDL_LoadBMP("./graphique/lumiereVerte.bmp");
+	lumiereVerte = SDL_LoadBMP("lumiereVerte.bmp");
 	if (!lumiereVerte)
 		{
 		fprintf(stderr,"ERREUR chargement image, lumiereVerte.bmp : %s\n",SDL_GetError());
@@ -155,7 +160,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *lumiereRouge = 0;
 
-	lumiereRouge = SDL_LoadBMP("./graphique/lumiereRouge.bmp");
+	lumiereRouge = SDL_LoadBMP("lumiereRouge.bmp");
 	if (!lumiereRouge)
 		{
 		fprintf(stderr,"ERREUR chargement image, lumiereRouge.bmp : %s\n",SDL_GetError());
@@ -173,7 +178,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *lumiereJaune = 0;
 
-	lumiereJaune = SDL_LoadBMP("./graphique/lumiereJaune.bmp");
+	lumiereJaune = SDL_LoadBMP("lumiereJaune.bmp");
 	if (!lumiereJaune)
 		{
 		fprintf(stderr,"ERREUR chargement image, lumiereJaune.bmp : %s\n",SDL_GetError());
@@ -191,7 +196,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 
 	SDL_Surface *lumiereOrange = 0;
 
-	lumiereOrange = SDL_LoadBMP("./graphique/lumiereOrange.bmp");
+	lumiereOrange = SDL_LoadBMP("lumiereOrange.bmp");
 	if (!lumiereOrange)
 		{
 		fprintf(stderr,"ERREUR chargement image, lumiereOrange.bmp : %s\n",SDL_GetError());

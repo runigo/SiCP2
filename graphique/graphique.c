@@ -58,6 +58,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	SDL_GetWindowSize((*interface).fenetre, &largeur, &hauteur);
 	(*graphique).largeur=largeur;
 	(*graphique).hauteur=hauteur;
+
 		// Création du rendu
 	(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
 					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -71,7 +72,6 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 			return EXIT_FAILURE;
 			}
 		}
-
 
 	//SDL_Color orange = {255, 127, 40, 255};
 	(*graphique).fond.r = fond;

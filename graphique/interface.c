@@ -52,8 +52,8 @@ int interfaceInitialisation(interfaceT * interface)
 
 
 		// Création de la fenêtre
-	(*interface).fenetre = SDL_CreateWindow("SiCP2", 0, 
-							0, FENETRE_X, FENETRE_Y, 
+	(*interface).fenetre = SDL_CreateWindow("SiCP2", SDL_WINDOWPOS_UNDEFINED, 
+							SDL_WINDOWPOS_UNDEFINED, FENETRE_X, FENETRE_Y, 
 							//SDL_WINDOW_FULLSCREEN_DESKTOP |
 							//SDL_WINDOW_MAXIMIZED |
 							SDL_WINDOW_RESIZABLE |

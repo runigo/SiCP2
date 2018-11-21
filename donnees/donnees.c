@@ -1,7 +1,7 @@
 /*
-Copyright juillet 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.2 simulateur de chaîne de pendules
+SiCP 2.3.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -143,6 +143,9 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 	(*systeme).moteurs.frequence=1.0;	// Fréquence du générateur de signaux
 	(*systeme).moteurs.phi=0;
 
+	(*systeme).moteurs.deltaDephasage = 0;
+	(*systeme).moteurs.fluxon=0;
+	(*systeme).moteurs.dephasage=0;
 		// Caractéristique de la chaîne
 
 	(*systeme).libreFixe = 1;	// 0 periodique, 1 libre, 2 fixe

@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.3.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -272,10 +272,23 @@ void systemeInertie(systemeT * systeme)
 	}
 
 void systemeIncremente(systemeT * systeme)
-	{//	incremente l'horloge, l'ancien et l'actuel etat du systeme
+	{
+		//	incremente l'horloge, le déphasage, l'ancien et l'actuel état du systeme
 
-	//(*systeme).moteurs.horloge=(*systeme).moteurs.horloge+(*systeme).moteurs.dt;
 	(*systeme).moteurs.chrono=(*systeme).moteurs.chrono+(*systeme).moteurs.dt;
+
+	if(moteurFluxon(&(*systeme).moteurs))
+		{
+		(*systeme).moteurs.dephasage = (*systeme).moteurs.dephasage + (*systeme).moteurs.deltaDephasage;
+		if((*systeme).moteurs.dephasage > DEUXPI || (*systeme).moteurs.dephasage < -DEUXPI)
+			{
+			moteurFinFluxon(&(*systeme).moteurs);
+			}
+		else
+			{
+			penduleAjouteDephasage(&(*systeme).premier->pendule, (*systeme).moteurs.deltaDephasage);
+			}
+		}
 
 	chaineT *iter;
 	iter=(*systeme).premier;

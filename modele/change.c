@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.3.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -316,21 +316,21 @@ void changeLimite(systemeT * systeme)
 	return;
 	}
 
-void changeDephasage(systemeT * systeme, float dephasage)
+void changeDephasage(systemeT * systeme, int fluxon)
 	{
-	float nouveau = (*systeme).premier->pendule.dephasage + dephasage;
+	float nouveau = (*systeme).premier->pendule.dephasage + fluxon*DEUXPI;
 
 	if(nouveau>(-DEPHASAGE_MAX) && nouveau<DEPHASAGE_MAX)
 		{
-		penduleAjouteDephasage(&(*systeme).premier->pendule, dephasage);
+		if((*systeme).moteurs.fluxon == 0)
+			{
+			moteurChangeFluxon(&(*systeme).moteurs, fluxon);
+			}
 		}
 	else
 		{
-		printf("Dephasage limite atteinte. ");
+		printf("Dephasage limite atteinte. \n");
 		}
-	
-	
-	printf("Dephasage premier = %6.3f\n", (*systeme).premier->pendule.dephasage);
 
 	return;
 	}

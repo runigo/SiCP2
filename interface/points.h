@@ -29,10 +29,10 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-#ifndef _POINT_
-#define _POINT_
+#ifndef _POINTS_
+#define _POINTS_
 
-#include "../graphique/vecteur.h"
+#include "../interface/vecteur.h"
 
 typedef struct PointsT pointsT;
 	struct PointsT

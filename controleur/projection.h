@@ -33,8 +33,8 @@ termes.
 #define _PROJECTION_
 
 #include "../modele/systeme.h"
-#include "../graphique/graphe.h"
-#include "../graphique/commandes.h"
+#include "../interface/graphe.h"
+#include "../interface/commandes.h"
 
 typedef struct ProjectionT projectionT;
 	struct ProjectionT

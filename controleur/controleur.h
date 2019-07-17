@@ -36,8 +36,8 @@ termes.
 #include "../controleur/projection.h"		//	Projection en perspective de la chaîne.
 #include "../modele/change.h"				//	Changement des parametres du système
 #include "../modele/observables.h"			//	Observables du système
-#include "../graphique/graphique.h"			//	Librairie SDL et représentation graphique
-#include "../graphique/horloge.h"			//	Librairie SDL et représentation graphique
+#include "../interface/graphique.h"			//	Librairie SDL et représentation graphique
+#include "../interface/horloge.h"			//	Librairie SDL et représentation graphique
 
 typedef struct ControleurT controleurT;
 	struct ControleurT

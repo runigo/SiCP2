@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2017, Stephan Runigo
+Copyright mars 2018, Stephan Runigo
 runigo@free.fr
-SiCP 1.3.7  simulateur de chaîne de pendules
+SiCP 1.6 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -29,33 +29,63 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-#ifndef _GRAPHE_
-#define _GRAPHE_
+#include "points.h"
 
-#include "point.h"
+pointsT* creationPremierGraphe(void);
+void creationPointGraphe(pointsT* premier);
+void pointSupprimeGraphe(pointsT* premier);
 
-typedef struct GrapheT grapheT;
-	struct GrapheT
+pointsT* pointCreationGraphe(int nombre)
+	{
+	int i;
+	pointsT* premier=creationPremierGraphe();
+	for(i=1;i<nombre;i++)
+		creationPointGraphe(premier);
+	return premier;
+	}
+
+void pointSupprime(pointsT** premier)
+	{
+	pointSupprimeGraphe(*premier);
+	free(*premier);
+	*premier=NULL;
+	}
+
+pointsT* creationPremierGraphe(void)
+	{
+	//pointsT * premier;
+	//premier = (pointsT*) malloc(sizeof(pointsT));
+	pointsT* premier = malloc(sizeof *premier);
+	if (premier!=NULL)
 		{
-		pointsT * premier;
-		int supporX[14];
-		int supporY[14];
+		premier->suivant=premier;
+		premier->precedent=premier;
+		}
+	else fprintf(stderr, "Echec de malloc dans creationPremierGraphe()");
+	//affichePendul(&(premier->pendul));
+	return premier;
+	}
 
-		int rouge;
-		int vert;
-		int bleu;
+void pointSupprimeGraphe(pointsT* premier)
+	{
+	pointsT *iter, *suivant;
+	for(iter=premier->suivant; iter !=premier; iter=suivant)
+		{
+		suivant=iter->suivant;
+		free(iter);
+		}
+	}
 
-		int fond;
-		int support;
-
-		int dessous;	// Vue de dessous
-		int arriere;	// Vue de derrière
-		int gauche;		// Vue de gauche
-		};
-
-int grapheCreation(grapheT * graphe, int nombre);
-//int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond);
-void grapheSuppression(grapheT * graphe);
-void grapheChangeSupport(grapheT * graphe);
-
-#endif
+void creationPointGraphe(pointsT* premier)
+	{// ajoute un pendule à la chaine
+	pointsT * nouveau = (pointsT*) malloc(sizeof(pointsT));
+	if (nouveau!=NULL)
+		{
+		nouveau->precedent=premier;
+		nouveau->suivant=premier->suivant;
+		premier->suivant->precedent=nouveau;
+		premier->suivant=nouveau;
+		}
+	//affichePendul(&(nouveau->pendul));
+	}
+//////////////////////////////////////////////////////////////////////

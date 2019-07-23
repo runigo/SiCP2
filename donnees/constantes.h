@@ -54,6 +54,14 @@ termes.
 #define FENETRE_X 892 // Largeur de la fenêtre
 #define FENETRE_Y 550 // Hauteur de la fenêtre
 
+#define HAUTEUR_MAX FENETRE_Y*3
+#define LARGEUR_MAX FENETRE_X*3
+#define HAUTEUR_MIN FENETRE_Y/7
+#define LARGEUR_MIN FENETRE_X/7
+
+#define PERSPECTIVE_MAX 1.7
+#define PERSPECTIVE_MIN 0.17
+
 #define BOUTON_COMMANDES 17 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
 

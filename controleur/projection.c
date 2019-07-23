@@ -284,6 +284,66 @@ int projectionAffichePointDeVue(projectionT * projection)
 
 	return 0;
 	}
+
+
+int projectionChangeTaille(projectionT * projection, float x)
+	{		// Change la taille de la chaîne
+
+	int hauteur = (*projection).hauteur * x;
+	int largeur = (*projection).largeur * x;
+
+	if(hauteur > HAUTEUR_MAX || largeur > LARGEUR_MAX)
+		{
+		printf("Maximum de la taille ateinte\n");
+		}
+	else
+		{
+		if(hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN)
+			{
+			printf("Minimum de la taille ateinte\n");
+			}
+		else
+			{
+			(*projection).hauteur = hauteur;
+			(*projection).largeur = largeur;
+			printf("(*projection).hauteur = %d\n", (*projection).hauteur);
+			printf("(*projection).largeur = %d\n", (*projection).largeur);
+			}
+		}
+
+	return 0;
+	}
+
+
+
+int projectionChangePerspective(projectionT * projection, float x)
+	{		// Change la perspective de la chaîne
+
+		float perspective = (*projection).perspective * x;
+
+	if(perspective > PERSPECTIVE_MAX)
+		{
+		printf("Maximum de la perspective ateinte\n");
+		}
+	else
+		{
+		if(perspective < PERSPECTIVE_MIN)
+			{
+			printf("Minimum de la perspective ateinte\n");
+			}
+		else
+			{
+			(*projection).perspective = perspective;
+			printf("(*projection).perspective = %f\n", (*projection).perspective);
+			}
+		}
+
+	return 0;
+	}
+
+
+
+
 /*
 
 		Projection du système sur le rendu en perspective

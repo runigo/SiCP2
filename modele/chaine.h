@@ -37,6 +37,11 @@ termes.
 typedef struct ChaineT chaineT;
 	struct ChaineT
 	{
+			//		La structure chaineT est une chaîne doublement liée.
+			//
+			//			Elle les pendules
+			//
+
 	struct ChaineT *precedent;
 	penduleT pendule;
 	struct ChaineT *suivant;

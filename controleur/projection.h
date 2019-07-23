@@ -44,22 +44,24 @@ typedef struct ProjectionT projectionT;
 
 		// Position observateur
 		vecteurT pointDeVue;
+
 		// Vecteurs perpendiculaires
 		vecteurT vecteurPhi;
 		vecteurT vecteurPsi;
 
-		int rotation;
+		int hauteur;	// hauteur de la chaîne
+		int largeur;	// largeur de la chaîne
 
+		float perspective;
+
+		int rotation;	// rotation du point de vue
+
+		// facteurs entre les grandeurs et la position des boutons rotatifs
 		float logCouplage;
 		float logDissipation;
 		float logJosephson;
 		float logAmplitude;
 		float logFrequence;
-
-		int hauteur;
-		int largeur;
-
-		float perspective;
 		};
 
 int projectionInitialise(projectionT * projection);

@@ -442,19 +442,22 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 
 	do
 		{
-			// Coordonnees 2D de la masse et centrage du graphe
+				// Coordonnees 2D de la masse et centrage du graphe
+
+			// v = masse - point de vue
 		vecteurDifferenceCartesien(&(iterGraph->masse), &(*projection).pointDeVue, &v);
+			// x = X + v.Psi		 y = Y + v.Phi
 		iterGraph->xm = centrageX + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
 		iterGraph->ym = centrageY + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
 
-			// Position avant ou arrière de la masse SUPPRIMÉ DANS SiCP 1.5.1
-		//iterGraph->position = iterGraph->masse.y * (*projection).pointDeVue.y;
 
-			// Coordonnees 2D de l'axe
+				// Coordonnees 2D de l'axe
+
+			// v = axe - point de vue
 		vecteurDifferenceCartesien(&(iterGraph->axe), &(*projection).pointDeVue, &v);
+			// x = X + v.Psi		 y = Y + v.Phi
 		iterGraph->xa = centrageX + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
 		iterGraph->ya = centrageY + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
-
 
 
 		iterGraph = iterGraph->suivant;
@@ -465,8 +468,9 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 	}
 
 int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe)
-	{	//	Projette le système sur une chaîne de pendule en 3 D
-	//float x=0;
+	{
+	//	Projette le système sur une chaîne de pendule en 3 Dimensions
+
 	float i = -(*systeme).nombre/2;
 
 	chaineT *iterSystem=(*systeme).premier;

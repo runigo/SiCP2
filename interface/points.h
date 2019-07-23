@@ -37,19 +37,30 @@ termes.
 typedef struct PointsT pointsT;
 	struct PointsT
 		{
+			//		La structure pointsT est une chaîne doublement liée.
+			//
+			//			Elle contient les coordonnées 3D de la chaîne
+			//			de pendules ainsi que les coordonnées 2D de
+			// 			la projection affichée à l'écran.
+			//
+
 		struct PointsT *suivant;	// point suivant
 
 		struct PointsT *precedent;	// point précédent
 
+
 		vecteurT masse;	// Coordonnees 3D de la masse
 
-		float sinTheta;
-		float cosTheta;
+		vecteurT axe;	// Coordonnees 3D de l'axe
+
+
+		float sinTheta;	//	Mémorise la position angulaire
+		float cosTheta;	//		pour la colorisation
+
 
 		int xm;		// Absisse 2D de la masse
 		int ym;		// Ordonnée 2D de la masse
 
-		vecteurT axe;	// Coordonnees 3D de l'axe
 
 		int xa;		// Absisse 2D de l'axe
 		int ya;		// Ordonnée 2D de l'axe

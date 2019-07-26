@@ -61,4 +61,5 @@ void vecteurDifferenceCartesien(vecteurT * v1, vecteurT * v2, vecteurT * v3);
 int vecteurInitialiseVecteurPhi(vecteurT * pointDeVue, vecteurT * vecteurPhi, float hauteur);
 int vecteurInitialiseVecteurPsi(vecteurT * pointDeVue, vecteurT * vecteurPsi, float largeur);
 
+void vecteurAffiche(vecteurT * v);
 #endif

@@ -82,14 +82,14 @@ int donneesControleur(controleurT * controleur)
 		//fprintf(stderr, " Création du rendu\n");
 	graphiqueInitialisation(&(*controleur).graphique, &(*controleur).interface, TAILLE_MASSE, (*controleur).options.fond);
 
-	int largeur;
-	int hauteur;
+	int fenetreX;
+	int fenetreY;
 	int x, y;
 		fprintf(stderr, " Initialisation des commmandes\n");
-	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
-	(*controleur).graphique.largeur=largeur;
-	(*controleur).graphique.hauteur=hauteur;
-	commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+	SDL_GetWindowSize((*controleur).interface.fenetre, &fenetreX, &fenetreY);
+	(*controleur).graphique.fenetreX=fenetreX;
+	(*controleur).graphique.fenetreY=fenetreY;
+	commandesInitialiseBoutons(&(*controleur).commandes, fenetreX, fenetreY);
 
 	SDL_PumpEvents();
 	SDL_GetMouseState(&x,&y);

@@ -57,8 +57,10 @@ struct GraphiqueT {
 	SDL_Texture *SiCP;
 	int taille;
 
-	int largeur;
-	int hauteur;
+	//int largeur;
+	//int hauteur;
+		int fenetreX;	// hauteur de la fenêtre
+		int fenetreY;	// largeur de la fenêtre
 };
 typedef struct GraphiqueT graphiqueT;
 

@@ -52,6 +52,9 @@ typedef struct ProjectionT projectionT;
 		int hauteur;	// hauteur de la chaîne
 		int largeur;	// largeur de la chaîne
 
+		int fenetreX;	// hauteur de la fenêtre
+		int fenetreY;	// largeur de la fenêtre
+
 		float perspective;
 
 		int rotation;	// rotation du point de vue
@@ -79,4 +82,5 @@ int projectionChangeTaille(projectionT * projection, float x);
 int projectionChangePerspective(projectionT * projection, float x);
 
 int projectionAffichePointDeVue(projectionT * projection);
+void projectionAffiche(projectionT * projection);
 #endif

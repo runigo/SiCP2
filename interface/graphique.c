@@ -53,11 +53,11 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	{
 	int retour = 0;
 	(void)taille;
-	int largeur;
-	int hauteur;
-	SDL_GetWindowSize((*interface).fenetre, &largeur, &hauteur);
-	(*graphique).largeur=largeur;
-	(*graphique).hauteur=hauteur;
+	int fenetreX;
+	int fenetreY;
+	SDL_GetWindowSize((*interface).fenetre, &fenetreX, &fenetreY);
+	(*graphique).fenetreX=fenetreX;
+	(*graphique).fenetreY=fenetreY;
 
 		// Création du rendu
 	(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
@@ -223,7 +223,7 @@ int graphiqueNettoyage(graphiqueT * graphique)
 int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 	{
 		// Dessine le fond et les commandes sélectionées
-	SDL_Rect coordonnee = {0, 0, (*graphique).largeur, (*graphique).hauteur};
+	SDL_Rect coordonnee = {0, 0, (*graphique).fenetreX, (*graphique).fenetreY};
 	SDL_RenderCopy((*graphique).rendu, (*graphique).SiCP, NULL, &coordonnee);
 	
 	int centrage = 5;

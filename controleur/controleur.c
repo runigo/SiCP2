@@ -132,23 +132,23 @@ int controleurEvolution(controleurT * controleur)
 
 int controleurProjection(controleurT * controleur)
 	{
-	int largeur;
-	int hauteur;
+	int fenetreX;
+	int fenetreY;
 	int x, y;
 
 		// Rotation automatique du graphisme
 	if((*controleur).projection.rotation!=0)
 		{projectionChangePsi(&(*controleur).projection, (*controleur).projection.rotation*ROTATION_PSI);}
 
-		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
-	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
+		// Taille de la fenêtre
+	SDL_GetWindowSize((*controleur).interface.fenetre, &fenetreX, &fenetreY);
 
 		// Réinitialisation des commandes si la fenêtre change de taille
-	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
+	if((*controleur).graphique.fenetreX!=fenetreX || (*controleur).graphique.fenetreY!=fenetreY)
 		{
-		(*controleur).graphique.largeur=largeur;
-		(*controleur).graphique.hauteur=hauteur;
-		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+		(*controleur).graphique.fenetreX=fenetreX;
+		(*controleur).graphique.fenetreY=fenetreY;
+		commandesInitialiseBoutons(&(*controleur).commandes, fenetreX, fenetreY);
 		}
 
 		// Réinitialisation des commandes de la souris
@@ -410,6 +410,8 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_F3: // Corde
 			(*controleur).systeme.equation = 3;break;
 */
+		case SDLK_F1:
+			projectionAffiche(&(*controleur).projection);break;
   // Afficher les observables
 
 		case SDLK_F4: // Corde asymétrique
@@ -944,9 +946,9 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 
 void controleurAfficheSouris(controleurT * controleur)
 	{
-	fprintf(stderr, "(*controleur).graphique.hauteur = %d\n", (*controleur).graphique.hauteur);
+	fprintf(stderr, "(*controleur).graphique.fenetreY = %d\n", (*controleur).graphique.fenetreY);
 	fprintf(stderr, "(*controleur).commandes.sourisY = %d\n", (*controleur).commandes.sourisY);
-	fprintf(stderr, "(*controleur).graphique.largeur = %d\n", (*controleur).graphique.largeur);
+	fprintf(stderr, "(*controleur).graphique.fenetreX = %d\n", (*controleur).graphique.fenetreX);
 	fprintf(stderr, "(*controleur).commandes.sourisX = %d\n", (*controleur).commandes.sourisX);
 
 	return ;

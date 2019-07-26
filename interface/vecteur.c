@@ -44,10 +44,10 @@ void vecteurCartesien(vecteurT * v, float x, float y, float z)
 	(*v).x=x;
 	(*v).y=y;
 	(*v).z=z;
-	(*v).r=0.0;
+	//(*v).r=0.0;
 	(*v).psi=0.0;
 	(*v).phi=0.0;
-	//(*v).r=sqrt(x*x+y*y+z*z);
+	(*v).r=sqrt(x*x+y*y+z*z);
 	//(*v).psi=acos(x/(*v).r);
 	//(*v).phi=acos(z/(*v).r);
 	return;
@@ -55,11 +55,10 @@ void vecteurCartesien(vecteurT * v, float x, float y, float z)
 
 void vecteurInitialisePolaire(vecteurT * v, float r, float psi, float phi)
 	{
-		//fprintf(stderr, "vecteurInitialisePolaire, r, psi, phi\n");
 	(*v).r=r;
 	(*v).psi=psi;
 	(*v).phi=phi;
-		//fprintf(stderr, "vecteurInitialisePolaire, x, y, z\n");
+
 	(*v).x=r*cos(psi)*sin(phi);
 	(*v).y=r*sin(psi)*sin(phi);
 	(*v).z=r*cos(phi);
@@ -101,6 +100,13 @@ int vecteurInitialiseVecteurPsi(vecteurT * pointDeVue, vecteurT * vecteurPsi, fl
 	(*vecteurPsi).y=largeur*cos((*pointDeVue).psi);
 	(*vecteurPsi).z=0;
 	return 0;
+	}
+
+void vecteurAffiche(vecteurT * v)
+	{
+	printf("x, y, z : %f,%f,%f\n", (*v).x,(*v).y,(*v).z);
+	printf("r, p, f : %f,%f,%f\n", (*v).r,(*v).psi,(*v).phi);
+	return;
 	}
 
 //////////////////////////////////////////////////////////////////////

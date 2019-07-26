@@ -41,6 +41,10 @@ int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
 
 int projectionInitialise(projectionT * projection)
 	{
+
+	(*projection).fenetreX = FENETRE_X;	// hauteur de la chaîne
+	(*projection).fenetreY = FENETRE_Y;	// largeur de la chaîne
+
 	(*projection).rotation = 0;
 	(*projection).logCouplage = 1.0 / log( (COUPLAGE_MAX/COUPLAGE_MIN) );
 	(*projection).logDissipation = 1.0 / log( DISSIPATION_MAX/DISSIPATION_MIN );
@@ -89,6 +93,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		//int rotatifPositionY[ROTATIF_COMMANDES];
 
 
+				//	Projection sur les petits boutons de droite
 	int i;
 	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
 
@@ -179,6 +184,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
+				//	Projection sur les petits boutons du bas
 		//	Vitesse de la simulation
 	if(duree<DUREE)
 		{
@@ -269,22 +275,6 @@ int projectionChangePsi(projectionT * projection, float x)
 	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).perspective);
 	return 0;
 	}
-
-int projectionAffichePointDeVue(projectionT * projection)
-	{		// Affiche les valeurs de psi et phi
-	float r, psi, phi;
-
-	r = (*projection).pointDeVue.r;
-	psi = (*projection).pointDeVue.psi;
-	phi = (*projection).pointDeVue.phi;
-
-	printf("(*projection).pointDeVue.r = %f\n", r);
-	printf("(*projection).pointDeVue.psi = %f\n", psi);
-	printf("(*projection).pointDeVue.phi = %f\n", phi);
-
-	return 0;
-	}
-
 
 int projectionChangeTaille(projectionT * projection, float x)
 	{		// Change la taille de la chaîne
@@ -561,6 +551,36 @@ int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grap
 		}
 	while(iterGraph!=(*graphe).premier);
 	return 0;
+	}
+
+int projectionAffichePointDeVue(projectionT * projection)
+	{		// Affiche les valeurs de psi et phi
+	float r, psi, phi;
+
+	r = (*projection).pointDeVue.r;
+	psi = (*projection).pointDeVue.psi;
+	phi = (*projection).pointDeVue.phi;
+
+	printf("(*projection).pointDeVue.r = %f\n", r);
+	printf("(*projection).pointDeVue.psi = %f\n", psi);
+	printf("(*projection).pointDeVue.phi = %f\n", phi);
+
+	return 0;
+	}
+
+
+void projectionAffiche(projectionT * projection)
+	{
+	//	Affiche les paramètres de la projection
+
+	printf(" Point de vue\n");
+	vecteurAffiche(&(*projection).pointDeVue);
+	printf(" Vecteur psi\n");
+	vecteurAffiche(&(*projection).vecteurPsi);
+	printf(" Vecteur phi\n");
+	vecteurAffiche(&(*projection).vecteurPhi);
+
+	return ;
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////

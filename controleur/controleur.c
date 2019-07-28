@@ -132,23 +132,22 @@ int controleurEvolution(controleurT * controleur)
 
 int controleurProjection(controleurT * controleur)
 	{
-	int fenetreX;
-	int fenetreY;
-	int x, y;
+	int x, y; //  fenêtre puis souris
 
 		// Rotation automatique du graphisme
 	if((*controleur).projection.rotation!=0)
 		{projectionChangePsi(&(*controleur).projection, (*controleur).projection.rotation*ROTATION_PSI);}
 
 		// Taille de la fenêtre
-	SDL_GetWindowSize((*controleur).interface.fenetre, &fenetreX, &fenetreY);
+	SDL_GetWindowSize((*controleur).interface.fenetre, &x, &y);
 
 		// Réinitialisation des commandes si la fenêtre change de taille
-	if((*controleur).graphique.fenetreX!=fenetreX || (*controleur).graphique.fenetreY!=fenetreY)
+	if((*controleur).graphique.fenetreX!=x || (*controleur).graphique.fenetreY!=y)
 		{
-		(*controleur).graphique.fenetreX=fenetreX;
-		(*controleur).graphique.fenetreY=fenetreY;
-		commandesInitialiseBoutons(&(*controleur).commandes, fenetreX, fenetreY);
+		(*controleur).graphique.fenetreX=x;
+		(*controleur).graphique.fenetreY=y;
+		projectionChangeFenetre(&(*controleur).projection, x, y);
+		commandesInitialiseBoutons(&(*controleur).commandes, x, y);
 		}
 
 		// Réinitialisation des commandes de la souris

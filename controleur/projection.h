@@ -55,6 +55,8 @@ typedef struct ProjectionT projectionT;
 		int fenetreX;	// hauteur de la fenêtre
 		int fenetreY;	// largeur de la fenêtre
 
+		float ratioXY;
+
 		float perspective;
 
 		int rotation;	// rotation du point de vue
@@ -69,7 +71,10 @@ typedef struct ProjectionT projectionT;
 
 int projectionInitialise(projectionT * projection);
 int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective);
-int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi);
+int projectionInitialisePointDeVue(projectionT * projection,  float r,float psi, float phi);
+
+
+int projectionChangeFenetre(projectionT * projection, int x, int y);
 
 int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe);
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);

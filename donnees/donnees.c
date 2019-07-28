@@ -69,11 +69,6 @@ int donneesControleur(controleurT * controleur)
 
 		//fprintf(stderr, " Initialisation de la projection\n");
 	projectionInitialise(&(*controleur).projection);
-		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	projectionInitialiseLongueurs(&(*controleur).projection, FENETRE_Y/3, FENETRE_X*0.7, 0.57);// hauteur, largeur, ratio de distance
-		//fprintf(stderr, "projectionInitialisePointDeVue\n");
-	projectionInitialisePointDeVue(&(*controleur).projection, PI/2 - 0.27, PI/2 + 0.21);//r=facteur de distance, psi, phi
-	//projectionInitialisePointDeVue(&(*controleur).projection, 3*FENETRE_X, 0.0, 0.0);//r, psi, phi
 
 		fprintf(stderr, " Initialisation SDL\n");
 	interfaceInitialisationSDL();

@@ -33,11 +33,20 @@ termes.
 
 float projectionAbsolue(float valeur);
 
+
+int projectionReinitialiseBase(projectionT * projection);
+
 int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe);
 int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe);
 
 int projectionInitialiseSupport(projectionT * projection, int nombre);
 int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
+
+float projectionAbsolue(float valeur)
+	{
+	if(valeur<0) return -valeur;
+	return valeur;
+	}
 
 int projectionInitialise(projectionT * projection)
 	{
@@ -45,18 +54,59 @@ int projectionInitialise(projectionT * projection)
 	(*projection).fenetreX = FENETRE_X;	// hauteur de la chaîne
 	(*projection).fenetreY = FENETRE_Y;	// largeur de la chaîne
 
+	(*projection).ratioXY=(float)FENETRE_X/FENETRE_Y;
+
 	(*projection).rotation = 0;
 	(*projection).logCouplage = 1.0 / log( (COUPLAGE_MAX/COUPLAGE_MIN) );
 	(*projection).logDissipation = 1.0 / log( DISSIPATION_MAX/DISSIPATION_MIN );
 	(*projection).logJosephson = 1.0 / log( JOSEPHSON_MAX/JOSEPHSON_MIN );
 	(*projection).logAmplitude = 1.0 / log( AMPLITUDE_MAX/AMPLITUDE_MIN );
 	(*projection).logFrequence = 1.0 / log( FREQUENCE_MAX/FREQUENCE_MIN );
+
+
+	projectionInitialiseLongueurs(projection, FENETRE_Y, FENETRE_X, 0.57);// hauteur, largeur, ratio de distance
+
+	projectionInitialisePointDeVue(projection, 3*FENETRE_Y, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
+
 	return 0;
 	}
-float projectionAbsolue(float valeur)
+
+int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective)
 	{
-	if(valeur<0) return -valeur;
-	return valeur;
+		// Fixe la taille de la chaîne et l'effet de perspective
+
+	(*projection).hauteur = hauteur;
+	(*projection).largeur = largeur;
+	(*projection).perspective = perspective;
+	return 0;
+	}
+
+int projectionInitialisePointDeVue(projectionT * projection, float r, float psi, float phi)
+	{
+		// Initialise la position de l'observateur et calcul les vecteurs perpendiculaires
+
+	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
+	projectionReinitialiseBase(projection);
+	return 0;
+	}
+
+int projectionReinitialiseBase(projectionT * projection)
+	{
+		// Reinitialise les vecteurs perpendiculaires
+
+	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).fenetreX*RATIO_CHAINE_FENETRE_X);
+	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).fenetreY*RATIO_CHAINE_FENETRE_X*(*projection).ratioXY);
+	return 0;
+	}
+
+int projectionChangeFenetre(projectionT * projection, int x, int y)
+	{
+	(*projection).fenetreX=x;
+	(*projection).fenetreY=y;
+
+	(*projection).ratioXY=y/x;
+	projectionReinitialiseBase(projection);
+	return 0;
 	}
 
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
@@ -211,21 +261,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	return 0;
 	}
 
-int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective)
-	{		// Fixe la taille de la chaîne et l'effet de perspective
-	(*projection).hauteur = hauteur;
-	(*projection).largeur = largeur;
-	(*projection).perspective = perspective;
-	return 0;
-	}
-int projectionInitialisePointDeVue(projectionT * projection, float psi, float phi)
-	{		// Initialise la position de l'observateur et calcul les vecteurs perpendiculaires
-	vecteurInitialisePolaire(&(*projection).pointDeVue, (*projection).perspective, psi, phi);
-	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).perspective);
-	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).perspective);
-	return 0;
-	}
-
 int projectionChangePhi(projectionT * projection, float x)
 	{		// Change la position de l'observateur suivant phi
 	float r, psi, phi;
@@ -247,8 +282,7 @@ int projectionChangePhi(projectionT * projection, float x)
 		}
 
 	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
-	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).perspective);
-	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).perspective);
+	projectionReinitialiseBase(projection);
 	return 0;
 	}
 
@@ -271,8 +305,7 @@ int projectionChangePsi(projectionT * projection, float x)
 		}
 
 	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
-	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).perspective);
-	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).perspective);
+	projectionReinitialiseBase(projection);
 	return 0;
 	}
 
@@ -433,8 +466,8 @@ int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe)
 
 	vecteurT v;
 	int i;
-	int centrageX = (int)( (*projection).largeur * RATIO_C_X );
-	int centrageY = (int)( (*projection).hauteur * RATIO_C_Y );
+	int centrageX = (int)( (*projection).fenetreX * RATIO_C_X );
+	int centrageY = (int)( (*projection).fenetreY * RATIO_C_Y );
 
 	for(i=0;i<14;i++)
 		{
@@ -487,8 +520,8 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 	pointsT *iterGraph=(*graphe).premier;
 
 	vecteurT v;
-	int centrageX = (int)( (*projection).largeur * RATIO_C_X );
-	int centrageY = (int)( (*projection).hauteur * RATIO_C_Y );
+	int centrageX = (int)( (*projection).fenetreX * RATIO_C_X );
+	int centrageY = (int)( (*projection).fenetreY * RATIO_C_Y );
 
 	do
 		{

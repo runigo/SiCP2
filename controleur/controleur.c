@@ -553,7 +553,7 @@ int controleurClavierCtrl(controleurT * controleur)
 		case SDLK_p:
 			projectionChangeTaille(&(*controleur).projection, 3);break;
 
-
+/*
 		case SDLK_j:
 			projectionChangePerspective(&(*controleur).projection, 0.3);break;
 		case SDLK_k:
@@ -562,7 +562,7 @@ int controleurClavierCtrl(controleurT * controleur)
 			projectionChangePerspective(&(*controleur).projection, 1.1);break;
 		case SDLK_m:
 			projectionChangePerspective(&(*controleur).projection, 3);break;
-
+*/
 
 		default:
 			;

@@ -31,8 +31,8 @@ termes.
 
 #include "projection.h"
 
-float projectionAbsolue(float valeur);
 
+float projectionAbsolue(float valeur);
 
 int projectionReinitialiseBase(projectionT * projection);
 
@@ -41,6 +41,8 @@ int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grap
 
 int projectionInitialiseSupport(projectionT * projection, int nombre);
 int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
+
+
 
 float projectionAbsolue(float valeur)
 	{
@@ -51,10 +53,10 @@ float projectionAbsolue(float valeur)
 int projectionInitialise(projectionT * projection)
 	{
 
-	(*projection).fenetreX = FENETRE_X;	// hauteur de la chaîne
-	(*projection).fenetreY = FENETRE_Y;	// largeur de la chaîne
+	(*projection).fenetreX = FENETRE_X;	// hauteur de la fenêtre
+	(*projection).fenetreY = FENETRE_Y;	// largeur de la fenêtre
 
-	(*projection).ratioXY=(float)FENETRE_X/FENETRE_Y;
+	(*projection).ratioXY=(float)FENETRE_X/(float)FENETRE_Y; // Rapport entre les dimensions de la fenêtre
 
 	(*projection).rotation = 0;
 	(*projection).logCouplage = 1.0 / log( (COUPLAGE_MAX/COUPLAGE_MIN) );
@@ -64,20 +66,11 @@ int projectionInitialise(projectionT * projection)
 	(*projection).logFrequence = 1.0 / log( FREQUENCE_MAX/FREQUENCE_MIN );
 
 
-	projectionInitialiseLongueurs(projection, FENETRE_Y, FENETRE_X, 0.57);// hauteur, largeur, ratio de distance
+	(*projection).hauteur = 500;// hauteur de la chaîne
+	(*projection).largeur = 1500;// largeur de la chaîne
 
 	projectionInitialisePointDeVue(projection, 3*FENETRE_Y, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
 
-	return 0;
-	}
-
-int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective)
-	{
-		// Fixe la taille de la chaîne et l'effet de perspective
-
-	(*projection).hauteur = hauteur;
-	(*projection).largeur = largeur;
-	(*projection).perspective = perspective;
 	return 0;
 	}
 
@@ -104,7 +97,8 @@ int projectionChangeFenetre(projectionT * projection, int x, int y)
 	(*projection).fenetreX=x;
 	(*projection).fenetreY=y;
 
-	(*projection).ratioXY=y/x;
+	(*projection).ratioXY=(float)x/(float)y;
+
 	projectionReinitialiseBase(projection);
 	return 0;
 	}
@@ -338,7 +332,7 @@ int projectionChangeTaille(projectionT * projection, float x)
 	}
 
 
-
+/*
 int projectionChangePerspective(projectionT * projection, float x)
 	{		// Change la perspective de la chaîne
 
@@ -364,7 +358,7 @@ int projectionChangePerspective(projectionT * projection, float x)
 	return 0;
 	}
 
-
+*/
 
 
 /*

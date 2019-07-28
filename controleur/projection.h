@@ -57,7 +57,7 @@ typedef struct ProjectionT projectionT;
 
 		float ratioXY;
 
-		float perspective;
+		//float perspective;
 
 		int rotation;	// rotation du point de vue
 
@@ -70,7 +70,7 @@ typedef struct ProjectionT projectionT;
 		};
 
 int projectionInitialise(projectionT * projection);
-int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur, float  perspective);
+//int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur);
 int projectionInitialisePointDeVue(projectionT * projection,  float r,float psi, float phi);
 
 
@@ -84,7 +84,7 @@ void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);
 int projectionChangePhi(projectionT * projection, float x);
 int projectionChangePsi(projectionT * projection, float x);
 int projectionChangeTaille(projectionT * projection, float x);
-int projectionChangePerspective(projectionT * projection, float x);
+//int projectionChangePerspective(projectionT * projection, float x);
 
 int projectionAffichePointDeVue(projectionT * projection);
 void projectionAffiche(projectionT * projection);

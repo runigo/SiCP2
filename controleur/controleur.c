@@ -553,16 +553,15 @@ int controleurClavierCtrl(controleurT * controleur)
 		case SDLK_p:
 			projectionChangeTaille(&(*controleur).projection, 3);break;
 
-/*
 		case SDLK_j:
-			projectionChangePerspective(&(*controleur).projection, 0.3);break;
+			projectionChangeDistance(&(*controleur).projection, 0.3);break;
 		case SDLK_k:
-			projectionChangePerspective(&(*controleur).projection, 0.9);break;
+			projectionChangeDistance(&(*controleur).projection, 0.9);break;
 		case SDLK_l:
-			projectionChangePerspective(&(*controleur).projection, 1.1);break;
+			projectionChangeDistance(&(*controleur).projection, 1.1);break;
 		case SDLK_m:
-			projectionChangePerspective(&(*controleur).projection, 3);break;
-*/
+			projectionChangeDistance(&(*controleur).projection, 3);break;
+
 
 		default:
 			;
@@ -618,33 +617,19 @@ int controleurDefilePointDeVue(controleurT * controleur)
 
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
-		(*controleur).projection.pointDeVue.r += 0.011;
+		projectionChangeDistance(&(*controleur).projection, 1.1);
 		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
 		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
 		{
-		(*controleur).projection.pointDeVue.r -= 0.011;
+		projectionChangeDistance(&(*controleur).projection, 0.9);
 		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
 		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 
-	if((*controleur).projection.pointDeVue.r < RATIO_R_MIN)
-		{
-		(*controleur).projection.pointDeVue.r = RATIO_R_MIN;
-		fprintf(stderr, "Distance limite = %f\n", (*controleur).projection.pointDeVue.r);
-		}
-	if((*controleur).projection.pointDeVue.r > RATIO_R_MAX)
-		{
-		(*controleur).projection.pointDeVue.r = RATIO_R_MAX;
-		fprintf(stderr, "Distance limite = %f\n", (*controleur).projection.pointDeVue.r);
-		}
-
 	//if(event.wheel.x > 0) // scroll right{}
 	//else if(event.wheel.x < 0) // scroll left{}
-
-	projectionChangePsi(&(*controleur).projection, 0);
-	projectionChangePhi(&(*controleur).projection, 0);
 
 	return 0;
 	}

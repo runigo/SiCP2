@@ -331,6 +331,30 @@ int projectionChangeTaille(projectionT * projection, float x)
 	return 0;
 	}
 
+int projectionChangeDistance(projectionT * projection, float x)
+	{		// Change la distance entre la chaîne et le point de vue
+
+	float distance = (*projection).pointDeVue.r * x;
+
+	if(distance > DISTANCE_MAX)
+		{
+		printf("Distance maximum ateinte\n");
+		}
+	else
+		{
+		if(distance < DISTANCE_MIN)
+			{
+			printf("Distance minimum ateinte\n");
+			}
+		else
+			{
+			vecteurInitialisePolaire(&(*projection).pointDeVue, distance, (*projection).pointDeVue.psi, (*projection).pointDeVue.phi);
+			printf("(*projection).pointDeVue.r = %f\n", (*projection).pointDeVue.r);
+			}
+		}
+
+	return 0;
+	}
 
 /*
 int projectionChangePerspective(projectionT * projection, float x)

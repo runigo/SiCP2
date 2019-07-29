@@ -84,6 +84,7 @@ void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);
 int projectionChangePhi(projectionT * projection, float x);
 int projectionChangePsi(projectionT * projection, float x);
 int projectionChangeTaille(projectionT * projection, float x);
+int projectionChangeDistance(projectionT * projection, float x);
 //int projectionChangePerspective(projectionT * projection, float x);
 
 int projectionAffichePointDeVue(projectionT * projection);

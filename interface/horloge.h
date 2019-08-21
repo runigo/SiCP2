@@ -36,7 +36,7 @@ termes.
 #ifndef _HORLOGE_
 #define _HORLOGE_
 
-#include "graphique.h"
+#include "interface.h"
 
 typedef struct HorlogeT horlogeT;
 	struct HorlogeT

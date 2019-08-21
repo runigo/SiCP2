@@ -73,7 +73,7 @@ int donneesControleur(controleurT * controleur)
 		fprintf(stderr, " Initialisation SDL\n");
 	interfaceInitialisationSDL();
 		//fprintf(stderr, " Création de l'interface SDL\n");
-	interfaceInitialisation(&(*controleur).interface);
+	interfaceCreation(&(*controleur).interface);
 		//fprintf(stderr, " Création du rendu\n");
 	graphiqueInitialisation(&(*controleur).graphique, &(*controleur).interface, TAILLE_MASSE, (*controleur).options.fond);
 

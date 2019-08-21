@@ -48,7 +48,7 @@ struct InterfaceT {
 int interfaceInitialisationSDL(void);
 int interfaceQuitteSDL(void);
 
-int interfaceInitialisation(interfaceT * interface);
+int interfaceCreation(interfaceT * interface);
 int interfaceDestruction(interfaceT * interface);
 
 #endif

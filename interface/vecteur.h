@@ -29,17 +29,13 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-/*
-
-	Un vecteurT contient les coordonnées cartésienne
-	et éventuellement les coordonées polaires
-
-*/
-
 #ifndef _VECTEUR_
 #define _VECTEUR_
 
 #include "../donnees/constantes.h"
+
+	// Un vecteurT contient les trois coordonnées cartésienne
+	// et éventuellement les coordonées polaires.
 
 typedef struct VecteurT vecteurT;
 	struct VecteurT
@@ -52,14 +48,21 @@ typedef struct VecteurT vecteurT;
 		float phi;
 		};
 
+	// Initialisation des trois coordonées cartésiennes
 void vecteurCartesien(vecteurT * v, float x, float y, float z);
+	// Initialisation des coordonées polaire et calcul des coordonées cartésiennes
 void vecteurInitialisePolaire(vecteurT * v, float r, float psi, float phi);
+	// retourne le produit scalaire
 float vecteurScalaireCartesien(vecteurT * v1, vecteurT * v2);
+	// v3 = v1 + v2
 void vecteurSommeCartesien(vecteurT * v1, vecteurT * v2, vecteurT * v3);
+	// v3 = v1 - v2
 void vecteurDifferenceCartesien(vecteurT * v1, vecteurT * v2, vecteurT * v3);
 
+	// Calcul des vecteurs perpendiculaires au vecteur point de vue
 int vecteurInitialiseVecteurPhi(vecteurT * pointDeVue, vecteurT * vecteurPhi, float hauteur);
 int vecteurInitialiseVecteurPsi(vecteurT * pointDeVue, vecteurT * vecteurPsi, float largeur);
 
+	// Affiche les informations
 void vecteurAffiche(vecteurT * v);
 #endif

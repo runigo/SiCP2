@@ -617,13 +617,15 @@ int controleurDefilePointDeVue(controleurT * controleur)
 
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
-		projectionChangeDistance(&(*controleur).projection, 1.1);
+		//projectionChangeDistance(&(*controleur).projection, 1.1);
+		projectionChangeTaille(&(*controleur).projection, 1.1);
 		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
 		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
 		{
-		projectionChangeDistance(&(*controleur).projection, 0.9);
+		//projectionChangeDistance(&(*controleur).projection, 0.9);
+		projectionChangeTaille(&(*controleur).projection, 0.9);
 		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
 		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}

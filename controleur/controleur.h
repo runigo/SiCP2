@@ -38,6 +38,7 @@ termes.
 #include "../modele/observables.h"			//	Observables du système
 #include "../interface/graphique.h"			//	Librairie SDL et représentation graphique
 #include "../interface/horloge.h"			//	Librairie SDL et représentation graphique
+#include "../donnees/fichier.h"
 
 typedef struct ControleurT controleurT;
 	struct ControleurT

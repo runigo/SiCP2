@@ -71,7 +71,6 @@ typedef struct ProjectionT projectionT;
 
 int projectionInitialise(projectionT * projection);
 //int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur);
-int projectionInitialisePointDeVue(projectionT * projection,  float r,float psi, float phi);
 
 
 int projectionChangeFenetre(projectionT * projection, int x, int y);

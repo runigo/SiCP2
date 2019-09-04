@@ -442,7 +442,7 @@ int controleurClavier(controleurT * controleur)
 			moteursAfficheHorloge(&(*controleur).systeme.moteurs);
 			break;
 		case SDLK_F7:
-			projectionAffichePointDeVue(&(*controleur).projection);
+			projectionAffiche(&(*controleur).projection);
 			break;
 	// Support
 		case SDLK_F8:

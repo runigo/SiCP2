@@ -63,8 +63,8 @@ termes.
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
 
-#define PERSPECTIVE_MAX 1.7
-#define PERSPECTIVE_MIN 0.17
+//#define PERSPECTIVE_MAX 1.7
+//#define PERSPECTIVE_MIN 0.17
 
 #define DISTANCE_MAX FENETRE_Y*77
 #define DISTANCE_MIN FENETRE_Y/77
@@ -74,7 +74,7 @@ termes.
 #define HAUTEUR_MIN FENETRE_Y/7
 #define LARGEUR_MIN FENETRE_X/7
 
-#define RATIO_H_L 0.436 // Ratio Hauteur sur Largeur de la chaîne
+//#define RATIO_H_L 0.136 // Ratio Hauteur sur Largeur de la chaîne
 //#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
 //#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
 #define RATIO_C_X 0.399 // Ratio Centrage X Avec Menu
@@ -103,7 +103,7 @@ termes.
 
 #define ABSORPTION 2.1 // Facteur de l'extrémité absorbante
 #define NOMBRE_MIN 2 // Nombre minimal de pendules
-#define NOMBRE 77 // Nombre implicite de pendules
+#define NOMBRE 199 // Nombre implicite de pendules
 #define NOMBRE_MAX 399 // Nombre maximal de pendules
 
 //#define SOLITON_MAX 19 // Nombre maximal de soliton

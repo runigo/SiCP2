@@ -34,6 +34,7 @@ termes.
 
 float projectionAbsolue(float valeur);
 
+int projectionInitialisePointDeVue(projectionT * projection,  float r,float psi, float phi);
 int projectionReinitialiseBase(projectionT * projection);
 
 int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe);
@@ -67,7 +68,7 @@ int projectionInitialise(projectionT * projection)
 
 
 	(*projection).hauteur = 500;// hauteur de la chaîne
-	(*projection).largeur = 1500;// largeur de la chaîne
+	(*projection).largeur = 2100;// largeur de la chaîne
 
 	projectionInitialisePointDeVue(projection, 3*FENETRE_Y, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
 
@@ -560,7 +561,6 @@ int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe)
 		iterGraph->xa = centrageX + vecteurScalaireCartesien(&v, &(*projection).vecteurPsi);
 		iterGraph->ya = centrageY + vecteurScalaireCartesien(&v, &(*projection).vecteurPhi);
 
-
 		iterGraph = iterGraph->suivant;
 		}
 	while(iterGraph!=(*graphe).premier);
@@ -631,6 +631,12 @@ void projectionAffiche(projectionT * projection)
 	printf(" Vecteur phi\n");
 	vecteurAffiche(&(*projection).vecteurPhi);
 
+	printf("(*projection).rotation = %d\n", (*projection).rotation);
+	printf("(*projection).ratioXY = %f\n", (*projection).ratioXY);
+	printf("(*projection).hauteur = %d\n", (*projection).hauteur);
+	printf("(*projection).largeur = %d\n", (*projection).largeur);
+	printf("(*projection).fenetreX = %d\n", (*projection).fenetreX);
+	printf("(*projection).fenetreY = %d\n", (*projection).fenetreY);
 	return ;
 	}
 

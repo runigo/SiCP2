@@ -1,10 +1,9 @@
 /*
-Copyright août 2019, Stephan Runigo
+Copyright septembre 2019, Stephan Runigo
 runigo@free.fr
-SiCF 2.1  simulateur de corde vibrante et spectre
+SiCP 2.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
-d'une corde vibrante, à calculer sa transformée de fourier, et à donner
-une représentation graphique de ces fonctions.
+d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
@@ -46,7 +45,7 @@ int fichierFonctionSinus(systemeT * systeme, grapheT * graphe, int numero);
 
 int fichierEcriture(systemeT * systeme, grapheT * graphe, int numero)
 	{
-	fprintf(stderr, "Ecriture de parametres\n");
+	fprintf(stderr, "Ecriture des paramètres\n");
 	fichierEcritureParametre(systeme, graphe, numero);
 	fprintf(stderr, "Ecriture des positions\n");
 	fichierEcriturePosition(systeme, numero);
@@ -55,7 +54,9 @@ int fichierEcriture(systemeT * systeme, grapheT * graphe, int numero)
 
 int fichierLecture(systemeT * systeme, grapheT * graphe, int numero)
 	{
+	fprintf(stderr, "Initialisation des paramètres\n");
 	fichierLectureParametre(systeme, graphe, numero);
+	fprintf(stderr, "Initialisation des positions\n");
 	fichierLecturePosition(systeme, numero);
 	return 0;
 	}
@@ -182,7 +183,8 @@ int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
 int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 	{
 	FILE *fichier; /* pointeur sur FILE */
-	float parametre = 0;
+	float reel = 0;
+	int entier = 0;
 	(void)graphe;
 
 	switch (numero)
@@ -251,54 +253,62 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 	else
 		{
 		// Initialisation du moteurs
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.dt = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.chrono = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.courant = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.josephson = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.generateur = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.amplitude = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.frequence = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.phi = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.deltaDephasage = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.fluxon = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).moteurs.dephasage = parametre;
+			// Paramètres d'horloge
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseDt(&(*systeme).moteurs, reel);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseChrono(&(*systeme).moteurs, reel);
 
-		// Caractéristique de la chaîne
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).libreFixe = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).nombre = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).equation = parametre;
+			// Moteur courant Josephson
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseCourant(&(*systeme).moteurs, reel);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseJosephson(&(*systeme).moteurs, reel);
 
-		// Paramètres physiques
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).gravitation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).masse = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).longueur = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).dissipation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).modeDissipation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).couplage = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).dephasage = parametre;
+			// Moteur périodique sur le premier pendule
+		fscanf(fichier, "%d\n", &entier);
+		moteursInitialiseGenerateur(&(*systeme).moteurs, entier);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseAmplitude(&(*systeme).moteurs, reel);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseFrequence(&(*systeme).moteurs, reel);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialisePhi(&(*systeme).moteurs, reel);
 
-		fscanf(fichier, "%f\n", &parametre);
+			// Moteur créateur de Fluxon
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseDeltaDephasage(&(*systeme).moteurs, reel);
+		fscanf(fichier, "%d\n", &entier);
+		moteursInitialiseFluxon(&(*systeme).moteurs, entier);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseDephasage(&(*systeme).moteurs, reel);
+
+
+		// Initialisation de la chaîne
+			// Caractéristiques
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).libreFixe = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).nombre = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).equation = reel;
+
+			// Paramètres physiques
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).gravitation = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).masse = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).longueur = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).dissipation = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).modeDissipation = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).couplage = reel;
+		fscanf(fichier, "%f\n", &reel);
+		(*systeme).dephasage = reel;
+		fscanf(fichier, "%f\n", &reel);
 
 		fclose(fichier);
 
@@ -314,7 +324,7 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 	//changeFormeDissipation(&(*controleur).systeme, 0);
 	changeFormeDissipation(systeme, (*systeme).modeDissipation);
 	changeConditionsLimites(systeme, (*systeme).libreFixe);
-	(*systeme).premier->pendule.dephasage = parametre;
+	(*systeme).premier->pendule.dephasage = reel;
 	//penduleAjouteDephasage(&(*systeme).premier->pendule, (*systeme).moteurs.dephasage);
 
 		fprintf(stderr, " Création du graphe\n");

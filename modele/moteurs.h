@@ -1,7 +1,7 @@
 /*
-Copyright novembre 2018, Stephan Runigo
+Copyright septembre 2019, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.3 simulateur de chaîne de pendules
+SiCP 2.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -37,28 +37,46 @@ termes.
 typedef struct MoteursT moteursT;
 	struct MoteursT
 		{
+			// Paramètres d'horloge
 		float dt;			//	discrétisation du temps
-		//float horloge;		//	Somme des dt
 		float chrono;		//	Somme des dt remis à zéro dans moteurs
 
+			// Moteur périodique sur le premier pendule
 		int generateur;		//	0:eteint, 1:sinus, 2:carre, 3:impulsion
-
-		float amplitude;	//	Amplitude du moteurs
-		float frequence;	//	Fréquence du moteurs
+		float amplitude;	//	Amplitude du moteur
+		float frequence;	//	Fréquence du moteur
 		float phi;			//	Phase
 
+			// Moteur courant Josephson
 		float josephson;	//	Courant Josephson
 		float courant;		//	Mémorise quand josephson = 0
 
+			// Moteur créateur de Fluxon
 		int fluxon;		// Activité du moteur fluxon
-		float dephasage;		// Valeur du dephasage ateint
 		float deltaDephasage;	// Valeur du dephasage à ajouter
+		float dephasage;		// Valeur du dephasage ateint
 		};
+
+int moteursInitialiseDt(moteursT * moteurs, float dt);
+int moteursInitialiseChrono(moteursT * moteurs, float chrono);
+
+int moteursInitialiseGenerateur(moteursT * moteurs, int generateur);
+int moteursInitialiseAmplitude(moteursT * moteurs, float amplitude);
+int moteursInitialiseFrequence(moteursT * moteurs, float frequence);
+int moteursInitialisePhi(moteursT * moteurs, float phi);
+
+int moteursInitialiseJosephson(moteursT * moteurs, float  josephson);
+int moteursInitialiseCourant(moteursT * moteurs, float courant);
+
+int moteursInitialiseFluxon(moteursT * moteurs, int fluxon);
+int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage);
+int moteursInitialiseDephasage(moteursT * moteurs, float dephasage);
+
 
 float moteursGenerateur(moteursT * m);
 float moteurJaugeZero(moteursT * m);
 
-void moteursChangeEtatJosephson(moteursT * moteur, int etat);
+void moteursChangeEtatJosephson(moteursT * moteurs, int etat);
 int moteursChangeJosephson(moteursT * m, float facteur);
 int moteursChangeJosephsonMoyenne(moteursT * m);	// Réglage du moteur josephson
 void moteursChangeFrequence(moteursT * m, float facteur);
@@ -66,8 +84,8 @@ void moteursChangeAmplitude(moteursT * m, float facteur);
 void moteursChangeGenerateur(moteursT * m, int i);
 
 int moteurChangeFluxon(moteursT * m, int fluxon);
-int moteurFinFluxon(moteursT * moteur);
-int moteurFluxon(moteursT * moteur);
+int moteurFinFluxon(moteursT * moteurs);
+int moteurFluxon(moteursT * moteurs);
 
 void moteursAfficheHorloge(moteursT * m);
 

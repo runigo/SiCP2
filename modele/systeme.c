@@ -42,6 +42,9 @@ void systemeJaugeZero(systemeT * systeme);
 
 /*--------------------------------------------------------------*/
 
+
+/*----------------CREATION SUPPRESSION-------------------*/
+
 int systemeCreation(systemeT * systeme)
 	{
 	(*systeme).premier = chaineCreation((*systeme).nombre);
@@ -63,6 +66,85 @@ void systemeSuppression(systemeT * systeme)
 	}
 
 /*------------------------------------------------------------------*/
+
+/*----------------  INITIALISATION  -------------------*/
+
+/*
+
+int systemeInitialisePosition(systemeT * systeme, parametre)
+	{
+
+
+
+
+	return 0;
+	}
+
+
+		// Caractéristique de la chaîne
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).libreFixe = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).nombre = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).equation = parametre;
+
+		// Paramètres physiques
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).gravitation = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).masse = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).longueur = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).dissipation = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).modeDissipation = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).couplage = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+		(*systeme).dephasage = parametre;
+		fscanf(fichier, "%f\n", &parametre);
+
+
+
+		// Caractéristique de la chaîne
+		parametre = (*systeme).libreFixe;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).nombre;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).equation;
+			fprintf(fichier, "%f\n", parametre);
+
+		// Paramètres physiques
+		parametre = (*systeme).gravitation;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).masse;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).longueur;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).dissipation;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).modeDissipation;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).couplage;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).dephasage;
+			fprintf(fichier, "%f\n", parametre);
+		parametre = (*systeme).premier->pendule.dephasage;
+			fprintf(fichier, "%f\n", parametre);
+
+
+
+
+*/
+
+
+
+
+
+
+
 
 void systemeInitialisePosition(systemeT * systeme, int forme)
 	{

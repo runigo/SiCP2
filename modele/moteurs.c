@@ -66,39 +66,39 @@ int moteursInitialiseChrono(moteursT * moteurs, float chrono)
 	}
 
 
-int moteursInitialiseCourant(moteursT * moteurs, float courant)
+int moteursInitialiseCourantJosephson(moteursT * moteurs, float courantJosephson)
 	{
-	if(courant>=JOSEPHSON_MIN && courant<=JOSEPHSON_MAX)
+	if(courantJosephson>=JOSEPHSON_MIN && courantJosephson<=JOSEPHSON_MAX)
 		{
-		(*moteurs).courant = courant;
-		printf("(*moteurs).courant = %f\n", (*moteurs).courant);
+		(*moteurs).courantJosephson = courantJosephson;
+		printf("(*moteurs).courantJosephson = %f\n", (*moteurs).courantJosephson);
 		return 0;
 		}
 	else
 		{
-		(*moteurs).courant = exp((log(JOSEPHSON_MIN)+log(JOSEPHSON_MAX))/2);
-		printf("ERREUR moteursInitialiseCourant(%f) (*moteurs).courant = %f\n", courant, (*moteurs).courant);
+		(*moteurs).courantJosephson = exp((log(JOSEPHSON_MIN)+log(JOSEPHSON_MAX))/2);
+		printf("ERREUR moteursInitialiseCourant(%f) (*moteurs).courantJosephson = %f\n", courantJosephson, (*moteurs).courantJosephson);
 		}
 	return 1;
 	}
 
-
-int moteursInitialiseJosephson(moteursT * moteurs, float josephson)
+/*
+int moteursInitialiseEtatJosephson(moteursT * moteurs, int etatJosephson)
 	{
-	if( josephson>=JOSEPHSON_MIN &&  josephson<=JOSEPHSON_MAX)
+	if( etatJosephson>=JOSEPHSON_MIN &&  etatJosephson<=JOSEPHSON_MAX)
 		{
-		(*moteurs).josephson =  josephson;
-		printf("(*moteurs). josephson = %f\n", (*moteurs).josephson);
+		(*moteurs).etatJosephson =  etatJosephson;
+		printf("(*moteurs).etatJosephson = %d\n", (*moteurs).etatJosephson);
 		return 0;
 		}
 	else
 		{
-		(*moteurs).courant = exp((log(JOSEPHSON_MIN)+log(JOSEPHSON_MAX))/2);
-		printf("ERREUR moteursInitialiseJosephson(%f) (*moteurs).josephson = %f\n", josephson, (*moteurs).josephson);
+		(*moteurs).courantJosephson = exp((log(JOSEPHSON_MIN)+log(JOSEPHSON_MAX))/2);
+		printf("ERREUR moteursInitialiseJosephson(%d) (*moteurs).etatJosephson = %d\n", etatJosephson, (*moteurs).etatJosephson);
 		}
 	return 1;
 	}
-
+*/
 
 int moteursInitialiseGenerateur(moteursT * moteurs, int generateur)
 	{
@@ -255,9 +255,9 @@ int moteursInitialise(moteursT * moteurs, float int )
 			fprintf(fichier, "%f\n", parametre);
 		parametre = (*moteurs) .chrono;
 			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .courant;
+		parametre = (*moteurs) .courantJosephson;
 			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .josephson;
+		parametre = (*moteurs) .etatJosephson;
 			fprintf(fichier, "%f\n", parametre);
 		parametre = (*moteurs) .generateur;
 			fprintf(fichier, "%f\n", parametre);
@@ -482,94 +482,51 @@ void moteursChangeAmplitude(moteursT * moteurs, float facteur)
 	return;
 	}
 
-void moteursChangeEtatJosephson(moteursT * moteurs, int etat)
+int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat)
 	{
-	if(etat == 0) // Allume / éteint le courant Josephson
+	(*moteurs).etatJosephson = 0;
+	if(etat == 1) // Allume / éteint le courantJosephson Josephson
 		{
-		(*moteurs).josephson = 0.0;
+		(*moteurs).etatJosephson = 1;
 		}
-	else
+	if(etat == -1) // Allume / éteint le courantJosephson Josephson
 		{
-		(*moteurs).josephson = (*moteurs).courant * (*moteurs).dt * (*moteurs).dt;
+		(*moteurs).etatJosephson = -1;
 		}
+	return 0;
+	}
+
+void moteursInverseJosephson(moteursT * moteurs)
+	{
+	(*moteurs).etatJosephson = - (*moteurs).etatJosephson;
 	return;
 	}
 
 int moteursChangeJosephson(moteursT * moteurs, float facteur)
-
-				// Règle la valeur du courant Josephson
 	{
-	int limite=0;
-	if(facteur == 0) // Allume / éteint le courant Josephson
+				// Règle la valeur du courantJosephson Josephson
+
+	float courantJosephson = (*moteurs).courantJosephson * facteur;
+
+	if(courantJosephson < 0) courantJosephson = -courantJosephson;
+
+	if(courantJosephson <= JOSEPHSON_MAX && courantJosephson >= JOSEPHSON_MIN)
 		{
-		if((*moteurs).josephson == 0)
-			{
-			(*moteurs).josephson = (*moteurs).courant * (*moteurs).dt * (*moteurs).dt;
-			}
-		else
-			{
-			(*moteurs).josephson = 0.0;
-			}
+		(*moteurs).courantJosephson = (*moteurs).etatJosephson * facteur;
 		}
 	else
-		if(facteur < 0) // Inverse le sens du courant Josephson
-			{
-			(*moteurs).josephson = - (*moteurs).josephson;
-			(*moteurs).courant = - (*moteurs).courant;
-			}
-		else
 		{
-		float courant = (*moteurs).josephson * facteur / (*moteurs).dt / (*moteurs).dt;
-		if(courant < 0) courant = -courant;
-		if(courant < JOSEPHSON_MAX && courant > JOSEPHSON_MIN)
-			{
-			(*moteurs).josephson = ((*moteurs).josephson) * facteur;
-			(*moteurs).courant = ((*moteurs).courant) * facteur;
-			}
-		else
-			{
-			printf("Courant Josephson limite atteint. ");
-			limite=1;
-			}
+		printf("Courant Josephson limite atteint. ");
 		}
 
-	printf("Courant Josephson = %6.3f\n", (*moteurs).josephson / (*moteurs).dt / (*moteurs).dt);
+	printf("Courant Josephson = %6.3f\n", (*moteurs).courantJosephson);
 
-	return limite;
+	return 0;
 	}
+
 int moteursChangeJosephsonMoyenne(moteursT * moteurs)
-	{	// Réglage du moteurs josephson à une amplitude moyenne
-	float moyenne = sqrt(JOSEPHSON_MAX * JOSEPHSON_MIN );
-	float courant = (*moteurs).josephson / (*moteurs).dt / (*moteurs).dt;
-	if(courant < 0) courant = -courant;
-
-	if(courant > moyenne)
-		{
-		do
-			{
-			if(moteursChangeJosephson(moteurs, 0.91)==0)
-				{
-				courant = (*moteurs).josephson / (*moteurs).dt / (*moteurs).dt;
-				if(courant < 0) courant = -courant;
-				}
-			else { printf("\n  ERREUR moteursChangeJosephsonMoyenne\n"); return 1; }
-			}
-		while(courant > moyenne);
-		}
-	else
-		{
-		do
-			{
-			if(moteursChangeJosephson(moteurs, 1.1)==0)
-				{
-				courant = (*moteurs).josephson / (*moteurs).dt / (*moteurs).dt;
-				if(courant < 0) courant = -courant;
-				}
-			else { printf("\n  ERREUR moteursChangeJosephsonMoyenne\n"); return 1; }
-			}
-		while(courant < moyenne);
-		}
-
+	{	// Réglage du moteurs etatJosephson à une amplitude moyenne
+	moteursInitialiseCourantJosephson(moteurs, sqrt(JOSEPHSON_MAX * JOSEPHSON_MIN ));
 	return 0;
 	}
 
@@ -587,7 +544,7 @@ void moteursAffiche(moteursT * moteurs)
 
 			// 	Affiche la valeur des paramètres du moteurs
 	{
-	printf("courant Josephson = %6.3f\n", (*moteurs).josephson / (*moteurs).dt / (*moteurs).dt);
+	printf("courantJosephson Josephson = %6.3f\n", (*moteurs).etatJosephson / (*moteurs).dt / (*moteurs).dt);
 	//printf("(*moteurs).horloge = %6.3f\n", (*moteurs).horloge);		//	Somme des dt
 	printf("(*moteurs).chrono = %6.3f\n", (*moteurs).chrono);		//	Remis à zéro
 

@@ -130,9 +130,9 @@ int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
 			fprintf(fichier, "%f\n", parametre);
 		parametre = (*systeme).moteurs.chrono;
 			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.courant;
+		parametre = (*systeme).moteurs.etatJosephson;
 			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.josephson;
+		parametre = (*systeme).moteurs.courantJosephson;
 			fprintf(fichier, "%f\n", parametre);
 		parametre = (*systeme).moteurs.generateur;
 			fprintf(fichier, "%f\n", parametre);
@@ -260,10 +260,10 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		moteursInitialiseChrono(&(*systeme).moteurs, reel);
 
 			// Moteur courant Josephson
+		fscanf(fichier, "%d\n", &entier);
+		moteursInitialiseEtatJosephson(&(*systeme).moteurs, entier);
 		fscanf(fichier, "%f\n", &reel);
-		moteursInitialiseCourant(&(*systeme).moteurs, reel);
-		fscanf(fichier, "%f\n", &reel);
-		moteursInitialiseJosephson(&(*systeme).moteurs, reel);
+		moteursInitialiseCourantJosephson(&(*systeme).moteurs, reel);
 
 			// Moteur périodique sur le premier pendule
 		fscanf(fichier, "%d\n", &entier);
@@ -322,8 +322,7 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 
 		fprintf(stderr, " Création du système\n");
 	systemeCreation(systeme);
-	//changeFormeDissipation(&(*controleur).systeme, 1);
-	//changeFormeDissipation(&(*controleur).systeme, 0);
+
 	changeFormeDissipation(systeme, (*systeme).modeDissipation);
 	changeConditionsLimites(systeme, (*systeme).libreFixe);
 	(*systeme).premier->pendule.dephasage = reel;

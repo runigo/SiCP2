@@ -398,9 +398,9 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_DOWN:
 			moteursChangeJosephson(&(*controleur).systeme.moteurs,0.91);break;
 		case SDLK_LEFT:
-			moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break;
+			moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,-1);break;
 		case SDLK_RIGHT:
-			moteursChangeJosephson(&(*controleur).systeme.moteurs,0.0);break;
+			moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,1);break;
 
 	// Moteur générateur de signaux
 		case SDLK_p:
@@ -916,13 +916,13 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 6: // Extrémité
 				changeFormeDissipation(&(*controleur).systeme, 2);break;
 			case 7: // Marche
-				moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+				moteursInverseJosephson(&(*controleur).systeme.moteurs);break;
 			case 8: // Arrêt
-				moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0);break;
+				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,0);break;
 			case 9: // Droite
-				moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break;
+				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,1);break;
 			case 10: // Gauche
-				moteursChangeJosephson(&(*controleur).systeme.moteurs,-1.0);break;
+				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,-1);break;
 			case 11: // Arrêt
 				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);break;
 			case 12: // Sinus
@@ -1035,8 +1035,8 @@ int controleurInitialiseNulle(controleurT * controleur)
 	changeFormeDissipation(&(*controleur).systeme, 0);
 
 		// Réglage du moteur josephson
-	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs, 0);
-	//moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
+	moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs, 0);
+	moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
 
 		// Réglage du moteur périodique
 	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
@@ -1061,7 +1061,7 @@ int controleurInitialiseFluxons(controleurT * controleur)
 	changeFormeDissipation(&(*controleur).systeme, 1);
 
 		// Réglage du moteur josephson
-	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs, 1);
+	moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs, 1);
 	moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
 
 	return 0;

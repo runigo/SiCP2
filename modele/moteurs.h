@@ -48,8 +48,8 @@ typedef struct MoteursT moteursT;
 		float phi;			//	Phase
 
 			// Moteur courant Josephson
-		float josephson;	//	Courant Josephson
-		float courant;		//	Mémorise quand josephson = 0
+		int etatJosephson;	//	État du moteur Josephson, -1, 0 ou 1
+		float courantJosephson;		//	Amplitude du courant josephson
 
 			// Moteur créateur de Fluxon
 		int fluxon;		// Activité du moteur fluxon
@@ -67,8 +67,8 @@ int moteursInitialiseAmplitude(moteursT * moteurs, float amplitude);
 int moteursInitialiseFrequence(moteursT * moteurs, float frequence);
 int moteursInitialisePhi(moteursT * moteurs, float phi);
 
-int moteursInitialiseJosephson(moteursT * moteurs, float  josephson);
-int moteursInitialiseCourant(moteursT * moteurs, float courant);
+int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat);
+int moteursInitialiseCourantJosephson(moteursT * moteurs, float courant);
 
 int moteursInitialiseFluxon(moteursT * moteurs, int fluxon);
 int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage);
@@ -82,9 +82,12 @@ float moteurJaugeZero(moteursT * m);
 
 	//	Réglage des paramètres
 
-void moteursChangeEtatJosephson(moteursT * moteurs, int etat);
+//void moteursChangeEtatJosephson(moteursT * moteurs, int etat);
+
+void moteursInverseJosephson(moteursT * moteurs);
 int moteursChangeJosephson(moteursT * m, float facteur);
 int moteursChangeJosephsonMoyenne(moteursT * m);	// Réglage du moteur josephson
+
 void moteursChangeFrequence(moteursT * m, float facteur);
 void moteursChangeAmplitude(moteursT * m, float facteur);
 void moteursChangeGenerateur(moteursT * m, int i);

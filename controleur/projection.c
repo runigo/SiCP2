@@ -120,7 +120,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 	//	Amplitude du moteur josephson
-	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MIN) );
+	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courantJosephson/JOSEPHSON_MIN) );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -177,14 +177,14 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).boutonEtat[5]=1;
 	(*commandes).boutonEtat[6]=1;
 */
-	if((*systeme).moteurs.josephson > 0.0)
+	if((*systeme).moteurs.etatJosephson ==1)
 		{
 		(*commandes).boutonEtat[7]=1; // 284	Marche
 		(*commandes).boutonEtat[9]=1; // 339	Droite
 		}
 	else
 		{
-		if((*systeme).moteurs.josephson < 0.0)
+		if((*systeme).moteurs.etatJosephson ==-1)
 			{
 			(*commandes).boutonEtat[7]=1; // 284	Marche
 			(*commandes).boutonEtat[10]=1; // 367	Gauche

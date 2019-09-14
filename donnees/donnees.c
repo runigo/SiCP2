@@ -130,8 +130,8 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 	(*systeme).moteurs.chrono = 0.0;
 
-	(*systeme).moteurs.courant=3.0;		// Mémoire courant Josephson si = 0
-	(*systeme).moteurs.josephson=0;//-3*(*options).dt*(*options).dt;
+	(*systeme).moteurs.courantJosephson=3.0;	// Courant Josephson
+	(*systeme).moteurs.etatJosephson=0;			//	-1, 0, 1
 
 	(*systeme).moteurs.generateur = 0;	// éteint, sinus, carre, impulsion
 	(*systeme).moteurs.amplitude=0.3;		// Amplitude du générateur de signaux

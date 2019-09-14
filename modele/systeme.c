@@ -463,7 +463,7 @@ void systemeCouplage(systemeT * systeme)
 
 void systemeInertie(systemeT * systeme)
 	{//	Principe d'inertie appliqué au systeme
-	float courantJosephson = (*systeme).moteurs.josephson;
+	float courantJosephson = (*systeme).moteurs.courantJosephson * (*systeme).moteurs.dt * (*systeme).moteurs.dt * (*systeme).moteurs.etatJosephson;
 	float generateur = moteursGenerateur(&(*systeme).moteurs);
 
 			//	Cas des extrémitées

@@ -57,6 +57,8 @@ typedef struct MoteursT moteursT;
 		float dephasage;		// Valeur du dephasage ateint
 		};
 
+	//	Initialisation
+
 int moteursInitialiseDt(moteursT * moteurs, float dt);
 int moteursInitialiseChrono(moteursT * moteurs, float chrono);
 
@@ -73,8 +75,12 @@ int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage);
 int moteursInitialiseDephasage(moteursT * moteurs, float dephasage);
 
 
+	//	Évolution des moteurs
+
 float moteursGenerateur(moteursT * m);
 float moteurJaugeZero(moteursT * m);
+
+	//	Réglage des paramètres
 
 void moteursChangeEtatJosephson(moteursT * moteurs, int etat);
 int moteursChangeJosephson(moteursT * m, float facteur);

@@ -1,7 +1,7 @@
 /*
-Copyright novembre 2018, Stephan Runigo
+Copyright septembre 2019, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.3 simulateur de chaîne de pendules
+SiCP 2.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -69,7 +69,179 @@ void systemeSuppression(systemeT * systeme)
 
 /*----------------  INITIALISATION  -------------------*/
 
+
+int systemeInitialiseLibreFixe(systemeT * systeme, int libreFixe)
+	{
+	if(libreFixe>=0 && libreFixe<=4)
+		{
+		(*systeme).libreFixe = libreFixe;
+		printf("(*systeme).libreFixe = %d\n", (*systeme).libreFixe);
+		return 0;
+		}
+	else
+		{
+		(*systeme).libreFixe = 1;
+		printf("ERREUR systemeInitialiseLibreFixe(%d) (*systeme).libreFixe = %d\n", libreFixe, (*systeme).libreFixe);
+		}
+	return 1;
+	}
+
+int systemeInitialiseNombre(systemeT * systeme, int nombre)
+	{
+	if(nombre>=NOMBRE_MIN && nombre<=NOMBRE_MAX)
+		{
+		(*systeme).nombre = nombre;
+		printf("(*systeme).nombre = %d\n", (*systeme).nombre);
+		return 0;
+		}
+	else
+		{
+		(*systeme).nombre = NOMBRE;
+		printf("ERREUR systemeInitialiseNombre(%d) (*systeme).nombre = %d\n", nombre, (*systeme).nombre);
+		}
+	return 1;
+	}
+
+int systemeInitialiseGravitation(systemeT * systeme, float gravitation)
+	{
+	if(gravitation>=GRAVITATION_MIN && gravitation<=GRAVITATION_MAX)
+		{
+		(*systeme).gravitation = gravitation;
+		printf("(*systeme).gravitation = %f\n", (*systeme).gravitation);
+		return 0;
+		}
+	else
+		{
+		(*systeme).gravitation = GRAVITATION;
+		printf("ERREUR systemeInitialiseGravitation(%f) (*systeme).gravitation = %f\n", gravitation, (*systeme).gravitation);
+		}
+	return 1;
+	}
+
+int systemeInitialiseMasse(systemeT * systeme, float masse)
+	{
+	if(masse>=MASSE_MIN && masse<=MASSE_MAX)
+		{
+		(*systeme).masse = masse;
+		printf("(*systeme).masse = %f\n", (*systeme).masse);
+		return 0;
+		}
+	else
+		{
+		(*systeme).masse = MASSE;
+		printf("ERREUR systemeInitialiseMasse(%f) (*systeme).masse = %f\n", masse, (*systeme).masse);
+		}
+	return 1;
+	}
+
+int systemeInitialiseLongueur(systemeT * systeme, float longueur)
+	{
+	if(longueur>=LONGUEUR_MIN && longueur<=LONGUEUR_MAX)
+		{
+		(*systeme).longueur = longueur;
+		printf("(*systeme).longueur = %f\n", (*systeme).longueur);
+		return 0;
+		}
+	else
+		{
+		(*systeme).longueur = LONGUEUR;
+		printf("ERREUR systemeInitialiseLongueur(%f) (*systeme).longueur = %f\n", longueur, (*systeme).longueur);
+		}
+	return 1;
+	}
+
+int systemeInitialiseDissipation(systemeT * systeme, float dissipation)
+	{
+	if(dissipation>DISSIPATION_MIN && dissipation<DISSIPATION_MAX)
+		{
+		(*systeme).dissipation = dissipation;
+		printf("(*systeme).dissipation = %f\n", (*systeme).dissipation);
+		return 0;
+		}
+	else
+		{
+		(*systeme).dissipation = exp((log(DISSIPATION_MIN)+log(DISSIPATION_MAX))/2);
+		printf("ERREUR systemeInitialiseDissipation(%f) (*systeme).dissipation = %f\n", dissipation, (*systeme).dissipation);
+		}
+	return 1;
+	}
+
+int systemeInitialiseModeDissipation(systemeT * systeme, int modeDissipation)
+	{
+	if(modeDissipation>=0 && modeDissipation<=2)
+		{
+		(*systeme).modeDissipation = modeDissipation;
+		printf("(*systeme).modeDissipation = %d\n", (*systeme).modeDissipation);
+		return 0;
+		}
+	else
+		{
+		(*systeme).modeDissipation = 0;
+		printf("ERREUR systemeInitialiseModeDissipation(%d) (*systeme).modeDissipation = %d\n", modeDissipation, (*systeme).modeDissipation);
+		}
+	return 1;
+	}
+
+int systemeInitialiseCouplage(systemeT * systeme, float couplage)
+	{
+	float couplageReduit = 0;
+	int nombre = (*systeme).nombre;
+
+	if(nombre < NOMBRE_MIN || nombre > NOMBRE_MAX)
+		{
+		nombre = NOMBRE;
+		printf("ERREUR systemeInitialise() (*systeme).nombre = %d\n", (*systeme).nombre);
+		}
+
+	couplageReduit = couplage / nombre;
+
+	if(couplageReduit < COUPLAGE_MAX && couplageReduit > COUPLAGE_MIN)
+		{
+		(*systeme).couplage = couplage;
+		printf("(*systeme).couplage = %f\n", (*systeme).couplage);
+		return 0;
+		}
+	else
+		{
+		(*systeme).couplage = nombre * exp((log(COUPLAGE_MIN)+log(COUPLAGE_MAX))/2);
+		printf("ERREUR systemeInitialiseCouplage(%f) (*systeme).couplage = %f\n", couplage, (*systeme).couplage);
+		}
+	return 1;
+	}
+
+int systemeInitialiseDephasage(systemeT * systeme, float dephasage)
+	{
+	if(dephasage>=-DEPHASAGE_MAX && dephasage<DEPHASAGE_MAX)
+		{
+		(*systeme).dephasage = dephasage;
+		printf("(*systeme).dephasage = %f\n", (*systeme).dephasage);
+		return 0;
+		}
+	else
+		{
+		(*systeme).dephasage = 0;
+		printf("ERREUR systemeInitialise(%f) (*systeme).dephasage = %f\n", dephasage, (*systeme).dephasage);
+		}
+	return 1;
+	}
+
+int systemeInitialiseEquation(systemeT * systeme, int equation)
+	{
+	if(equation>=1 && equation<=4)
+		{
+		(*systeme).equation = equation;
+		printf("(*systeme).equation = %d\n", (*systeme).equation);
+		return 0;
+		}
+	else
+		{
+		(*systeme).equation = 1;
+		printf("ERREUR systemeInitialiseEquation(%d) (*systeme).equation = %d\n", equation, (*systeme).equation);
+		}
+	return 1;
+	}
 /*
+
 
 int systemeInitialisePosition(systemeT * systeme, parametre)
 	{
@@ -80,31 +252,19 @@ int systemeInitialisePosition(systemeT * systeme, parametre)
 	return 0;
 	}
 
-
-		// Caractéristique de la chaîne
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).libreFixe = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).nombre = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).equation = parametre;
-
-		// Paramètres physiques
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).gravitation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).masse = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).longueur = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).dissipation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).modeDissipation = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).couplage = parametre;
-		fscanf(fichier, "%f\n", &parametre);
-		(*systeme).dephasage = parametre;
-		fscanf(fichier, "%f\n", &parametre);
+int systemeInitialise(systemeT * systeme, float int )
+	{
+	if(>_MIN && <_MAX)
+		{
+		printf("Option dt valide, dt = %f\n", (*options).dt);
+		return 0;
+		}
+	else
+		{
+		(*systeme).amplitude = exp((log(_MIN)+log(_MAX))/2);
+		}
+	return 1;
+	}
 
 
 

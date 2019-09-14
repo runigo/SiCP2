@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright septembre 2019, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -61,17 +61,34 @@ typedef struct SystemeT systemeT;
 
 		};
 
-// Création de la chaîne de pendule
+	//	Initialisation des paramètres
+int systemeInitialiseNombre(systemeT * systeme, int nombre);
+int systemeInitialiseEquation(systemeT * systeme, int equation);
+
+int systemeInitialiseDephasage(systemeT * systeme, float dephasage);
+int systemeInitialiseLibreFixe(systemeT * systeme, int libreFixe);
+
+int systemeInitialiseMasse(systemeT * systeme, float masse);
+int systemeInitialiseLongueur(systemeT * systeme, float longueur);
+
+int systemeInitialiseCouplage(systemeT * systeme, float couplage);
+int systemeInitialiseDissipation(systemeT * systeme, float dissipation);
+int systemeInitialiseModeDissipation(systemeT * systeme, int modeDissipation);
+
+int systemeInitialiseGravitation(systemeT * systeme, float gravitation);
+
+	//	Réinitialisation des positions
+void systemeInitialisePosition(systemeT * systeme, int forme);
+
+	//	Création de la chaîne de pendule
 int systemeCreation(systemeT * systeme);
 
-// Suppression de la chaîne de pendule
+	//	Suppression de la chaîne de pendule
 void systemeSuppression(systemeT * systeme);
 
-// Évolution temporelle du système, "duree" cycle d'évolution
+	//	Évolution temporelle du système
 void systemeEvolution(systemeT * systeme, int duree);
 
-// Réinitialisation des positions
-void systemeInitialisePosition(systemeT * systeme, int forme);
 #endif
 
 ////////////////////////////////////////////////////////////

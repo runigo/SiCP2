@@ -43,7 +43,7 @@ int moteurInitialiseFluxon(moteursT * m, int fluxon);
 
 int moteursInitialiseDt(moteursT * moteurs, float dt)
 	{
-	if(dt>DT_MIN && dt<DT_MAX)
+	if(dt>=DT_MIN && dt<=DT_MAX)
 		{
 		(*moteurs).dt = dt;
 		printf("(*moteurs).dt = %f\n", (*moteurs).dt);
@@ -68,7 +68,7 @@ int moteursInitialiseChrono(moteursT * moteurs, float chrono)
 
 int moteursInitialiseCourant(moteursT * moteurs, float courant)
 	{
-	if(courant>JOSEPHSON_MIN && courant<JOSEPHSON_MAX)
+	if(courant>=JOSEPHSON_MIN && courant<=JOSEPHSON_MAX)
 		{
 		(*moteurs).courant = courant;
 		printf("(*moteurs).courant = %f\n", (*moteurs).courant);
@@ -85,7 +85,7 @@ int moteursInitialiseCourant(moteursT * moteurs, float courant)
 
 int moteursInitialiseJosephson(moteursT * moteurs, float josephson)
 	{
-	if( josephson>JOSEPHSON_MIN &&  josephson<JOSEPHSON_MAX)
+	if( josephson>=JOSEPHSON_MIN &&  josephson<=JOSEPHSON_MAX)
 		{
 		(*moteurs).josephson =  josephson;
 		printf("(*moteurs). josephson = %f\n", (*moteurs).josephson);
@@ -119,7 +119,7 @@ int moteursInitialiseGenerateur(moteursT * moteurs, int generateur)
 
 int moteursInitialiseAmplitude(moteursT * moteurs, float amplitude)
 	{
-	if(amplitude>AMPLITUDE_MIN && amplitude<AMPLITUDE_MAX)
+	if(amplitude>=AMPLITUDE_MIN && amplitude<=AMPLITUDE_MAX)
 		{
 		(*moteurs).amplitude = amplitude;
 		printf("(*moteurs).amplitude = %f\n", (*moteurs).amplitude);
@@ -135,7 +135,7 @@ int moteursInitialiseAmplitude(moteursT * moteurs, float amplitude)
 
 int moteursInitialiseFrequence(moteursT * moteurs, float frequence)
 	{
-	if(frequence>FREQUENCE_MIN && frequence<FREQUENCE_MAX)
+	if(frequence>=FREQUENCE_MIN && frequence<=FREQUENCE_MAX)
 		{
 		(*moteurs).frequence = frequence;
 		printf("(*moteurs).frequence = %f\n", (*moteurs).frequence);
@@ -151,7 +151,7 @@ int moteursInitialiseFrequence(moteursT * moteurs, float frequence)
 
 int moteursInitialisePhi(moteursT * moteurs, float phi)
 	{
-	if(phi>-DEPHASAGE_MAX && phi<DEPHASAGE_MAX)
+	if(phi>=-DEPHASAGE_MAX && phi<=DEPHASAGE_MAX)
 		{
 		(*moteurs).phi = phi;
 		printf("(*moteurs).phi = %f\n", (*moteurs).phi);
@@ -166,7 +166,7 @@ int moteursInitialisePhi(moteursT * moteurs, float phi)
 	}
 int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage)
 	{
-	if(deltaDephasage>-DEUXPI && deltaDephasage<DEUXPI)
+	if(deltaDephasage>=-DEUXPI && deltaDephasage<=DEUXPI)
 		{
 		(*moteurs).deltaDephasage = deltaDephasage;
 		printf("(*moteurs).deltaDephasage = %f\n", (*moteurs).deltaDephasage);
@@ -211,31 +211,6 @@ int moteursInitialiseDephasage(moteursT * moteurs, float dephasage)
 	return 1;
 	}
 /*
-int moteursInitialise(moteursT * moteurs, float int )
-	{
-	if(>_MIN && <_MAX)
-		{
-		printf("Option dt valide, dt = %f\n", (*options).dt);
-		return 0;
-		}
-	else
-		{
-		}
-	return 1;
-	}
-int moteursInitialise(moteursT * moteurs, float int )
-	{
-	if(>_MIN && <_MAX)
-		{
-		printf("Option dt valide, dt = %f\n", (*options).dt);
-		return 0;
-		}
-	else
-		{
-		(*moteurs).amplitude = exp((log(_MIN)+log(_MAX))/2);
-		}
-	return 1;
-	}
 int moteursInitialise(moteursT * moteurs, float int )
 	{
 	if(>_MIN && <_MAX)

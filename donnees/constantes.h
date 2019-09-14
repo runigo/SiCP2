@@ -112,19 +112,26 @@ termes.
 
 	//	PARAMÈTRES  CHAINE ET CORDE
 
-#define COUPLAGE_MAX 99 // Couplage maximal / nombre de pendule
-#define COUPLAGE_MIN 0.099
+#define COUPLAGE_MAX 99.9		// Couplage maximal / nombre de pendule
+#define COUPLAGE_MIN 0.099	// Couplage minimal / nombre de pendule
 
-#define GRAVITATION_MAX 77 // Gravitation maximale.
-#define GRAVITATION_MIN 0.07 // Gravitation minimale.
+#define GRAVITATION_MAX 77.7	// Gravitation maximale
+#define GRAVITATION 9.81		// Gravitation implicite
+#define GRAVITATION_MIN 0.07	// Gravitation minimale
 
-#define MASSE_MAX 77
-#define MASSE_MIN 0.7
+#define MASSE_MAX 77.7	//	Masse maximale
+#define MASSE 1.0		//	Masse implicite
+#define MASSE_MIN 0.7	//	Masse minimale
 
-#define DISSIPATION_MAX 333	//	Coeficient de frottement visqueux maximal
+#define LONGUEUR_MAX 1.0	//	Longueur maximale
+#define LONGUEUR 1.0		//	Longueur implicite
+#define LONGUEUR_MIN 1.0	//	Longueur minimale
+
+
+#define DISSIPATION_MAX 333.3	//	Coeficient de frottement visqueux maximal
 #define DISSIPATION_MIN 0.033	//	Valeur minimale
 
-#define FREQUENCE_MAX 77	//	Valeur maximale de la fréquence du moteur
+#define FREQUENCE_MAX 77.7	//	Valeur maximale de la fréquence du moteur
 #define FREQUENCE_MIN 0.077	//	Valeur minimale de la fréquence du moteur
 
 #define AMPLITUDE_MAX 7.7	//	Valeur maximale de l'amplitude du moteur

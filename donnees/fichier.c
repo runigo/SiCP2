@@ -286,29 +286,31 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 
 		// Initialisation de la chaîne
 			// Caractéristiques
-		fscanf(fichier, "%f\n", &reel);
-		(*systeme).libreFixe = reel;
-		fscanf(fichier, "%f\n", &reel);
-		(*systeme).nombre = reel;
-		fscanf(fichier, "%f\n", &reel);
-		(*systeme).equation = reel;
+		fscanf(fichier, "%d\n", &entier);
+		systemeInitialiseLibreFixe(systeme, entier);
+		fscanf(fichier, "%d\n", &entier);
+		systemeInitialiseNombre(systeme, entier);
+
+		fscanf(fichier, "%d\n", &entier);
+		systemeInitialiseEquation(systeme, entier);
 
 			// Paramètres physiques
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).gravitation = reel;
+		systemeInitialiseGravitation(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).masse = reel;
+		systemeInitialiseMasse(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).longueur = reel;
+		systemeInitialiseLongueur(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).dissipation = reel;
+		systemeInitialiseDissipation(systeme, reel);
+		fscanf(fichier, "%d\n", &entier);
+		systemeInitialiseModeDissipation(systeme, entier);
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).modeDissipation = reel;
+		systemeInitialiseCouplage(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
-		(*systeme).couplage = reel;
-		fscanf(fichier, "%f\n", &reel);
-		(*systeme).dephasage = reel;
-		fscanf(fichier, "%f\n", &reel);
+		systemeInitialiseDephasage(systeme, reel);
+
+		fscanf(fichier, "%f\n", &reel); // Déphasage du premier pendule
 
 		fclose(fichier);
 

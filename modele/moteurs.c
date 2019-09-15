@@ -68,7 +68,13 @@ int moteursInitialiseChrono(moteursT * moteurs, float chrono)
 
 int moteursInitialiseCourantJosephson(moteursT * moteurs, float courantJosephson)
 	{
-	if(courantJosephson>=JOSEPHSON_MIN && courantJosephson<=JOSEPHSON_MAX)
+	float courant=courantJosephson;
+	
+	if(courant<0)
+		{
+		courant = -courant;
+		}
+	if(courant>=JOSEPHSON_MIN && courant<=JOSEPHSON_MAX)
 		{
 		(*moteurs).courantJosephson = courantJosephson;
 		printf("(*moteurs).courantJosephson = %f\n", (*moteurs).courantJosephson);
@@ -492,6 +498,7 @@ int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat)
 		{
 		(*moteurs).etatJosephson = 0;
 		}
+	printf("(*moteurs).etatJosephson = %d\n", (*moteurs).etatJosephson);
 	return 0;
 	}
 

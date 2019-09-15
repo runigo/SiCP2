@@ -484,21 +484,32 @@ void moteursChangeAmplitude(moteursT * moteurs, float facteur)
 
 int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat)
 	{
-	(*moteurs).etatJosephson = 0;
-	if(etat == 1) // Allume / éteint le courantJosephson Josephson
+	if(etat == 1) // Allume le courantJosephson Josephson
 		{
 		(*moteurs).etatJosephson = 1;
 		}
-	if(etat == -1) // Allume / éteint le courantJosephson Josephson
+	else // Eteint le courantJosephson Josephson
 		{
-		(*moteurs).etatJosephson = -1;
+		(*moteurs).etatJosephson = 0;
 		}
 	return 0;
 	}
 
-void moteursInverseJosephson(moteursT * moteurs)
+void moteursSensJosephson(moteursT * moteurs, int signe)
 	{
-	(*moteurs).etatJosephson = - (*moteurs).etatJosephson;
+	if((*moteurs).courantJosephson<0)
+		{
+		(*moteurs).courantJosephson=-(*moteurs).courantJosephson;
+		}
+
+	if(signe>1)
+		{
+		(*moteurs).courantJosephson = (*moteurs).courantJosephson;
+		}
+	else
+		{
+		(*moteurs).courantJosephson = - (*moteurs).courantJosephson;
+		}
 	return;
 	}
 
@@ -512,7 +523,7 @@ int moteursChangeJosephson(moteursT * moteurs, float facteur)
 
 	if(courantJosephson <= JOSEPHSON_MAX && courantJosephson >= JOSEPHSON_MIN)
 		{
-		(*moteurs).courantJosephson = (*moteurs).etatJosephson * facteur;
+		(*moteurs).courantJosephson = (*moteurs).courantJosephson * facteur;
 		}
 	else
 		{

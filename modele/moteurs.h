@@ -48,7 +48,7 @@ typedef struct MoteursT moteursT;
 		float phi;			//	Phase
 
 			// Moteur courant Josephson
-		int etatJosephson;	//	État du moteur Josephson, -1, 0 ou 1
+		int etatJosephson;	//	État du moteur Josephson, 0 ou 1
 		float courantJosephson;		//	Amplitude du courant josephson
 
 			// Moteur créateur de Fluxon
@@ -84,7 +84,7 @@ float moteurJaugeZero(moteursT * m);
 
 //void moteursChangeEtatJosephson(moteursT * moteurs, int etat);
 
-void moteursInverseJosephson(moteursT * moteurs);
+void moteursSensJosephson(moteursT * moteurs, int signe);
 int moteursChangeJosephson(moteursT * m, float facteur);
 int moteursChangeJosephsonMoyenne(moteursT * m);	// Réglage du moteur josephson
 

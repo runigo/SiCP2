@@ -108,6 +108,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	{		// Projette le système sur les commandes
 	float theta;
 	float ratioRotatif = 0.9;
+	float courantJosephson = projectionAbsolue((*systeme).moteurs.courantJosephson);
 
 				//	Projection sur les boutons rotatifs
 	 //	Couplage
@@ -120,7 +121,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 	//	Amplitude du moteur josephson
-	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courantJosephson/JOSEPHSON_MIN) );
+	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue(courantJosephson/JOSEPHSON_MIN) );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 

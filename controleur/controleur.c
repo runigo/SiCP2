@@ -916,13 +916,13 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 6: // Extrémité
 				changeFormeDissipation(&(*controleur).systeme, 2);break;
 			case 7: // Marche
-				moteursInverseJosephson(&(*controleur).systeme.moteurs);break;
+				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,1);break;
 			case 8: // Arrêt
 				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,0);break;
 			case 9: // Droite
-				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+				moteursSensJosephson(&(*controleur).systeme.moteurs,1);break;
 			case 10: // Gauche
-				moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs,-1);break;
+				moteursSensJosephson(&(*controleur).systeme.moteurs,-1);break;
 			case 11: // Arrêt
 				moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);break;
 			case 12: // Sinus

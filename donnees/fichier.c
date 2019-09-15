@@ -64,7 +64,8 @@ int fichierLecture(systemeT * systeme, grapheT * graphe, int numero)
 int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
 	{
 	FILE *fichier; /* pointeur sur FILE */
-	double parametre;
+	float reel;
+	int entier;
 	(void)graphe;
 
 	switch (numero)
@@ -126,54 +127,62 @@ int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		}
 
 		// Moteurs
-		parametre = (*systeme).moteurs.dt;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.chrono;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.etatJosephson;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.courantJosephson;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.generateur;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.amplitude;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.frequence;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.phi;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.deltaDephasage;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.fluxon;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).moteurs.dephasage;
-			fprintf(fichier, "%f\n", parametre);
+			// Paramètres d'horloge
+		reel = (*systeme).moteurs.dt;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).moteurs.chrono;
+			fprintf(fichier, "%f\n", reel);
+
+			// Moteur périodique sur le premier pendule
+		entier = (*systeme).moteurs.generateur;
+			fprintf(fichier, "%d\n", entier);
+		reel = (*systeme).moteurs.amplitude;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).moteurs.frequence;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).moteurs.phi;
+			fprintf(fichier, "%f\n", reel);
+
+			// Moteur courant Josephson
+		entier = (*systeme).moteurs.etatJosephson;
+			fprintf(fichier, "%d\n", entier);
+		reel = (*systeme).moteurs.courantJosephson;
+			fprintf(fichier, "%f\n", reel);
+
+			// Moteur créateur de Fluxon
+		entier = (*systeme).moteurs.fluxon;
+			fprintf(fichier, "%d\n", entier);
+		reel = (*systeme).moteurs.deltaDephasage;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).moteurs.dephasage;
+			fprintf(fichier, "%f\n", reel);
 
 		// Caractéristique de la chaîne
-		parametre = (*systeme).libreFixe;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).nombre;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).equation;
-			fprintf(fichier, "%f\n", parametre);
+		entier = (*systeme).nombre;
+			fprintf(fichier, "%d\n", entier);
+		entier = (*systeme).equation;
+			fprintf(fichier, "%d\n", entier);
+		reel = (*systeme).dephasage;
+			fprintf(fichier, "%f\n", reel);
+		entier = (*systeme).libreFixe;
+			fprintf(fichier, "%d\n", entier);
 
 		// Paramètres physiques
-		parametre = (*systeme).gravitation;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).masse;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).longueur;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).dissipation;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).modeDissipation;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).couplage;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).dephasage;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*systeme).premier->pendule.dephasage;
-			fprintf(fichier, "%f\n", parametre);
+		reel = (*systeme).masse;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).longueur;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).couplage;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).gravitation;
+			fprintf(fichier, "%f\n", reel);
+
+		entier = (*systeme).modeDissipation;
+			fprintf(fichier, "%d\n", entier);
+		reel = (*systeme).dissipation;
+			fprintf(fichier, "%f\n", reel);
+		reel = (*systeme).premier->pendule.dephasage;
+			fprintf(fichier, "%f\n", reel);
 
 	fclose(fichier);
 
@@ -259,12 +268,6 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		fscanf(fichier, "%f\n", &reel);
 		moteursInitialiseChrono(&(*systeme).moteurs, reel);
 
-			// Moteur courant Josephson
-		fscanf(fichier, "%d\n", &entier);
-		moteursInitialiseEtatJosephson(&(*systeme).moteurs, entier);
-		fscanf(fichier, "%f\n", &reel);
-		moteursInitialiseCourantJosephson(&(*systeme).moteurs, reel);
-
 			// Moteur périodique sur le premier pendule
 		fscanf(fichier, "%d\n", &entier);
 		moteursInitialiseGenerateur(&(*systeme).moteurs, entier);
@@ -275,11 +278,17 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		fscanf(fichier, "%f\n", &reel);
 		moteursInitialisePhi(&(*systeme).moteurs, reel);
 
-			// Moteur créateur de Fluxon
+			// Moteur courant Josephson
+		fscanf(fichier, "%d\n", &entier);
+		moteursInitialiseEtatJosephson(&(*systeme).moteurs, entier);
 		fscanf(fichier, "%f\n", &reel);
-		moteursInitialiseDeltaDephasage(&(*systeme).moteurs, reel);
+		moteursInitialiseCourantJosephson(&(*systeme).moteurs, reel);
+
+			// Moteur créateur de Fluxon
 		fscanf(fichier, "%d\n", &entier);
 		moteursInitialiseFluxon(&(*systeme).moteurs, entier);
+		fscanf(fichier, "%f\n", &reel);
+		moteursInitialiseDeltaDephasage(&(*systeme).moteurs, reel);
 		fscanf(fichier, "%f\n", &reel);
 		moteursInitialiseDephasage(&(*systeme).moteurs, reel);
 
@@ -287,28 +296,28 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		// Initialisation de la chaîne
 			// Caractéristiques
 		fscanf(fichier, "%d\n", &entier);
-		systemeInitialiseLibreFixe(systeme, entier);
-		fscanf(fichier, "%d\n", &entier);
 		systemeInitialiseNombre(systeme, entier);
-
 		fscanf(fichier, "%d\n", &entier);
 		systemeInitialiseEquation(systeme, entier);
 
-			// Paramètres physiques
 		fscanf(fichier, "%f\n", &reel);
-		systemeInitialiseGravitation(systeme, reel);
+		systemeInitialiseDephasage(systeme, reel);
+		fscanf(fichier, "%d\n", &entier);
+		systemeInitialiseLibreFixe(systeme, entier);
+
+			// Paramètres physiques
 		fscanf(fichier, "%f\n", &reel);
 		systemeInitialiseMasse(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
 		systemeInitialiseLongueur(systeme, reel);
 		fscanf(fichier, "%f\n", &reel);
-		systemeInitialiseDissipation(systeme, reel);
+		systemeInitialiseCouplage(systeme, reel);
+		fscanf(fichier, "%f\n", &reel);
+		systemeInitialiseGravitation(systeme, reel);
 		fscanf(fichier, "%d\n", &entier);
 		systemeInitialiseModeDissipation(systeme, entier);
 		fscanf(fichier, "%f\n", &reel);
-		systemeInitialiseCouplage(systeme, reel);
-		fscanf(fichier, "%f\n", &reel);
-		systemeInitialiseDephasage(systeme, reel);
+		systemeInitialiseDissipation(systeme, reel);
 
 		fscanf(fichier, "%f\n", &reel); // Déphasage du premier pendule
 

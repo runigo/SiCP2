@@ -52,12 +52,11 @@ typedef struct SystemeT systemeT;
 
 		float masse;		//	Masse d'un pendule
 		float longueur;		//	Longueur d'un pendule
-
 		float couplage;		//	Mémoire pour conditions limites
-		float dissipation;	//	Mémoire si alpha = 0.0
-		int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
-
 		float gravitation;	//	Accélération de la pesanteur
+
+		int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
+		float dissipation;	//	Mémoire si alpha = 0.0
 
 		};
 

@@ -51,11 +51,12 @@ typedef struct ProjectionT projectionT;
 
 		int hauteur;	// hauteur de la chaîne
 		int largeur;	// largeur de la chaîne
+		float ratioHL;
 
 		int fenetreX;	// hauteur de la fenêtre
 		int fenetreY;	// largeur de la fenêtre
-
 		float ratioXY;
+
 
 		//float perspective;
 

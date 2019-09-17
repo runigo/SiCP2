@@ -67,8 +67,9 @@ int projectionInitialise(projectionT * projection)
 	(*projection).logFrequence = 1.0 / log( FREQUENCE_MAX/FREQUENCE_MIN );
 
 
-	(*projection).hauteur = 500;// hauteur de la chaîne
 	(*projection).largeur = 2100;// largeur de la chaîne
+	(*projection).ratioHL = 3.99;
+	(*projection).hauteur = (int)((*projection).largeur/(*projection).ratioHL);// hauteur de la chaîne
 
 	projectionInitialisePointDeVue(projection, 3*FENETRE_Y, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
 
@@ -308,23 +309,22 @@ int projectionChangePsi(projectionT * projection, float x)
 int projectionChangeTaille(projectionT * projection, float x)
 	{		// Change la taille de la chaîne
 
-	int hauteur = (*projection).hauteur * x;
 	int largeur = (*projection).largeur * x;
 
-	if(hauteur > HAUTEUR_MAX || largeur > LARGEUR_MAX)
+	if(largeur > LARGEUR_MAX)
 		{
 		printf("Maximum de la taille ateinte\n");
 		}
 	else
 		{
-		if(hauteur < HAUTEUR_MIN || largeur < LARGEUR_MIN)
+		if(largeur < LARGEUR_MIN)
 			{
 			printf("Minimum de la taille ateinte\n");
 			}
 		else
 			{
-			(*projection).hauteur = hauteur;
 			(*projection).largeur = largeur;
+			(*projection).hauteur = (int)(largeur/(*projection).ratioHL);
 			printf("(*projection).hauteur = %d\n", (*projection).hauteur);
 			printf("(*projection).largeur = %d\n", (*projection).largeur);
 			}

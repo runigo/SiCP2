@@ -69,10 +69,8 @@ termes.
 #define DISTANCE_MAX FENETRE_Y*77
 #define DISTANCE_MIN FENETRE_Y/77
 
-#define HAUTEUR_MAX FENETRE_Y*3
-#define LARGEUR_MAX FENETRE_X*3
-#define HAUTEUR_MIN FENETRE_Y/7
-#define LARGEUR_MIN FENETRE_X/7
+#define LARGEUR_MAX 3000	// Longueur maximale de la chaîne
+#define LARGEUR_MIN 900		// Longueur minimale de la chaîne
 
 //#define RATIO_H_L 0.136 // Ratio Hauteur sur Largeur de la chaîne
 //#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu

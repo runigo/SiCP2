@@ -89,6 +89,8 @@ termes.
 
 #define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
+#define MEMOIRE_CHRONO 10 // 
+
 #define DUREE 100 // Nombre implicite d'incrémentation du système entre deux affichages.
 #define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
 

@@ -40,6 +40,13 @@ termes.
 #include <assert.h>
 #include <time.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <time.h>
+#include <math.h>
+
 //#define PI 3.14159265358979323846264338327950288419716939937510582
 //#define PI 3.1415926535897932384626433832795
 #define PI 3.14159265359

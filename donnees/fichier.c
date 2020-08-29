@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2019, Stephan Runigo
+Copyright septembre 2020, Stephan Runigo
 runigo@free.fr
-SiCP 2.4 simulateur de chaîne de pendules
+SiCP 2.4.3 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -31,10 +31,10 @@ termes.
 
 #include "fichier.h"
 
-int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero);
-int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero);
-int fichierEcriturePosition(systemeT * systeme, int numero);
-int fichierLecturePosition(systemeT * systeme, int numero);
+int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, char * nom);
+int fichierLectureParametre(systemeT * systeme, grapheT * graphe, char * nom);
+int fichierEcriturePosition(systemeT * systeme, char * nom);
+int fichierLecturePosition(systemeT * systeme, char * nom);
 
 int fichierFonctionNulle(systemeT * systeme, grapheT * graphe);
 int fichierFonctionTriangle(systemeT * systeme, grapheT * graphe, int numero);
@@ -43,89 +43,50 @@ int fichierFonctionSinus(systemeT * systeme, grapheT * graphe, int numero);
 
 
 
-int fichierEcriture(systemeT * systeme, grapheT * graphe, int numero)
+int fichierEcriture(systemeT * systeme, grapheT * graphe, char * nom)
 	{
-	fprintf(stderr, "Ecriture des paramètres\n");
-	fichierEcritureParametre(systeme, graphe, numero);
-	fprintf(stderr, "Ecriture des positions\n");
-	fichierEcriturePosition(systeme, numero);
+	fprintf(stderr, "Ecriture des paramètres %s\n", nom);
+	fichierEcritureParametre(systeme, graphe, nom);
+	fprintf(stderr, "Ecriture des positions %s\n", nom);
+	fichierEcriturePosition(systeme, nom);
 	return 0;
 	}
 
-int fichierLecture(systemeT * systeme, grapheT * graphe, int numero)
+int fichierLecture(systemeT * systeme, grapheT * graphe, char * nom)
 	{
-	fprintf(stderr, "Initialisation des paramètres\n");
-	fichierLectureParametre(systeme, graphe, numero);
-	fprintf(stderr, "Initialisation des positions\n");
-	fichierLecturePosition(systeme, numero);
+			fprintf(stderr, "Réinitialisation du système\n");
+	fprintf(stderr, "Initialisation des paramètres %s\n", nom);
+	fichierLectureParametre(systeme, graphe, nom);
+	fprintf(stderr, "Initialisation des positions %s\n", nom);
+	fichierLecturePosition(systeme, nom);
 	return 0;
 	}
 
-int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
+int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, char * nom)
 	{
 	FILE *fichier; /* pointeur sur FILE */
 	float reel;
 	int entier;
 	(void)graphe;
 
-	switch (numero)
-		{
-		case 0 :
-			fichier = fopen("./donnees/enregistrement/parametre_a.sicp", "w");break;
-		case 1 :
-			fichier = fopen("./donnees/enregistrement/parametre_z.sicp", "w");break;
-		case 2 :
-			fichier = fopen("./donnees/enregistrement/parametre_e.sicp", "w");break;
-		case 3 :
-			fichier = fopen("./donnees/enregistrement/parametre_r.sicp", "w");break;
-		case 4 :
-			fichier = fopen("./donnees/enregistrement/parametre_t.sicp", "w");break;
-		case 5 :
-			fichier = fopen("./donnees/enregistrement/parametre_y.sicp", "w");break;
-		case 6 :
-			fichier = fopen("./donnees/enregistrement/parametre_u.sicp", "w");break;
-		case 7 :
-			fichier = fopen("./donnees/enregistrement/parametre_i.sicp", "w");break;
-		case 8 :
-			fichier = fopen("./donnees/enregistrement/parametre_o.sicp", "w");break;
-		case 9 :
-			fichier = fopen("./donnees/enregistrement/parametre_p.sicp", "w");break;
-		case 10 :
-			fichier = fopen("./donnees/enregistrement/parametre_q.sicp", "w");break;
-		case 11 :
-			fichier = fopen("./donnees/enregistrement/parametre_s.sicp", "w");break;
-		case 12 :
-			fichier = fopen("./donnees/enregistrement/parametre_d.sicp", "w");break;
-		case 13 :
-			fichier = fopen("./donnees/enregistrement/parametre_f.sicp", "w");break;
-		case 14 :
-			fichier = fopen("./donnees/enregistrement/parametre_g.sicp", "w");break;
-		case 15 :
-			fichier = fopen("./donnees/enregistrement/parametre_h.sicp", "w");break;
-		case 16 :
-			fichier = fopen("./donnees/enregistrement/parametre_j.sicp", "w");break;
-		case 17 :
-			fichier = fopen("./donnees/enregistrement/parametre_k.sicp", "w");break;
-		case 18 :
-			fichier = fopen("./donnees/enregistrement/parametre_l.sicp", "w");break;
-		case 19 :
-			fichier = fopen("./donnees/enregistrement/parametre_m.sicp", "w");break;
-		case 20 :
-			fichier = fopen("./donnees/enregistrement/parametre_w.sicp", "w");break;
-		case 21 :
-			fichier = fopen("./donnees/enregistrement/parametre_x.sicp", "w");break;
-		case 22 :
-			fichier = fopen("./donnees/enregistrement/parametre_c.sicp", "w");break;
-		case 23 :
-			fichier = fopen("./donnees/enregistrement/parametre_v.sicp", "w");break;
-		case 24 :
-			fichier = fopen("./donnees/enregistrement/parametre_b.sicp", "w");break;
-		case 25 :
-			fichier = fopen("./donnees/enregistrement/parametre_n.sicp", "w");break;
-		default:
-			;
-		}
 
+	char chemin[120] = "./donnees/enregistrement/parametre_";
+
+	char * extension = ".sicp";
+
+	strncat(chemin, nom, 20);
+
+	strncat(chemin, extension, 40);
+
+	fichier = fopen(chemin, "w");
+
+	if(fichier == NULL)
+		{
+		printf("Erreur d'ouverture du fichier d'enregistrement\n");
+		printf("	Vérifier le répertoire donnees/enregistrement\n");
+		}
+	else
+		{
 		// Moteurs
 			// Paramètres d'horloge
 		reel = (*systeme).moteurs.dt;
@@ -184,79 +145,32 @@ int fichierEcritureParametre(systemeT * systeme, grapheT * graphe, int numero)
 		reel = (*systeme).premier->pendule.dephasage;
 			fprintf(fichier, "%f\n", reel);
 
-	fclose(fichier);
+		fclose(fichier);
+		}
 
 	return 0;
 	}
 
-int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
+int fichierLectureParametre(systemeT * systeme, grapheT * graphe, char * nom)
 	{
 	FILE *fichier; /* pointeur sur FILE */
 	float reel = 0;
 	int entier = 0;
 	(void)graphe;
 
-	switch (numero)
-		{
-		case 0 :
-			fichier = fopen("./donnees/enregistrement/parametre_a.sicp", "r");break;
-		case 1 :
-			fichier = fopen("./donnees/enregistrement/parametre_z.sicp", "r");break;
-		case 2 :
-			fichier = fopen("./donnees/enregistrement/parametre_e.sicp", "r");break;
-		case 3 :
-			fichier = fopen("./donnees/enregistrement/parametre_r.sicp", "r");break;
-		case 4 :
-			fichier = fopen("./donnees/enregistrement/parametre_t.sicp", "r");break;
-		case 5 :
-			fichier = fopen("./donnees/enregistrement/parametre_y.sicp", "r");break;
-		case 6 :
-			fichier = fopen("./donnees/enregistrement/parametre_u.sicp", "r");break;
-		case 7 :
-			fichier = fopen("./donnees/enregistrement/parametre_i.sicp", "r");break;
-		case 8 :
-			fichier = fopen("./donnees/enregistrement/parametre_o.sicp", "r");break;
-		case 9 :
-			fichier = fopen("./donnees/enregistrement/parametre_p.sicp", "r");break;
-		case 10 :
-			fichier = fopen("./donnees/enregistrement/parametre_q.sicp", "r");break;
-		case 11 :
-			fichier = fopen("./donnees/enregistrement/parametre_s.sicp", "r");break;
-		case 12 :
-			fichier = fopen("./donnees/enregistrement/parametre_d.sicp", "r");break;
-		case 13 :
-			fichier = fopen("./donnees/enregistrement/parametre_f.sicp", "r");break;
-		case 14 :
-			fichier = fopen("./donnees/enregistrement/parametre_g.sicp", "r");break;
-		case 15 :
-			fichier = fopen("./donnees/enregistrement/parametre_h.sicp", "r");break;
-		case 16 :
-			fichier = fopen("./donnees/enregistrement/parametre_j.sicp", "r");break;
-		case 17 :
-			fichier = fopen("./donnees/enregistrement/parametre_k.sicp", "r");break;
-		case 18 :
-			fichier = fopen("./donnees/enregistrement/parametre_l.sicp", "r");break;
-		case 19 :
-			fichier = fopen("./donnees/enregistrement/parametre_m.sicp", "r");break;
-		case 20 :
-			fichier = fopen("./donnees/enregistrement/parametre_w.sicp", "r");break;
-		case 21 :
-			fichier = fopen("./donnees/enregistrement/parametre_x.sicp", "r");break;
-		case 22 :
-			fichier = fopen("./donnees/enregistrement/parametre_c.sicp", "r");break;
-		case 23 :
-			fichier = fopen("./donnees/enregistrement/parametre_v.sicp", "r");break;
-		case 24 :
-			fichier = fopen("./donnees/enregistrement/parametre_b.sicp", "r");break;
-		case 25 :
-			fichier = fopen("./donnees/enregistrement/parametre_n.sicp", "r");break;
-		default:
-			;
-		}
-	//fichier = fopen("fluxon.sicp", "r");  /* read */
+	char chemin[120] = "./donnees/enregistrement/parametre_";
+
+	char * extension = ".sicp";
+
+	strncat(chemin, nom, 20);
+
+	strncat(chemin, extension, 40);
+
+	fichier = fopen(chemin, "r");
+
 	if(fichier == NULL)
 		{
-		printf("Erreur d'ouverture du fichier de réinitialisation\n");
+		printf("Erreur d'ouverture du fichier d'enregistrement\n");
 		printf("	Vérifier le répertoire donnees/enregistrement\n");
 		}
 	else
@@ -345,150 +259,62 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, int numero)
 	return 0;
 	}
 
-int fichierEcriturePosition(systemeT * systeme, int numero)
+int fichierEcriturePosition(systemeT * systeme, char * nom)
 	{
 	FILE *fichier; /* pointeur sur FILE */
 
-	switch (numero)
-		{
-		case 0 :
-			fichier = fopen("./donnees/enregistrement/position_a.sicp", "w");break;
-		case 1 :
-			fichier = fopen("./donnees/enregistrement/position_z.sicp", "w");break;
-		case 2 :
-			fichier = fopen("./donnees/enregistrement/position_e.sicp", "w");break;
-		case 3 :
-			fichier = fopen("./donnees/enregistrement/position_r.sicp", "w");break;
-		case 4 :
-			fichier = fopen("./donnees/enregistrement/position_t.sicp", "w");break;
-		case 5 :
-			fichier = fopen("./donnees/enregistrement/position_y.sicp", "w");break;
-		case 6 :
-			fichier = fopen("./donnees/enregistrement/position_u.sicp", "w");break;
-		case 7 :
-			fichier = fopen("./donnees/enregistrement/position_i.sicp", "w");break;
-		case 8 :
-			fichier = fopen("./donnees/enregistrement/position_o.sicp", "w");break;
-		case 9 :
-			fichier = fopen("./donnees/enregistrement/position_p.sicp", "w");break;
-		case 10 :
-			fichier = fopen("./donnees/enregistrement/position_q.sicp", "w");break;
-		case 11 :
-			fichier = fopen("./donnees/enregistrement/position_s.sicp", "w");break;
-		case 12 :
-			fichier = fopen("./donnees/enregistrement/position_d.sicp", "w");break;
-		case 13 :
-			fichier = fopen("./donnees/enregistrement/position_f.sicp", "w");break;
-		case 14 :
-			fichier = fopen("./donnees/enregistrement/position_g.sicp", "w");break;
-		case 15 :
-			fichier = fopen("./donnees/enregistrement/position_h.sicp", "w");break;
-		case 16 :
-			fichier = fopen("./donnees/enregistrement/position_j.sicp", "w");break;
-		case 17 :
-			fichier = fopen("./donnees/enregistrement/position_k.sicp", "w");break;
-		case 18 :
-			fichier = fopen("./donnees/enregistrement/position_l.sicp", "w");break;
-		case 19 :
-			fichier = fopen("./donnees/enregistrement/position_m.sicp", "w");break;
-		case 20 :
-			fichier = fopen("./donnees/enregistrement/position_w.sicp", "w");break;
-		case 21 :
-			fichier = fopen("./donnees/enregistrement/position_x.sicp", "w");break;
-		case 22 :
-			fichier = fopen("./donnees/enregistrement/position_c.sicp", "w");break;
-		case 23 :
-			fichier = fopen("./donnees/enregistrement/position_v.sicp", "w");break;
-		case 24 :
-			fichier = fopen("./donnees/enregistrement/position_b.sicp", "w");break;
-		case 25 :
-			fichier = fopen("./donnees/enregistrement/position_n.sicp", "w");break;
-		default:
-			;
-		}
-	//fichier = fopen("fluxon.sicp", "w");  /* write */
+	char chemin[120] = "./donnees/enregistrement/position_";
 
-	chaineT *iter=(*systeme).premier;
-	double ancien, actuel;
-	do
-		{
-		ancien = iter->pendule.ancien;
-		actuel = iter->pendule.nouveau;
-		fprintf(fichier, "%f %f\n", ancien, actuel);
-		iter=iter->suivant;
-		}
-	while(iter != (*systeme).premier);
+	char * extension = ".sicp";
 
-	fclose(fichier);
+	strncat(chemin, nom, 20);
+
+	strncat(chemin, extension, 40);
+
+	fichier = fopen(chemin, "w");
+
+	if(fichier == NULL)
+		{
+		printf("Erreur d'ouverture du fichier d'enregistrement\n");
+		printf("	Vérifier le répertoire donnees/enregistrement\n");
+		}
+	else
+	   	{
+	    chaineT *iter=(*systeme).premier;
+	    double ancien, actuel;
+
+	    do
+	    	{
+	    	ancien = iter->pendule.ancien;
+	    	actuel = iter->pendule.nouveau;
+	    	fprintf(fichier, "%f %f\n", ancien, actuel);
+	    	iter=iter->suivant;
+	    	}
+	    while(iter != (*systeme).premier);
+
+    	fclose(fichier);
+		}
 
 	return 0;
 	}
 
-int fichierLecturePosition(systemeT * systeme, int numero)
+int fichierLecturePosition(systemeT * systeme, char * nom)
 	{
 	FILE *fichier; /* pointeur sur FILE */
 
-	switch (numero)
-		{
-		case 0 :
-			fichier = fopen("./donnees/enregistrement/position_a.sicp", "r");break;
-		case 1 :
-			fichier = fopen("./donnees/enregistrement/position_z.sicp", "r");break;
-		case 2 :
-			fichier = fopen("./donnees/enregistrement/position_e.sicp", "r");break;
-		case 3 :
-			fichier = fopen("./donnees/enregistrement/position_r.sicp", "r");break;
-		case 4 :
-			fichier = fopen("./donnees/enregistrement/position_t.sicp", "r");break;
-		case 5 :
-			fichier = fopen("./donnees/enregistrement/position_y.sicp", "r");break;
-		case 6 :
-			fichier = fopen("./donnees/enregistrement/position_u.sicp", "r");break;
-		case 7 :
-			fichier = fopen("./donnees/enregistrement/position_i.sicp", "r");break;
-		case 8 :
-			fichier = fopen("./donnees/enregistrement/position_o.sicp", "r");break;
-		case 9 :
-			fichier = fopen("./donnees/enregistrement/position_p.sicp", "r");break;
-		case 10 :
-			fichier = fopen("./donnees/enregistrement/position_q.sicp", "r");break;
-		case 11 :
-			fichier = fopen("./donnees/enregistrement/position_s.sicp", "r");break;
-		case 12 :
-			fichier = fopen("./donnees/enregistrement/position_d.sicp", "r");break;
-		case 13 :
-			fichier = fopen("./donnees/enregistrement/position_f.sicp", "r");break;
-		case 14 :
-			fichier = fopen("./donnees/enregistrement/position_g.sicp", "r");break;
-		case 15 :
-			fichier = fopen("./donnees/enregistrement/position_h.sicp", "r");break;
-		case 16 :
-			fichier = fopen("./donnees/enregistrement/position_j.sicp", "r");break;
-		case 17 :
-			fichier = fopen("./donnees/enregistrement/position_k.sicp", "r");break;
-		case 18 :
-			fichier = fopen("./donnees/enregistrement/position_l.sicp", "r");break;
-		case 19 :
-			fichier = fopen("./donnees/enregistrement/position_m.sicp", "r");break;
-		case 20 :
-			fichier = fopen("./donnees/enregistrement/position_w.sicp", "r");break;
-		case 21 :
-			fichier = fopen("./donnees/enregistrement/position_x.sicp", "r");break;
-		case 22 :
-			fichier = fopen("./donnees/enregistrement/position_c.sicp", "r");break;
-		case 23 :
-			fichier = fopen("./donnees/enregistrement/position_v.sicp", "r");break;
-		case 24 :
-			fichier = fopen("./donnees/enregistrement/position_b.sicp", "r");break;
-		case 25 :
-			fichier = fopen("./donnees/enregistrement/position_n.sicp", "r");break;
-		default:
-			;
-		}
+	char chemin[120] = "./donnees/enregistrement/position_";
+
+	char * extension = ".sicp";
+
+	strncat(chemin, nom, 20);
+
+	strncat(chemin, extension, 40);
+
+	fichier = fopen(chemin, "r");
 
 	if(fichier == NULL)
 		{
-		printf("Erreur d'ouverture du fichier de réinitialisation\n");
+		printf("Erreur d'ouverture du fichier d'enregistrement\n");
 		printf("	Vérifier le répertoire donnees/enregistrement\n");
 		}
 	else

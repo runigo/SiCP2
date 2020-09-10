@@ -1,7 +1,7 @@
 /*
-Copyright juillet 2018, Stephan Runigo
+Copyright septembre 2020, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.2 simulateur de chaîne de pendules
+SiCP 2.4.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -110,8 +110,8 @@ termes.
 
 #define ABSORPTION 2.1 // Facteur de l'extrémité absorbante
 #define NOMBRE_MIN 2 // Nombre minimal de pendules
-#define NOMBRE 199 // Nombre implicite de pendules
-#define NOMBRE_MAX 399 // Nombre maximal de pendules
+#define NOMBRE 150 // Nombre implicite de pendules
+#define NOMBRE_MAX 401 // Nombre maximal de pendules
 
 //#define SOLITON_MAX 19 // Nombre maximal de soliton
 #define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal

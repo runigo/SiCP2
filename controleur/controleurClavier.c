@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2019, Stephan Runigo
+Copyright septembre 2020, Stephan Runigo
 runigo@free.fr
-SiCP 2.4 simulateur de chaîne de pendules
+SiCP 2.4.4 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -30,12 +30,12 @@ termes.
 */
 
 #include "controleurClavier.h"
-
+/*
 int controleurClavier(controleurT * controleur);
 int controleurClavierMaj(controleurT * controleur);
 int controleurClavierCtrl(controleurT * controleur);
 int controleurClavierCtrlMaj(controleurT * controleur);
-
+*/
 int controleurClavier(controleurT * controleur)
 	{
 	switch ((*controleur).interface.evenement.key.keysym.sym)
@@ -45,6 +45,8 @@ int controleurClavier(controleurT * controleur)
 			controleurChangeMode(controleur);break;
 		case SDLK_BACKSPACE:
 			controleurChangeMode(controleur);break;
+		case SDLK_SPACE:
+			controleurEvolutionSysteme(controleur);break;
 
 	// Vitesse de la simulation
 		case SDLK_KP_PLUS:
@@ -154,7 +156,7 @@ int controleurClavier(controleurT * controleur)
   // Afficher les observables
 
 		case SDLK_F4: // Corde asymétrique
-			controleurAfficheSouris(controleur);
+			controleurSourisAffiche(controleur);
 			break;
 		case SDLK_F5:
 			observablesAfficheEnergie(&(*controleur).systeme);

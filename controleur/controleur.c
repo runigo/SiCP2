@@ -42,7 +42,7 @@ termes.
 int controleurEvolution(controleurT * controleur);
 
 int controleurProjection(controleurT * controleur);
-int controleurEvolutionSysteme(controleurT * controleur);
+//int controleurEvolutionSysteme(controleurT * controleur);
 int controleurConstructionGraphique(controleurT * controleur);
 
 int controleurTraiteEvenement(controleurT * controleur);

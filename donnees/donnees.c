@@ -41,7 +41,31 @@ termes.
 
 int donneesSysteme(systemeT * systeme, optionsT * options);
 int donneesGraphe(grapheT * graphe, optionsT * options);
-int donneesOptionsSysteme(optionsT * options);
+
+int donneesOptions(optionsT * options)
+	{
+		// Préréglage des valeurs optionnelles
+
+	(*options).modeDemo = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+	(*options).modeClavier = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+	(*options).modeMenu = 0;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
+
+	(*options).modePause = 1;		// avec ou sans attente
+	(*options).duree = DUREE;		// 100 : temps réèl.
+
+	(*options).fond=240;		// couleur du fond de l'affichage
+	(*options).support=-1;		// Graphisme du support de la chaîne
+
+
+	(*options).dt=DT;		// discrétisation du temps
+							    // dt*duree = 0.004
+	(*options).soliton=0;
+	(*options).nombre=NOMBRE;		// Nombre implicite de pendule
+	(*options).equation=1;		// 1 : pendule, 2 : linéarisation,
+							//	 3 : corde, 4 : dioptre
+
+	return 0;
+	}
 
 int donneesControleur(controleurT * controleur)
 	{
@@ -55,6 +79,7 @@ int donneesControleur(controleurT * controleur)
 
 		fprintf(stderr, " Création du système\n");
 	systemeCreation(&(*controleur).systeme);
+
 	changeFormeDissipation(&(*controleur).systeme, 1);
 	changeFormeDissipation(&(*controleur).systeme, 0);
 	changeConditionsLimites(&(*controleur).systeme, (*controleur).systeme.libreFixe);
@@ -97,39 +122,6 @@ int donneesControleur(controleurT * controleur)
 	return 0;
 	}
 
-int donneesOptions(optionsT * options)
-	{
-		// Préréglage des valeurs optionnelles
-
-	(*options).modeDemo = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-	(*options).modeClavier = 1;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-	(*options).modeMenu = 0;		// 0 : SiCP, 1 Graphique démo, 2 Commande démo
-
-	(*options).modePause = 1;		// avec ou sans attente
-	(*options).duree = DUREE;		// 100 : temps réèl.
-	(*options).fond=240;		// couleur du fond de l'affichage
-
-    donneesOptionsSysteme(options);
-
-	return 0;
-	}
-
-int donneesOptionsSysteme(optionsT * options)
-	{
-		// Préréglage des valeurs optionnelles
-
-			// OPTIONS SiCP
-	(*options).dt=DT;		// discrétisation du temps
-							    // dt*duree = 0.004
-	(*options).soliton=0;
-	(*options).support=-1;		// Support de la chaîne
-	(*options).nombre=NOMBRE;		// Nombre implicite de pendule
-	(*options).equation=1;		// 1 : pendule, 2 : linéarisation,
-							//	 3 : corde, 4 : dioptre
-
-	return 0;
-	}
-
 int donneesSysteme(systemeT * systeme, optionsT * options)
 	{
 
@@ -139,20 +131,20 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 	(*systeme).moteurs.chrono = 0.0;
 
-	(*systeme).moteurs.courantJosephson=3.0;	// Courant Josephson
-	(*systeme).moteurs.etatJosephson=0;			//	-1, 0, 1
+	(*systeme).moteurs.etatJosephson = 0;			//	-1, 0, 1
+	(*systeme).moteurs.courantJosephson = sqrt(JOSEPHSON_MAX*JOSEPHSON_MIN);
 
-	(*systeme).moteurs.generateur = 0;	// éteint, sinus, carre, impulsion
-	(*systeme).moteurs.amplitude=0.3;		// Amplitude du générateur de signaux
-	(*systeme).moteurs.frequence=1.0;	// Fréquence du générateur de signaux
-	(*systeme).moteurs.phi=0;
+	(*systeme).moteurs.generateur = 0;
+	(*systeme).moteurs.phi = 0;
+	(*systeme).moteurs.amplitude = sqrt(AMPLITUDE_MAX * AMPLITUDE_MIN);
+	(*systeme).moteurs.frequence = sqrt(FREQUENCE_MAX * FREQUENCE_MIN);	// Fréquence du générateur de signaux
 
 	(*systeme).moteurs.deltaDephasage = 0;
-	(*systeme).moteurs.fluxon=0;
-	(*systeme).moteurs.dephasage=0;
+	(*systeme).moteurs.fluxon = 0;
+	(*systeme).moteurs.dephasage = 0;
+
 		// Caractéristique de la chaîne
 
-	(*systeme).libreFixe = 1;	// 0 periodique, 1 libre, 2 fixe
 	(*systeme).nombre = (*options).nombre;		// nombre de pendule
 	(*systeme).equation = (*options).equation;	// 1 : pendule pesant, 2 : linéarisation
 												// 3 : corde, 4 : dioptre
@@ -160,22 +152,19 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 		// Paramètres physiques
 
 	(*systeme).gravitation = 9.81; // 4*PI*PI
+
 	(*systeme).masse = 1.0;
-	(*systeme).longueur = 1.0;// 9.81/4/PI/PI = 25 cm => période = 1 s. Met en évidence une erreur dans le calcul de l'énergie de couplage.
-	(*systeme).dissipation = 0.17;
+
+	(*systeme).longueur = 1.0;  // 9.81/4/PI/PI = 25 cm => période = 1 s.
+                                // Met en évidence une erreur dans le calcul de l'énergie de couplage.
+
+	(*systeme).dissipation = sqrt(DISSIPATION_MAX * DISSIPATION_MIN);
 	(*systeme).modeDissipation = 0;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
-	(*systeme).couplage = 11.1 * (*systeme).nombre;
+
+	(*systeme).couplage = sqrt(COUPLAGE_MAX * COUPLAGE_MIN) * (*systeme).nombre;
+	(*systeme).libreFixe = 1;	// 0 periodique, 1 libre, 2 fixe
 	(*systeme).dephasage = (*options).soliton * 2 * PI;
 
-/*
-	if((*systeme).equation == 3 || (*systeme).equation == 4)
-		{		 // donneeCorde;
-		(*systeme).couplage = (*systeme).couplage * 10.0;
-		(*systeme).gravitation = 0.0;
-		(*systeme).libreFixe = 2;
-		(*systeme).moteurs.josephson=0.0;
-		}
-*/
 	return 0;
 	}
 

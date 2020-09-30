@@ -41,6 +41,6 @@ int controleurSourisMouvement(controleurT * controleur);
 
 int controleurSourisDefile(controleurT * controleur);
 
-int controleurAfficheSouris(controleurT * controleur);
+int controleurSourisAffiche(controleurT * controleur);
 
 #endif

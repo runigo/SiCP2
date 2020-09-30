@@ -71,6 +71,7 @@ typedef struct ControleurT controleurT;
 		};
 
 int controleurSimulationGraphique(controleurT * control);
+int controleurEvolutionSysteme(controleurT * controleur);
 
 int controleurDestruction(controleurT * control);
 

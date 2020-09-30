@@ -334,7 +334,7 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 	return 0;
 	}
 
-int controleurAfficheSouris(controleurT * controleur)
+int controleurSourisAffiche(controleurT * controleur)
 	{
 	fprintf(stderr, "(*controleur).graphique.fenetreY = %d\n", (*controleur).graphique.fenetreY);
 	fprintf(stderr, "(*controleur).commandes.sourisY = %d\n", (*controleur).commandes.sourisY);

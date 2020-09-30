@@ -156,7 +156,7 @@ int fichierLectureParametre(systemeT * systeme, grapheT * graphe, char * nom)
 	FILE *fichier; /* pointeur sur FILE */
 	float reel = 0;
 	int entier = 0;
-	(void)graphe;
+	//(void)graphe;
 
 	char chemin[120] = "./donnees/enregistrement/parametre_";
 

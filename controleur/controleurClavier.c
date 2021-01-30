@@ -141,7 +141,6 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_l:
 			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 2);break;
 
-
 	// Choix de la simulation
 /*
 		case SDLK_F1: // Pendules
@@ -154,6 +153,8 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_F1:
 			projectionAffiche(&(*controleur).projection);break;
   // Afficher les observables
+		case SDLK_F2: // Harmoniques
+			observablesAffiche(&(*controleur).observables);break;
 
 		case SDLK_F4: // Corde asymétrique
 			controleurSourisAffiche(controleur);

@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -33,8 +33,10 @@ termes.
 #define _PROJECTION_
 
 #include "../modele/systeme.h"
+#include "../modele/observables.h"
 #include "../interface/graphe.h"
 #include "../interface/commandes.h"
+#include "../interface/capteurs.h"
 
 typedef struct ProjectionT projectionT;
 	struct ProjectionT
@@ -77,6 +79,7 @@ int projectionInitialise(projectionT * projection);
 int projectionChangeFenetre(projectionT * projection, int x, int y);
 
 int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe);
+int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs);
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
 
 void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);

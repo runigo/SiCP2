@@ -1,9 +1,10 @@
 /*
-Copyright fevrier 2021, Stephan Runigo
+Copyright avril 2019, Stephan Runigo
 runigo@free.fr
-SiCP 2.5 simulateur de chaîne de pendules
+SiCF 2.0  simulateur de corde vibrante et spectre
 Ce logiciel est un programme informatique servant à simuler l'équation
-d'une chaîne de pendules et à en donner une représentation graphique.
+d'une corde vibrante, à calculer sa transformée de fourier, et à donner
+une représentation graphique de ces fonctions.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
@@ -29,65 +30,34 @@ pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
 */
 
-#ifndef _GRAPHIQUE_
-#define _GRAPHIQUE_
+#ifndef _CAPTEURS_
+#define _CAPTEURS_
 
-#include "graphe.h"
-#include "commandes.h"
-#include "interface.h"
-#include "capteurs.h"
+#include "../donnees/constantes.h"
+#include <SDL2/SDL.h>
 
+typedef struct CapteurT capteurT;
+	struct CapteurT
+		{
+		SDL_Point gauche[DUREE_CAPTEURS];
+		SDL_Point droite[DUREE_CAPTEURS];
+		SDL_Point somme[DUREE_CAPTEURS];
 
-struct GraphiqueT {
+		int yZero; // Positon de l'origine
+		int xZero; // Positon de l'origine
 
-	SDL_Renderer *rendu;
+		int largeur; // axe x
+		int hauteur; // axe y
+		};
 
-	SDL_Color fond;
-	SDL_Color contraste;
+typedef struct CapteursT capteursT;
+	struct CapteursT
+		{
+		capteurT capteur[CAPTEURS];
+		};
 
-	SDL_Color jaune;
+int capteursInitialise(capteursT * capteurs);
 
-	SDL_Color orange;
-	SDL_Color orangeF;
-
-	SDL_Color vert;
-	SDL_Color vertF;
-
-	SDL_Color gris;
-	SDL_Color grisF;
-
-	SDL_Color cyan;
-	SDL_Color aubergine;
-
-	SDL_Color gauche;
-	SDL_Color droite;
-
-	SDL_Texture *masse;
-	SDL_Texture *lumiereVerte;
-	SDL_Texture *lumiereRouge;
-	SDL_Texture *lumiereOrange;
-	SDL_Texture *lumiereJaune;
-	SDL_Texture *SiCP;
-	int taille;
-
-	//int largeur;
-	//int hauteur;
-		int fenetreX;	// hauteur de la fenêtre
-		int fenetreY;	// largeur de la fenêtre
-};
-typedef struct GraphiqueT graphiqueT;
-
-int graphiqueDestruction(graphiqueT * graphique);
-int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int taille, int fond);
-
-int graphiqueNettoyage(graphiqueT * graphique);
-int graphiqueMiseAJour(graphiqueT * graphique);
-
-int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes);
-int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs);
-void graphiquePenduleSupportPlein(graphiqueT * graphique, grapheT * graphe);
-void graphiquePenduleSupport(graphiqueT * graphique, grapheT * graphe);
-void graphiquePendule(graphiqueT * graphique, grapheT * graphe);
+int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur);
 
 #endif
-/////////////////////////////////////////////////////////////////

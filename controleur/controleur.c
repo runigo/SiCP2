@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2020, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.4.4 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -151,6 +151,7 @@ int controleurProjection(controleurT * controleur)
 		(*controleur).graphique.fenetreY=y;
 		projectionChangeFenetre(&(*controleur).projection, x, y);
 		commandesInitialiseBoutons(&(*controleur).commandes, x, y);
+		capteursMiseAJourLongueur(&(*controleur).capteurs, x, y);
 		}
 
 		// Réinitialisation des commandes de la souris
@@ -159,6 +160,9 @@ int controleurProjection(controleurT * controleur)
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
 
 	projectionSystemeChaineDePendule(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
+
+	projectionObservablesCapteurs(&(*controleur).observables, &(*controleur).projection, &(*controleur).capteurs);
+
 	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).options.duree, (*controleur).options.modePause);
 
 	return (*controleur).sortie;
@@ -168,6 +172,9 @@ int controleurEvolutionSysteme(controleurT * controleur)
 	{
 		//fprintf(stderr, "Evolution temporelle du système\n");
 	systemeEvolution(&(*controleur).systeme, (*controleur).options.duree);
+
+		//fprintf(stderr, "Mise à jour des observables\n");
+	observablesMiseAJour(&(*controleur).observables, &(*controleur).systeme);
 
 	return 0;
 	}
@@ -180,6 +187,9 @@ int controleurConstructionGraphique(controleurT * controleur)
 
 		//fprintf(stderr, "Dessin des Commandes\n");
 	graphiqueCommandes(&(*controleur).graphique, &(*controleur).commandes);
+
+		//fprintf(stderr, "Dessin des capteurs\n");
+	graphiqueCapteurs(&(*controleur).graphique, &(*controleur).capteurs);
 
 		//fprintf(stderr, "Dessin des graphes\n");
 	if((*controleur).graphe.support==0)

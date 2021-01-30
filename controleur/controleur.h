@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2020, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.4.4 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -48,11 +48,15 @@ typedef struct ControleurT controleurT;
 
 		systemeT systeme;	//	Modélisation physique de la chaîne
 
+		observablesT observables;	//	Capteurs sur le système
+
 		projectionT projection;	//	Paramètre de la projection
 
 		grapheT graphe;		//	Graphe de la chaîne
 
 		commandesT commandes;	//	Graphe des commandes
+
+		capteursT capteurs;		//	Graphe des capteurs
 
 		interfaceT interface;	//	Fenêtre SDL
 

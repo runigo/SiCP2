@@ -1,7 +1,7 @@
 /*
-Copyright juillet 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.2 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -255,6 +255,59 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		{
 		(*commandes).triangleEtat[7]=2;
 		}
+	return 0;
+	}
+
+int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs)
+	{
+	(void)projection;
+	float a;
+	int i, k, y0;
+						// 0 : Energie, 1 : Cinetique, 2 : Couplage, 3 : Rappel
+						//		0, 1, 2 : Somme, 3, 4, 5 : droite/gauche
+		//	SOMME
+	if((*observables).observable[0].maximumSomme!=0.0)
+		{
+		a = -(float)((*capteurs).capteur[0].hauteur) / (*observables).observable[0].maximumSomme;
+		}
+	else
+		{
+	//fprintf(stderr, "(*observables).observable[0].maximumSomme==0.0\n");
+		a = 0.0;
+		}
+	y0 = (*capteurs).capteur[0].yZero;
+	for(i=0;i<DUREE_CAPTEURS;i++)
+		{
+		k=(i+(*observables).index+1)%DUREE_CAPTEURS;
+		(*capteurs).capteur[0].somme[i].y = (int)(a*(*observables).observable[3].somme[k]) + y0;
+		(*capteurs).capteur[1].somme[i].y = (int)(a*(*observables).observable[1].somme[k]) + y0;
+		(*capteurs).capteur[2].somme[i].y = (int)(a*(*observables).observable[2].somme[k]) + y0;
+		//(*capteurs).capteur[3].somme[i].y = (int)(a*(*observables).observable[3].somme[k]) + y0;
+		}
+
+
+		//	GAUCHE DROITE
+	if((*observables).observable[0].maximumCapteur!=0.0)
+		{
+		a = -(float)((*capteurs).capteur[3].hauteur) / (*observables).observable[0].maximumCapteur;
+		}
+	else
+		{
+	//fprintf(stderr, "(*observables).observable[0].maximumSomme==0.0\n");
+		a = 0.0;
+		}
+	y0 = (*capteurs).capteur[3].yZero;
+	for(i=0;i<DUREE_CAPTEURS;i++)
+		{
+		k=(i+(*observables).index+1)%DUREE_CAPTEURS;
+		(*capteurs).capteur[3].gauche[i].y = (int)(a*(*observables).observable[0].gauche[k]) + y0;
+		(*capteurs).capteur[3].droite[i].y = (int)(a*(*observables).observable[0].droite[k]) + y0;
+		(*capteurs).capteur[4].gauche[i].y = (int)(a*(*observables).observable[1].gauche[k]) + y0;
+		(*capteurs).capteur[4].droite[i].y = (int)(a*(*observables).observable[1].droite[k]) + y0;
+		(*capteurs).capteur[5].gauche[i].y = (int)(a*(*observables).observable[2].gauche[k]) + y0;
+		(*capteurs).capteur[5].droite[i].y = (int)(a*(*observables).observable[2].droite[k]) + y0;
+		}
+
 	return 0;
 	}
 

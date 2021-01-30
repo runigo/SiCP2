@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.3 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -74,34 +74,36 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 		}
 
 	//SDL_Color orange = {255, 127, 40, 255};
-	(*graphique).fond.r = fond;
-	(*graphique).fond.g = fond;
-	(*graphique).fond.b = fond;
-	(*graphique).fond.a = 255;
-	(*graphique).contraste.r = 255-fond;
-	(*graphique).contraste.g = 255-fond;
-	(*graphique).contraste.b = 255-fond;
-	(*graphique).contraste.a = 255;
-	(*graphique).orange.r = 255;
-	(*graphique).orange.g = 127;
-	(*graphique).orange.b = 40;
-	(*graphique).orange.a = 255;
-	(*graphique).jaune.r = 255;
-	(*graphique).jaune.g = 255;
-	(*graphique).jaune.b = 0;
-	(*graphique).jaune.a = 255;
-	(*graphique).gris.r = 127;
-	(*graphique).gris.g = 127;
-	(*graphique).gris.b = 127;
-	(*graphique).gris.a = 255;
-	(*graphique).cyan.r = 127;
-	(*graphique).cyan.g = 40;
-	(*graphique).cyan.b = 255;
-	(*graphique).cyan.a = 255;
-	(*graphique).vert.r = 173;
-	(*graphique).vert.g = 255;
-	(*graphique).vert.b = 47;
-	(*graphique).vert.a = 255;
+	(*graphique).fond.r = fond; (*graphique).fond.g = fond; (*graphique).fond.b = fond; (*graphique).fond.a = 255;
+	(*graphique).contraste.r = 255-fond; (*graphique).contraste.g = 255-fond; (*graphique).contraste.b = 255-fond; (*graphique).contraste.a = 255;
+	(*graphique).jaune.r = 255; (*graphique).jaune.g = 255; (*graphique).jaune.b = 0; (*graphique).jaune.a = 255;
+
+	(*graphique).orange.r = 255; (*graphique).orange.g = 127; (*graphique).orange.b = 40; (*graphique).orange.a = 255;
+	(*graphique).orangeF.r = 198; (*graphique).orangeF.g = 8; (*graphique).orangeF.b = 0; (*graphique).orangeF.a = 255;
+
+	(*graphique).gris.r = 127; (*graphique).gris.g = 127; (*graphique).gris.b = 127; (*graphique).gris.a = 255;
+	(*graphique).grisF.r = 27; (*graphique).grisF.g = 27; (*graphique).grisF.b = 27; (*graphique).grisF.a = 255;
+
+	(*graphique).cyan.r = 127; (*graphique).cyan.g = 40; (*graphique).cyan.b = 255; (*graphique).cyan.a = 255;
+
+	(*graphique).vert.r = 173; (*graphique).vert.g = 255; (*graphique).vert.b = 47; (*graphique).vert.a = 255;
+	(*graphique).vertF.r = 0; (*graphique).vertF.g = 86; (*graphique).vertF.b = 27; (*graphique).vertF.a = 255;
+	//(*graphique).vertF.r = 27; (*graphique).vertF.g = 79; (*graphique).vertF.b = 8;
+
+	(*graphique).aubergine.r = 55; (*graphique).aubergine.g = 0; (*graphique).aubergine.b = 40; (*graphique).aubergine.a = 255;
+
+		//(253, 63, 146) Fuschia
+		//(255, 0, 255) Magenta
+	(*graphique).gauche.r = 253;
+	(*graphique).gauche.g = 63;
+	(*graphique).gauche.b = 146;
+	(*graphique).gauche.a = 255;
+
+		//(52, 201, 36) Pomme
+	(*graphique).droite.r = 52;
+	(*graphique).droite.g = 201;
+	(*graphique).droite.b = 36;
+	(*graphique).droite.a = 255;
 
 	//SDL_Texture *masse;
 
@@ -291,6 +293,65 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 
 	return 0;
 	}
+
+int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
+	{
+	int i, j;
+
+		// Energie
+	graphiqueChangeCouleur(graphique, (*graphique).grisF);
+
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].somme, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].droite, DUREE_CAPTEURS);
+
+
+		// Cinetique
+	graphiqueChangeCouleur(graphique, (*graphique).vertF);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].somme, DUREE_CAPTEURS);
+
+		// Couplage
+	graphiqueChangeCouleur(graphique, (*graphique).orangeF);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].somme, DUREE_CAPTEURS);
+
+		// Rappel
+	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].somme, DUREE_CAPTEURS);
+
+						// 0 : Energie, 1 : Cinetique, 2 : Couplage, 3 : Rappel
+
+						//		0, 1, 2 : Somme, 3, 4, 5 : droite/gauche
+		// Epaississement du trait
+	for(j=0;j<CAPTEURS;j++)
+		{
+		for(i=0;i<DUREE_CAPTEURS;i++)
+			{
+			(*capteurs).capteur[j].droite[i].y = (*capteurs).capteur[j].droite[i].y + 1;
+			}
+		}
+		// Energie
+	graphiqueChangeCouleur(graphique, (*graphique).grisF);
+
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].somme, DUREE_CAPTEURS);
+	//SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].gauche, DUREE_CAPTEURS);
+	//SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].droite, DUREE_CAPTEURS);
+/*
+	graphiqueChangeCouleur(graphique, (*graphique).gauche);
+	for(j=0;j<CAPTEURS;j++)
+		{
+		for(i=0;i<DUREE_CAPTEURS;i++)
+			{
+			(*capteurs).capteur[j].gauche[i].y = (*capteurs).capteur[j].gauche[i].y + 1;
+			}
+		}
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].gauche, DUREE_CAPTEURS);
+*/
+
+	return 0;
+	}
+
 
 int graphiqueMiseAJour(graphiqueT * graphique)
 	{

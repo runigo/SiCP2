@@ -42,11 +42,14 @@ int controleurClavier(controleurT * controleur)
 		{
 	// Mode : évolution du système en pause
 		case SDLK_RETURN:
-			controleurChangeMode(controleur);break;
+			controleurEvolutionSysteme(controleur);break;
 		case SDLK_BACKSPACE:
 			controleurChangeMode(controleur);break;
 		case SDLK_SPACE:
-			controleurEvolutionSysteme(controleur);break;
+			controleurChangeMode(controleur);break;
+		case SDLK_ESCAPE:
+			controleurSourisAffiche(controleur);break;
+			;
 
 	// Vitesse de la simulation
 		case SDLK_KP_PLUS:

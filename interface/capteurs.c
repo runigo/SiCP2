@@ -60,15 +60,15 @@ int capteursInitialise(capteursT * capteurs)
 
 int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	{
-	float xSomme =0.087368*largeur;
-	float ySomme =0.957849*hauteur;
-	float xGaucheDroite =0.455789*largeur;
-	float yGaucheDroite =0.953*hauteur;
+	float xSomme =0.089*largeur;
+	float ySomme =0.827*hauteur;
+	float xGaucheDroite =0.456*largeur;
+	float yGaucheDroite =0.827*hauteur;
 
 	// Position de l'origine
 
 	(*capteurs).capteur[0].xZero=(int)(xSomme); // 	x
-	(*capteurs).capteur[0].yZero=(int)(ySomme); // Energie
+	(*capteurs).capteur[0].yZero=(int)(ySomme); // Gravitation
 
 	(*capteurs).capteur[1].xZero=(int)(xSomme); // x
 	(*capteurs).capteur[1].yZero=(int)(ySomme); // Cinetique
@@ -77,7 +77,7 @@ int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	(*capteurs).capteur[2].yZero=(int)(ySomme); // Couplage
 
 	(*capteurs).capteur[3].xZero=(int)(xGaucheDroite); // 	x
-	(*capteurs).capteur[3].yZero=(int)(yGaucheDroite); // Energie
+	(*capteurs).capteur[3].yZero=(int)(yGaucheDroite); // Énergie
 
 	(*capteurs).capteur[4].xZero=(int)(xGaucheDroite); // x
 	(*capteurs).capteur[4].yZero=(int)(yGaucheDroite); // Cinetique

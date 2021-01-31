@@ -287,9 +287,9 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 
 
 		//	GAUCHE DROITE
-	if((*observables).observable[0].maximumCapteur!=0.0)
+	if((*observables).observable[0].maximumSomme!=0.0)
 		{
-		a = -(float)((*capteurs).capteur[3].hauteur) / (*observables).observable[0].maximumCapteur;
+		a = -(float)((*capteurs).capteur[3].hauteur) / (*observables).observable[0].maximumSomme;
 		}
 	else
 		{
@@ -302,10 +302,11 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		k=(i+(*observables).index+1)%DUREE_CAPTEURS;
 		(*capteurs).capteur[3].gauche[i].y = (int)(a*(*observables).observable[0].gauche[k]) + y0;
 		(*capteurs).capteur[3].droite[i].y = (int)(a*(*observables).observable[0].droite[k]) + y0;
-		(*capteurs).capteur[4].gauche[i].y = (int)(a*(*observables).observable[1].gauche[k]) + y0;
-		(*capteurs).capteur[4].droite[i].y = (int)(a*(*observables).observable[1].droite[k]) + y0;
-		(*capteurs).capteur[5].gauche[i].y = (int)(a*(*observables).observable[2].gauche[k]) + y0;
-		(*capteurs).capteur[5].droite[i].y = (int)(a*(*observables).observable[2].droite[k]) + y0;
+		(*capteurs).capteur[3].somme[i].y = (int)(a*(*observables).observable[0].somme[k]) + y0;
+		//(*capteurs).capteur[4].gauche[i].y = (int)(a*(*observables).observable[1].gauche[k]) + y0;
+		//(*capteurs).capteur[4].droite[i].y = (int)(a*(*observables).observable[1].droite[k]) + y0;
+		//(*capteurs).capteur[5].gauche[i].y = (int)(a*(*observables).observable[2].gauche[k]) + y0;
+		//(*capteurs).capteur[5].droite[i].y = (int)(a*(*observables).observable[2].droite[k]) + y0;
 		}
 
 	return 0;

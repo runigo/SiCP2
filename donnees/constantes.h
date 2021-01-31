@@ -56,8 +56,8 @@ termes.
 
 	//	PARAMÈTRES GRAPHIQUES
 
-#define FENETRE_X 892 // Largeur de la fenêtre
-#define FENETRE_Y 550 // Hauteur de la fenêtre
+#define FENETRE_X 868 // Largeur de la fenêtre
+#define FENETRE_Y 626 // Hauteur de la fenêtre
 
 #define RATIO_CHAINE_FENETRE_X 0.000317 // Vecteur Psi et Phi
 //#define RATIO_CHAINE_FENETRE_Y 0.000677 // Vecteur Psi et Phi
@@ -91,7 +91,8 @@ termes.
 //#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
 //#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
 #define RATIO_C_X 0.399 // Ratio Centrage X Avec Menu
-#define RATIO_C_Y 0.351 // Ratio Centrage Y Avec Menu
+//#define RATIO_C_Y 0.351 // Ratio Centrage Y Avec Menu
+#define RATIO_C_Y 0.251 // Ratio Centrage Y Avec Menu
 #define RATIO_R_MIN 0.21 // Ratio Distance minimal
 #define RATIO_R_MAX 0.99 // Ratio Distance maximal
 

@@ -50,6 +50,10 @@ struct GraphiqueT {
 	SDL_Color orange;
 	SDL_Color orangeF;
 
+	SDL_Color rouge;
+
+	SDL_Color bleue;
+
 	SDL_Color vert;
 	SDL_Color vertF;
 

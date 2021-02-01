@@ -1,7 +1,7 @@
 /*
-Copyright novembre 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.2 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -43,11 +43,11 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).rotatifsCentre=(int)(0.892918825561*largeur); // 1034 // Positon X des boutons rotatifs
 		// BOUTONS ROTATIFS SUIVANT Y
 	(*commandes).rotatifY=(int)(0.0322128851541*hauteur); // 23 / 714	Rayon suivant Y
-	(*commandes).rotatifCentre[0]=(int)(0.135854341737*hauteur); // 97	Couplage
-	(*commandes).rotatifCentre[1]=(int)(0.347338935574*hauteur); // 248	Dissipation Positon Y des boutons rotatifs
-	(*commandes).rotatifCentre[2]=(int)(0.560224089636*hauteur); // 400	Josephson
-	(*commandes).rotatifCentre[3]=(int)(0.763305322129*hauteur); // 545	Amplitude
-	(*commandes).rotatifCentre[4]=(int)(0.915966386555*hauteur); // 654	Fréquence
+	(*commandes).rotatifCentre[0]=(int)(0.115*hauteur); // 97	Couplage
+	(*commandes).rotatifCentre[1]=(int)(0.2939*hauteur); // 248	Dissipation Positon Y des boutons rotatifs
+	(*commandes).rotatifCentre[2]=(int)(0.4760*hauteur); // 400	Josephson
+	(*commandes).rotatifCentre[3]=(int)(0.6517*hauteur); // 545	Amplitude
+	(*commandes).rotatifCentre[4]=(int)(0.7827*hauteur); // 654	Fréquence
 
 		 // Zone des petits boutons
 	(*commandes).boutons=(int)(0.946459412781*largeur); // 1096 / 1158
@@ -56,23 +56,23 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutonsCentre=(int)(0.964*largeur); // 1117 // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.0168067226891*largeur); // Rayon suivant Y // 12 / 714
-	(*commandes).boutonCentre[0]=(int)(0.0574229691877*hauteur); // 41	Périodique
-	(*commandes).boutonCentre[1]=(int)(0.1035*hauteur); // 74	Libre
-	(*commandes).boutonCentre[2]=(int)(0.1513*hauteur); // 108 	Fixe // Positon Y des petits boutons
-	(*commandes).boutonCentre[3]=(int)(0.203081232493*hauteur); // 145	Mixte
-	(*commandes).boutonCentre[4]=(int)(0.289915966387*hauteur); // 207	Uniforme
-	(*commandes).boutonCentre[5]=(int)(0.3431372549*hauteur); // 245	Nulle
-	(*commandes).boutonCentre[6]=(int)(0.396358543417*hauteur); // 283	Extrémité
-	(*commandes).boutonCentre[7]=(int)(0.478991596639*hauteur); // 342	Marche
-	(*commandes).boutonCentre[8]=(int)(0.526610644258*hauteur); // 376	Arrêt
-	(*commandes).boutonCentre[9]=(int)(0.575*hauteur); // 410	Droite
-	(*commandes).boutonCentre[10]=(int)(0.624*hauteur); // 445	Gauche
-	(*commandes).boutonCentre[11]=(int)(0.7019*hauteur); // 501	Arrêt
-	(*commandes).boutonCentre[12]=(int)(0.75215*hauteur); // 537	Sinus
-	(*commandes).boutonCentre[13]=(int)(0.80117*hauteur); // 572	Carré
-	(*commandes).boutonCentre[14]=(int)(0.851540616246*hauteur); // 608	Impulsion
-	(*commandes).boutonCentre[15]=(int)(0.912*hauteur); // 649	Fluxon
-	(*commandes).boutonCentre[16]=(int)(0.96*hauteur); // 685	Anti F.
+	(*commandes).boutonCentre[0]=(int)(0.049*hauteur); // 41	Périodique
+	(*commandes).boutonCentre[1]=(int)(0.088*hauteur); // 74	Libre
+	(*commandes).boutonCentre[2]=(int)(0.13099*hauteur); // 108 	Fixe // Positon Y des petits boutons
+	(*commandes).boutonCentre[3]=(int)(0.174*hauteur); // 145	Mixte
+	(*commandes).boutonCentre[4]=(int)(0.248*hauteur); // 207	Uniforme
+	(*commandes).boutonCentre[5]=(int)(0.2939*hauteur); // 245	Nulle
+	(*commandes).boutonCentre[6]=(int)(0.338*hauteur); // 283	Extrémité
+	(*commandes).boutonCentre[7]=(int)(0.41*hauteur); // 342	Marche
+	(*commandes).boutonCentre[8]=(int)(0.452*hauteur); // 376	Arrêt
+	(*commandes).boutonCentre[9]=(int)(0.4936*hauteur); // 410	Droite
+	(*commandes).boutonCentre[10]=(int)(0.53674*hauteur); // 445	Gauche
+	(*commandes).boutonCentre[11]=(int)(0.6022*hauteur); // 501	Arrêt
+	(*commandes).boutonCentre[12]=(int)(0.645*hauteur); // 537	Sinus
+	(*commandes).boutonCentre[13]=(int)(0.688*hauteur); // 572	Carré
+	(*commandes).boutonCentre[14]=(int)(0.73*hauteur); // 608	Impulsion
+	(*commandes).boutonCentre[15]=(int)(0.78115*hauteur); // 649	Fluxon
+	(*commandes).boutonCentre[16]=(int)(0.82428*hauteur); // 685	Anti F.
 
 
 	//	PANNEAU BAS

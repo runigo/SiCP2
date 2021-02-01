@@ -49,6 +49,8 @@ int controleurTraiteEvenement(controleurT * controleur);
 
 int controleurKEYDOWN(controleurT * controleur);
 
+void controleurReinitialisationFichiers(controleurT * controleur);
+
 int controleurCommandes(controleurT * controleur, int zone);
 int controleurInitialiseParametres(controleurT * controleur, int forme);
 int controleurInitialiseFluxons(controleurT * controleur);
@@ -56,7 +58,7 @@ int controleurInitialiseNulle(controleurT * controleur);
 int controleurInitialiseNombre(controleurT * controleur, int nombre);
 
 int controleurInitialiseParametres(controleurT * controleur, int forme);
-int controleurInitialiseFluxons(controleurT * controleur);
+//int controleurInitialiseFluxons(controleurT * controleur);
 int controleurInitialiseNulle(controleurT * controleur);
 
 int controleurSouris(controleurT * controleur);
@@ -269,17 +271,32 @@ int controleurKEYDOWN(controleurT * controleur)
 			{
 			if(Maj == 1 )
 				{
-				return controleurClavierMaj(controleur);
+				if (controleurClavierMaj(controleur) == 1)
+					{
+					controleurReinitialisationFichiers(controleur);
+					}
 				}
 			else
 				{
-				return controleurClavierCtrl(controleur);
+				if (controleurClavierCtrl(controleur) == 1)
+					{
+					controleurReinitialisationFichiers(controleur);
+					}
 				}
 			}
 		}
 
 	return (*controleur).sortie;
 	}
+
+void controleurReinitialisationFichiers(controleurT * controleur)
+	{
+		fprintf(stderr, "Remise à zéro des observables temporelles\n");
+	observablesInitialise(&(*controleur).observables);
+
+	return;
+	}
+
 
 void controleurChangeMode(controleurT * controleur)
 	{

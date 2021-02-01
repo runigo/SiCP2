@@ -320,16 +320,15 @@ int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
 	graphiqueChangeCouleur(graphique, (*graphique).bleue);
 		// Couplage
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].somme, DUREE_CAPTEURS);
-		// Energie Gauche
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].gauche, DUREE_CAPTEURS);
+		// Energie Droite
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].droite, DUREE_CAPTEURS);
 
 	// Vert
 	graphiqueChangeCouleur(graphique, (*graphique).vert);
 		// Rappel - Gravitation
-	//SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].somme, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].somme, DUREE_CAPTEURS);
-		// Energie Droite
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].droite, DUREE_CAPTEURS);
+		// Energie Gauche
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].gauche, DUREE_CAPTEURS);
 
 						// 0 : Rappel, 1 : Cinetique, 2 : Couplage, 3 : Energie
 

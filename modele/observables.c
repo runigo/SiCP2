@@ -112,19 +112,6 @@ float observablesMiseAJourAmplitude(observableT * observable)
 
 	return max;
 	}
-
-int observablesMiseAJourAmplitudes(observablesT * observables)
-	{
-				// Mise à jour des maximums des capteurs
-	int j;
-
-	for(j=0;j<OBSERVABLES;j++)
-		{
-		observablesMiseAJourAmplitude(&(*observables).observable[j]);
-		}
-	return 0;
-	}
-
 int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 	{
 						// Évolution de l'index
@@ -149,6 +136,19 @@ int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 
 	return 0;
 	}
+
+int observablesMiseAJourAmplitudes(observablesT * observables)
+	{
+				// Mise à jour des maximums des capteurs
+	int j;
+
+	for(j=0;j<OBSERVABLES;j++)
+		{
+		observablesMiseAJourAmplitude(&(*observables).observable[j]);
+		}
+	return 0;
+	}
+
 
 int observablesMiseAJourEnergie(observablesT * observables)
 	{
@@ -312,7 +312,7 @@ double observablesEnergieCouplagePendule(penduleT * pendule, penduleT * suivant,
 	{	//(*pendule).kapa est négatif
 	double x, y;
 	x=(*pendule).actuel;
-	y=(*suivant).actuel - (*pendule).dephasage;
+	y=(*suivant).actuel + (*pendule).dephasage;
 	return ( - 0.5 * (*pendule).longueur * (*pendule).longueur * (*pendule).masse * (*pendule).kapa *  (x-y) * (x-y) / dt / dt);
 	}
 

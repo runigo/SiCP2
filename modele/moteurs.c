@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2019, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.4 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -31,12 +31,307 @@ termes.
 
 #include "moteurs.h"
 
-void moteursAffiche(moteursT * moteurs);
-void moteursInverseGenerateur(moteursT * moteurs);
+
+/*----------------  ÉVOLUTION  -------------------*/
 void moteursImpulsion(moteursT * moteurs);
+
+/*----------------  CHANGE  -------------------*/
+void moteursInverseGenerateur(moteursT * moteurs);
 int moteurInitialiseFluxon(moteursT * m, int fluxon);
 
 /*----------------  INITIALISATION  -------------------*/
+
+/*----------------  AFFICHAGE  -------------------*/
+void moteursAffiche(moteursT * moteurs);
+
+
+/*----------------  ÉVOLUTION  -------------------*/
+
+float moteursGenerateur(moteursT * moteurs)
+	{
+			// retourne la position du générateur de signaux
+
+	float amplitude;
+	float phase;
+
+	phase = (*moteurs).phi + DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
+	amplitude = (*moteurs).amplitude * sin(phase);
+
+	if((*moteurs).generateur==3)
+		{
+		if(phase>2*PI) (*moteurs).generateur=0;
+		}
+
+	if((*moteurs).generateur==2)
+		{
+		if(amplitude>0) amplitude = (*moteurs).amplitude;
+		else amplitude = - (*moteurs).amplitude;
+		}
+
+	return amplitude;
+	}
+
+float moteurJaugeZero(moteursT * moteurs) {
+
+			// Rpproche la phase et le chrono de zéro
+
+		//	Rapproche la phase de zéro
+	if((*moteurs).phi > DEUXPI)
+		{
+		do
+			{
+			(*moteurs).phi = (*moteurs).phi - DEUXPI;
+			}
+		while((*moteurs).phi > DEUXPI);
+		}
+	else 
+		{
+			if((*moteurs).phi < - DEUXPI)
+			{
+			do
+				{
+				(*moteurs).phi = (*moteurs).phi + DEUXPI;
+				}
+			while((*moteurs).phi < - DEUXPI);
+			}
+		}
+
+	float phase = DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
+	if(phase > DEUXPI)
+		{
+		do
+			{
+			(*moteurs).chrono = (*moteurs).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteurs).frequence;
+			}
+		while((*moteurs).frequence * (*moteurs).chrono > 1.0);
+		}
+	else 
+		{
+		if(phase < - DEUXPI)
+			{
+			do
+				{
+				(*moteurs).chrono = (*moteurs).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteurs).frequence;
+				}
+			while((*moteurs).frequence * (*moteurs).chrono < - 1.0);
+			}
+		}
+
+	return 0;
+	}
+
+
+int moteurChangeFluxon(moteursT * moteurs, int fluxon)
+	{
+	if(fluxon!=0)
+		{
+		moteurInitialiseFluxon(moteurs, fluxon);
+		printf("moteurInitialiseFluxon(moteurs, fluxon)\n");
+		}
+	return 0;
+	}
+
+int moteurInitialiseFluxon(moteursT * moteurs, int fluxon)
+	{
+	(*moteurs).deltaDephasage = fluxon*DEUXPI * (*moteurs).dt * (*moteurs).frequence;
+	(*moteurs).fluxon=1;
+	(*moteurs).dephasage=0;
+	return 0;
+	}
+
+int moteurFinFluxon(moteursT * moteurs)
+	{
+	(*moteurs).dephasage=0;
+	(*moteurs).fluxon=0;
+	return 0;
+	}
+
+int moteurFluxon(moteursT * moteurs)
+	{
+	if((*moteurs).fluxon==0)
+		{
+		return 0;
+		}
+	else
+		{
+		return 1;
+		}
+	return 0;
+	}
+
+
+/*----------------  CHANGE  -------------------*/
+
+void moteursChangeGenerateur(moteursT * moteurs, int i) {
+
+			// Change la forme du signal
+			// 0 : éteint, -1 : allume-éteint, 1 : allume, 3 : impulsion
+
+	// Réinitialisation
+	(*moteurs).chrono = 0.0;
+	(*moteurs).phi = 0.0;
+
+	switch(i)
+		{
+		case 0:	// désactive le moteurs
+			(*moteurs).generateur=0;break;
+
+		case 1:	// active le moteurs
+			(*moteurs).generateur=1;break;
+
+		case -1:	// active/désactive le moteurs
+			moteursInverseGenerateur(moteurs);break;
+
+		case 2:	// active le signal carré
+			(*moteurs).generateur=2;break;
+
+		case 3:	// Lance une impulsion
+			moteursImpulsion(moteurs);break;
+
+		default:
+			;
+		}
+
+	printf("etat générateur %d\n", (*moteurs).generateur);
+
+	return;
+	}
+
+void moteursInverseGenerateur(moteursT * moteurs) {
+
+		//	Allume le générateur s'il est éteint, éteint le générateur sinon
+
+	switch((*moteurs).generateur)
+		{
+		case 0:	// désactive le moteurs
+			(*moteurs).generateur=1;break;
+
+		case 1:	// active le moteurs
+			(*moteurs).generateur=0;break;
+
+		default:
+			(*moteurs).generateur=0;
+		} 
+	return;
+	}
+
+void moteursImpulsion(moteursT * moteurs) {
+
+			// Initialise l'état impulsion
+
+	(*moteurs).generateur=3;
+	(*moteurs).chrono=0.0;
+	(*moteurs).phi=0.0;
+
+	printf("impulsion\n");
+	return;
+	}
+
+void moteursChangeFrequence(moteursT * moteurs, float facteur) {
+
+			//	Change la fréquence du signal
+
+	float phase;
+
+	if((*moteurs).frequence * facteur < FREQUENCE_MAX && (*moteurs).frequence * facteur > FREQUENCE_MIN)
+		{
+		phase = (*moteurs).phi + DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
+
+		(*moteurs).frequence = (*moteurs).frequence * facteur;
+
+		(*moteurs).phi = phase - DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
+
+		}
+	else
+		{
+		printf("Fréquence limite atteinte. ");
+		}
+	printf("Fréquence générateur = %6.3f\n", (*moteurs).frequence);
+
+	return;
+	}
+
+void moteursChangeAmplitude(moteursT * moteurs, float facteur) {
+
+			//	Change l'amplitude du signal
+
+	float amplitude = (*moteurs).amplitude * facteur;
+	if(amplitude < AMPLITUDE_MAX && amplitude > AMPLITUDE_MIN)
+		{
+		(*moteurs).amplitude = (*moteurs).amplitude * facteur;
+		}
+	else
+		{
+		printf("Amplitude limite atteinte. ");
+		}
+	printf("Amplitude générateur = %6.3f\n", (*moteurs).amplitude);
+	return;
+	}
+
+int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat)
+	{
+	if(etat == 1) // Allume le courantJosephson Josephson
+		{
+		(*moteurs).etatJosephson = 1;
+		}
+	else // Eteint le courantJosephson Josephson
+		{
+		(*moteurs).etatJosephson = 0;
+		}
+	printf("(*moteurs).etatJosephson = %d\n", (*moteurs).etatJosephson);
+	return 0;
+	}
+
+void moteursSensJosephson(moteursT * moteurs, int signe) {
+
+		//	Inverse le sens du courant josephson
+
+	if((*moteurs).courantJosephson<0)
+		{
+		(*moteurs).courantJosephson=-(*moteurs).courantJosephson;
+		}
+
+	if(signe>0)
+		{
+		(*moteurs).courantJosephson = (*moteurs).courantJosephson;
+		}
+	else
+		{
+		(*moteurs).courantJosephson = - (*moteurs).courantJosephson;
+		}
+
+	return;
+	}
+
+int moteursChangeJosephson(moteursT * moteurs, float facteur) {
+
+				// Change la valeur du courantJosephson Josephson
+
+	float courantJosephson = (*moteurs).courantJosephson * facteur;
+
+	if(courantJosephson < 0) courantJosephson = -courantJosephson;
+
+	if(courantJosephson <= JOSEPHSON_MAX && courantJosephson >= JOSEPHSON_MIN)
+		{
+		(*moteurs).courantJosephson = (*moteurs).courantJosephson * facteur;
+		}
+	else
+		{
+		printf("Courant Josephson limite atteint. ");
+		}
+
+	printf("Courant Josephson = %6.3f\n", (*moteurs).courantJosephson);
+
+	return 0;
+	}
+
+int moteursChangeJosephsonMoyenne(moteursT * moteurs) {
+
+		// Réglage du moteurs etatJosephson à une amplitude moyenne
+
+	moteursInitialiseCourantJosephson(moteurs, sqrt(JOSEPHSON_MAX * JOSEPHSON_MIN ));
+	return 0;
+	}
 
 
 /*----------------  INITIALISATION  -------------------*/
@@ -87,24 +382,6 @@ int moteursInitialiseCourantJosephson(moteursT * moteurs, float courantJosephson
 		}
 	return 1;
 	}
-
-/*
-int moteursInitialiseEtatJosephson(moteursT * moteurs, int etatJosephson)
-	{
-	if( etatJosephson>=JOSEPHSON_MIN &&  etatJosephson<=JOSEPHSON_MAX)
-		{
-		(*moteurs).etatJosephson =  etatJosephson;
-		printf("(*moteurs).etatJosephson = %d\n", (*moteurs).etatJosephson);
-		return 0;
-		}
-	else
-		{
-		(*moteurs).courantJosephson = exp((log(JOSEPHSON_MIN)+log(JOSEPHSON_MAX))/2);
-		printf("ERREUR moteursInitialiseJosephson(%d) (*moteurs).etatJosephson = %d\n", etatJosephson, (*moteurs).etatJosephson);
-		}
-	return 1;
-	}
-*/
 
 int moteursInitialiseGenerateur(moteursT * moteurs, int generateur)
 	{
@@ -170,21 +447,7 @@ int moteursInitialisePhi(moteursT * moteurs, float phi)
 		}
 	return 1;
 	}
-int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage)
-	{
-	if(deltaDephasage>=-DEUXPI && deltaDephasage<=DEUXPI)
-		{
-		(*moteurs).deltaDephasage = deltaDephasage;
-		printf("(*moteurs).deltaDephasage = %f\n", (*moteurs).deltaDephasage);
-		return 0;
-		}
-	else
-		{
-		(*moteurs).deltaDephasage = 0;
-		printf("ERREUR moteursInitialiseDeltaDephasage(%f) (*moteurs).deltaDephasage = %f\n", deltaDephasage, (*moteurs).deltaDephasage);
-		}
-	return 1;
-	}
+
 int moteursInitialiseFluxon(moteursT * moteurs, int fluxon)
 	{
 	if(fluxon>=0 && fluxon<=1)
@@ -197,6 +460,22 @@ int moteursInitialiseFluxon(moteursT * moteurs, int fluxon)
 		{
 		(*moteurs).fluxon = 0;
 		printf("ERREUR moteursInitialiseFluxon(%d) (*moteurs).fluxon = %d\n", fluxon, (*moteurs).fluxon);
+		}
+	return 1;
+	}
+
+int moteursInitialiseDeltaDephasage(moteursT * moteurs, float deltaDephasage)
+	{
+	if(deltaDephasage>=-DEUXPI && deltaDephasage<=DEUXPI)
+		{
+		(*moteurs).deltaDephasage = deltaDephasage;
+		printf("(*moteurs).deltaDephasage = %f\n", (*moteurs).deltaDephasage);
+		return 0;
+		}
+	else
+		{
+		(*moteurs).deltaDephasage = 0;
+		printf("ERREUR moteursInitialiseDeltaDephasage(%f) (*moteurs).deltaDephasage = %f\n", deltaDephasage, (*moteurs).deltaDephasage);
 		}
 	return 1;
 	}
@@ -216,338 +495,9 @@ int moteursInitialiseDephasage(moteursT * moteurs, float dephasage)
 		}
 	return 1;
 	}
-/*
-int moteursInitialise(moteursT * moteurs, float int )
-	{
-	if(>_MIN && <_MAX)
-		{
-		printf("Option dt valide, dt = %f\n", (*options).dt);
-		return 0;
-		}
-	else
-		{
-		}
-	return 1;
-	}
-int moteursInitialise(moteursT * moteurs, float int )
-	{
-	if(dt>DT_MIN && dt<DT_MAX)
-		{
-		printf("Option dt valide, dt = %f\n", (*options).dt);
-		return 0;
-		}
-	else
-		{
-		}
-	return 1;
-	}
-		// Initialisation du moteurs
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
-		fscanf(fichier, "%f\n", &parametre);
 
 
-
-		// Moteurs
-		parametre = (*moteurs) .dt;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .chrono;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .courantJosephson;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .etatJosephson;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .generateur;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .amplitude;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .frequence;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .phi;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .deltaDephasage;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .fluxon;
-			fprintf(fichier, "%f\n", parametre);
-		parametre = (*moteurs) .dephasage;
-			fprintf(fichier, "%f\n", parametre);
-
-
-*/
-
-
-int moteurChangeFluxon(moteursT * moteurs, int fluxon)
-	{
-	if(fluxon!=0)
-		{
-		moteurInitialiseFluxon(moteurs, fluxon);
-		printf("moteurInitialiseFluxon(moteurs, fluxon)\n");
-		}
-	return 0;
-	}
-
-int moteurInitialiseFluxon(moteursT * moteurs, int fluxon)
-	{
-	(*moteurs).deltaDephasage = fluxon*DEUXPI * (*moteurs).dt * (*moteurs).frequence;
-	(*moteurs).fluxon=1;
-	(*moteurs).dephasage=0;
-	return 0;
-	}
-
-int moteurFinFluxon(moteursT * moteurs)
-	{
-	(*moteurs).dephasage=0;
-	(*moteurs).fluxon=0;
-	return 0;
-	}
-
-int moteurFluxon(moteursT * moteurs)
-	{
-	if((*moteurs).fluxon==0)
-		{
-		return 0;
-		}
-	else
-		{
-		return 1;
-		}
-	return 0;
-	}
-
-float moteursGenerateur(moteursT * moteurs)
-	{
-			// retourne la position du générateur de signaux
-
-	float amplitude;
-	float phase;
-
-	phase = (*moteurs).phi + DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
-	amplitude = (*moteurs).amplitude * sin(phase);
-
-	if((*moteurs).generateur==3)
-		{
-		if(phase>2*PI) (*moteurs).generateur=0;
-		}
-
-	if((*moteurs).generateur==2)
-		{
-		if(amplitude>0) amplitude = (*moteurs).amplitude;
-		else amplitude = - (*moteurs).amplitude;
-		}
-
-	return amplitude;
-	}
-
-float moteurJaugeZero(moteursT * moteurs)
-	{
-			// Normalise la phase et le chrono
-	if((*moteurs).phi > DEUXPI)
-		{
-		do
-			{
-			//printf("(*moteurs).phi = %f\n",(*moteurs).phi);
-			//(*moteurs).phi = (*moteurs).phi - ((int)((*moteurs).phi/DEUXPI))*DEUXPI;
-			(*moteurs).phi = (*moteurs).phi - DEUXPI;
-			}
-		while((*moteurs).phi > DEUXPI);
-		}
-	else 
-		{
-			if((*moteurs).phi < - DEUXPI)
-			{
-			do
-				{
-				//printf("(*moteurs).phi = %f\n",(*moteurs).phi);
-				//(*moteurs).phi = (*moteurs).phi - ((int)((*moteurs).phi/DEUXPI))*DEUXPI;
-				(*moteurs).phi = (*moteurs).phi + DEUXPI;
-				}
-			while((*moteurs).phi < - DEUXPI);
-			}
-		}
-
-	float phase = DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
-	if(phase > DEUXPI)
-		{
-		do
-			{
-			//printf("(*moteurs).frequence * (*moteurs).chrono = %f\n",phase);
-			(*moteurs).chrono = (*moteurs).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteurs).frequence;
-			}
-		while((*moteurs).frequence * (*moteurs).chrono > 1.0);
-		}
-	else 
-		{
-		if(phase < - DEUXPI)
-			{
-			do
-				{
-				//printf("(*moteurs).frequence * (*moteurs).chrono = %f\n",phase);
-				(*moteurs).chrono = (*moteurs).chrono - ( (int)(phase/DEUXPI) ) * 1.0/(*moteurs).frequence;
-				}
-			while((*moteurs).frequence * (*moteurs).chrono < - 1.0);
-			}
-		}
-
-	return 0;
-	}
-
-void moteursChangeGenerateur(moteursT * moteurs, int i)
-
-			// Change la forme du signal
-			// 0 : éteint, -1 : allume-éteint, 1 : allume, 3 : impulsion
-	{
-
-	// Réinitialisation
-	(*moteurs).chrono = 0.0;
-	(*moteurs).phi = 0.0;
-
-	switch(i)
-		{
-		case 0:	// désactive le moteurs
-			(*moteurs).generateur=0;break;
-
-		case 1:	// active le moteurs
-			(*moteurs).generateur=1;break;
-
-		case -1:	// active/désactive le moteurs
-			moteursInverseGenerateur(moteurs);break;
-
-		case 2:	// active le signal carré
-			(*moteurs).generateur=2;break;
-
-		case 3:	// Lance une impulsion
-			moteursImpulsion(moteurs);break;
-
-		default:
-			;
-		}
-
-	printf("etat générateur %d\n", (*moteurs).generateur);
-
-	return;
-	}
-
-void moteursImpulsion(moteursT * moteurs)
-
-			// Initialise l'état impulsion
-	{
-	(*moteurs).generateur=3;
-	(*moteurs).chrono=0.0;
-	(*moteurs).phi=0.0;
-
-	printf("impulsion\n");
-	return;
-	}
-
-void moteursChangeFrequence(moteursT * moteurs, float facteur)
-
-			//	Change la fréquence du signal
-	{
-	float phase;
-
-	if((*moteurs).frequence * facteur < FREQUENCE_MAX && (*moteurs).frequence * facteur > FREQUENCE_MIN)
-		{
-		phase = (*moteurs).phi + DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
-
-		(*moteurs).frequence = (*moteurs).frequence * facteur;
-
-		(*moteurs).phi = phase - DEUXPI * (*moteurs).frequence * (*moteurs).chrono;
-
-		}
-	else
-		{
-		printf("Fréquence limite atteinte. ");
-		}
-	printf("Fréquence générateur = %6.3f\n", (*moteurs).frequence);
-
-	return;
-	}
-
-void moteursChangeAmplitude(moteursT * moteurs, float facteur)
-
-			//	Change l'amplitude du signal
-	{
-	float amplitude = (*moteurs).amplitude * facteur;
-	if(amplitude < AMPLITUDE_MAX && amplitude > AMPLITUDE_MIN)
-		{
-		(*moteurs).amplitude = (*moteurs).amplitude * facteur;
-		}
-	else
-		{
-		printf("Amplitude limite atteinte. ");
-		}
-	printf("Amplitude générateur = %6.3f\n", (*moteurs).amplitude);
-	return;
-	}
-
-int moteursInitialiseEtatJosephson(moteursT * moteurs, int etat)
-	{
-	if(etat == 1) // Allume le courantJosephson Josephson
-		{
-		(*moteurs).etatJosephson = 1;
-		}
-	else // Eteint le courantJosephson Josephson
-		{
-		(*moteurs).etatJosephson = 0;
-		}
-	printf("(*moteurs).etatJosephson = %d\n", (*moteurs).etatJosephson);
-	return 0;
-	}
-
-void moteursSensJosephson(moteursT * moteurs, int signe)
-	{
-	if((*moteurs).courantJosephson<0)
-		{
-		(*moteurs).courantJosephson=-(*moteurs).courantJosephson;
-		}
-
-	if(signe>0)
-		{
-		(*moteurs).courantJosephson = (*moteurs).courantJosephson;
-		}
-	else
-		{
-		(*moteurs).courantJosephson = - (*moteurs).courantJosephson;
-		}
-
-	return;
-	}
-
-int moteursChangeJosephson(moteursT * moteurs, float facteur)
-	{
-				// Règle la valeur du courantJosephson Josephson
-
-	float courantJosephson = (*moteurs).courantJosephson * facteur;
-
-	if(courantJosephson < 0) courantJosephson = -courantJosephson;
-
-	if(courantJosephson <= JOSEPHSON_MAX && courantJosephson >= JOSEPHSON_MIN)
-		{
-		(*moteurs).courantJosephson = (*moteurs).courantJosephson * facteur;
-		}
-	else
-		{
-		printf("Courant Josephson limite atteint. ");
-		}
-
-	printf("Courant Josephson = %6.3f\n", (*moteurs).courantJosephson);
-
-	return 0;
-	}
-
-int moteursChangeJosephsonMoyenne(moteursT * moteurs)
-	{	// Réglage du moteurs etatJosephson à une amplitude moyenne
-	moteursInitialiseCourantJosephson(moteurs, sqrt(JOSEPHSON_MAX * JOSEPHSON_MIN ));
-	return 0;
-	}
+/*----------------  AFFICHAGE  -------------------*/
 
 void moteursAfficheHorloge(moteursT * m)
 
@@ -576,22 +526,4 @@ void moteursAffiche(moteursT * moteurs)
 	return;
 	}
 
-void moteursInverseGenerateur(moteursT * moteurs)
-	{
-	/*	Allume le générateur s'il est éteint,
-			Éteint le générateur sinon		*/
-
-	switch((*moteurs).generateur)
-		{
-		case 0:	// désactive le moteurs
-			(*moteurs).generateur=1;break;
-
-		case 1:	// active le moteurs
-			(*moteurs).generateur=0;break;
-
-		default:
-			(*moteurs).generateur=0;
-		} 
-	return;
-	}
 //////////////////////////////////////////////////////////////////////////

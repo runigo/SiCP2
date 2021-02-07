@@ -53,7 +53,7 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutons=(int)(0.946459412781*largeur); // 1096 / 1158
 		// PETITS BOUTONS SUIVANT X
 	(*commandes).boutonX=(int)(0.0121*largeur); // Rayon suivant X // 14 / 1158
-	(*commandes).boutonsCentre=(int)(0.964*largeur); // 1117 // Positon X des petits boutons
+	(*commandes).boutonsCentre=(int)(0.9644*largeur); // 1117 // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.0168067226891*largeur); // Rayon suivant Y // 12 / 714
 	(*commandes).boutonCentre[0]=(int)(0.049*hauteur); // 41	Périodique
@@ -92,7 +92,7 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 
 		// BOUTONS TRIANGULAIRES SUIVANT Y
 	(*commandes).triangleY=(int)(0.0168067226891*hauteur); // Rayon suivant Y // 12 / 714
-	(*commandes).trianglesCentre=(int)(0.920168067227*hauteur); // 657 // Position Y des petits triangles
+	(*commandes).trianglesCentre=(int)(0.928*hauteur); // 657 // Position Y des petits triangles
 	(*commandes).trianglesLumiere=(int)(0.960784313725*hauteur); // 685 // Position Y des lumière
 		// BOUTONS TRIANGULAIRES SUIVANT X
 	(*commandes).triangleX=(int)(0.0120898100173*largeur); // Rayon suivant X // 14 / 1158

@@ -289,18 +289,19 @@ int controleurKEYDOWN(controleurT * controleur)
 	return (*controleur).sortie;
 	}
 
-void controleurReinitialisationFichiers(controleurT * controleur)
-	{
-		fprintf(stderr, "Remise à zéro des observables temporelles\n");
+void controleurReinitialisationFichiers(controleurT * controleur) {
+
+		//fprintf(stderr, "Remise à zéro des observables temporelles\n");
+
 	observablesInitialise(&(*controleur).observables);
 
 	return;
 	}
 
 
-void controleurChangeMode(controleurT * controleur)
-	{
-	(*controleur).options.modePause=-(*controleur).options.modePause;
+void controleurChangeMode(controleurT * controleur) {
+
+	(*controleur).options.modePause = - (*controleur).options.modePause;
 
 	return;
 	}

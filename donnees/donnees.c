@@ -82,7 +82,7 @@ int donneesControleur(controleurT * controleur)
 
 	changeFormeDissipation(&(*controleur).systeme, 1);
 	changeFormeDissipation(&(*controleur).systeme, 0);
-	changeConditionsLimites(&(*controleur).systeme, (*controleur).systeme.libreFixe);
+	changeLimite(&(*controleur).systeme);
 	systemeInitialisePosition(&(*controleur).systeme, 9);
 
 

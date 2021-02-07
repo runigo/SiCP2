@@ -1,7 +1,7 @@
 /*
-Copyright novembre 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.3.3 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -30,8 +30,6 @@ termes.
 */
 
 #include "change.h"
-
-void changeLimite(systemeT * systeme);
 
 /*--------------------------------------------------------------*/
 
@@ -272,52 +270,53 @@ void changeFormeDissipation(systemeT * systeme, int forme)
 	return;
 	}
 
-void changeConditionsLimites(systemeT * systeme, int libreFixe)
-	{
-	(*systeme).libreFixe=libreFixe;
-	printf("libreFixe = %d, ", (*systeme).libreFixe);
+int changeConditionsLimites(systemeT * systeme, int libreFixe) {
 
-	switch(libreFixe)
-		{
-		case 0:
-			printf(": conditions aux limites périodiques\n");
-			break;
-		case 1:
-			printf(": extrémités libres\n");
-			break;
-		case 2:
-			printf(": extrémités fixes\n");
-			break;
-		case 3:
-			printf(": premier libre, dernier fixe\n");
-			break;
-		case 4:
-			printf(": premier fixe, dernier libre\n");
-			break;
+	//  Change les conditions aux limites
+
+	if( libreFixe != (*systeme).libreFixe) {
+		switch(libreFixe) {
+			case 0:
+				printf("Conditions aux limites périodiques\n");(*systeme).libreFixe=0; break;
+			case 1:
+				printf("Extrémités libres\n");(*systeme).libreFixe=1; break;
+			case 2:
+				printf("Extrémités fixes\n");(*systeme).libreFixe=2; break;
+			case 3:
+				printf("Premier libre, dernier fixe\n");(*systeme).libreFixe=3; break;
+			case 4:
+				printf("Premier fixe, dernier libre\n");(*systeme).libreFixe=4; break;
+			default:
+			return 1;
+			}
+		changeLimite(systeme);
 		}
 
-	changeLimite(systeme);
-
-	return;
+	return 0;
 	}
 
-void changeLimite(systemeT * systeme)
-	{// Change le couplage du dernier pendule
+void changeLimite(systemeT * systeme) {
+
+		// Change le couplage du dernier pendule
+	//	(*systeme).limites.libreFixe : 0 périodiques 1 libres, 2 fixes, 3 libre-fixe, 4 fixe-libre
+
 	float couplage=0.0;
-	if ((*systeme).libreFixe==0 || (*systeme).libreFixe==2)
-		{
+
+	if ((*systeme).libreFixe==0 || (*systeme).libreFixe==2) {		//	Périodiques ou fixes
 		couplage=(*systeme).couplage;
-		}
+	}
 
 	penduleInitialiseKapa(&(*systeme).premier->precedent->pendule, couplage, (*systeme).moteurs.dt);
 
 	printf("Couplage dernier = %6.3f\n", couplage);
 
 	return;
-	}
+}
 
-void changeDephasage(systemeT * systeme, int fluxon)
-	{
+void changeDephasage(systemeT * systeme, int fluxon) {
+
+	// Change le déphasage du premier pendule
+
 	float nouveau = (*systeme).premier->pendule.dephasage + fluxon*DEUXPI;
 
 	if(nouveau>(-DEPHASAGE_MAX) && nouveau<DEPHASAGE_MAX)

@@ -144,33 +144,30 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	int i;
 	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
 
-		//int libreFixe;		//	0 : périodiques 1 : libres, 2 : fixes, 
-							//		3 libre-fixe, 4 fixe-libre
-	switch((*systeme).libreFixe)	//	
-		{
+			//	Conditions aux limites
+	switch((*systeme).libreFixe) {
 		case 0:
-			(*commandes).boutonEtat[0]=1;break; // 32	Périodique
+			(*commandes).boutonEtat[0]=1;break; //	Périodique
 		case 1:
-			(*commandes).boutonEtat[1]=1;break; // 62	Libre
+			(*commandes).boutonEtat[1]=1;break; //	Libre
 		case 2:
-			(*commandes).boutonEtat[2]=1;break; // 88 	Fixe
+			(*commandes).boutonEtat[2]=1;break; //	Fixe
 		case 3:
-			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+			(*commandes).boutonEtat[3]=1;break; //	Mixte
 		case 4:
-			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+			(*commandes).boutonEtat[3]=1;break; //	Mixte
 		default:
 			;
 		}
 
-	//	int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
-	switch((*systeme).modeDissipation)	//	
-		{
+		//	Dissipation
+	switch((*systeme).modeDissipation) {
 		case 0:
-			(*commandes).boutonEtat[5]=1;break; // 198	Nulle
+			(*commandes).boutonEtat[5]=1;break; //	Nulle
 		case 1:
-			(*commandes).boutonEtat[4]=1;break; // 167	Uniforme
+			(*commandes).boutonEtat[4]=1;break; //	Uniforme
 		case 2:
-			(*commandes).boutonEtat[6]=1;break; // 230	Extrémité
+			(*commandes).boutonEtat[6]=1;break; //	Extrémité
 		default:
 			;
 		}
@@ -210,8 +207,18 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}
-	//(*commandes).boutonEtat[15]=0; // 536	Fluxon
-	//(*commandes).boutonEtat[16]=0; // 563	Anti F.
+
+	if((*systeme).moteurs.fluxon == 1)
+		{
+		if((*systeme).moteurs.deltaDephasage > 0)
+			{
+			(*commandes).boutonEtat[15]=1;
+			}
+		else
+			{
+			(*commandes).boutonEtat[16]=1;
+		    }
+		}
 
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 

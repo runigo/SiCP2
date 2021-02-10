@@ -33,12 +33,9 @@ termes.
 #define _CONSTANTES_
 
 //#include "unistd.h"
-
-#include "math.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include <assert.h>
-#include <time.h>
+#include "math.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,30 +75,26 @@ termes.
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
 
-//#define PERSPECTIVE_MAX 1.7
-//#define PERSPECTIVE_MIN 0.17
+	//	PARAMÈTRES GRAPHIQUES DE LA CHAÎNE
 
 #define DISTANCE_MAX FENETRE_Y*77
 #define DISTANCE_MIN FENETRE_Y/77
 
 #define LARGEUR_MAX 3000	// Longueur maximale de la chaîne
+#define LARGEUR_IMP 1900	// Longueur implicite de la chaîne
 #define LARGEUR_MIN 900		// Longueur minimale de la chaîne
 
-//#define RATIO_H_L 0.136 // Ratio Hauteur sur Largeur de la chaîne
-//#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
-//#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
-#define RATIO_C_X 0.399 // Ratio Centrage X Avec Menu
-//#define RATIO_C_Y 0.351 // Ratio Centrage Y Avec Menu
-#define RATIO_C_Y 0.251 // Ratio Centrage Y Avec Menu
-#define RATIO_R_MIN 0.21 // Ratio Distance minimal
-#define RATIO_R_MAX 0.99 // Ratio Distance maximal
+#define RATIO_C_X 0.399		// Ratio Centrage X Avec Menu
+#define RATIO_C_Y 0.263		// Ratio Centrage Y Avec Menu
+#define RATIO_R_MIN 0.21	// Ratio Distance minimal
+#define RATIO_R_MAX 0.99	// Ratio Distance maximal
 
 #define TAILLE_MASSE 8 // Diamètre des masses
 
 
 	//	PARAMÈTRES DE DISCRÉTISATION TEMPORELLE
 
-	//	DT * DUREE = TEMPS_AFFICHAGE
+	//	Temps réèl : DT * DUREE = TEMPS_AFFICHAGE
 
 #define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
@@ -110,26 +103,22 @@ termes.
 #define DUREE 100 // Nombre implicite d'incrémentation du système entre deux affichages.
 #define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
 
-#define DT_MIN 0.00003 // Discrétisation minimale du temps
+#define DT_MIN 0.0003 // Discrétisation minimale du temps
 #define DT 0.0011
 #define DT_MAX 0.003		//	discrétisation maximale du temps
 
 
-	//	PARAMÈTRES DE LA CHAINE
+	//	PARAMÈTRES PHYSIQUE DE LA CHAINE
 
-#define ABSORPTION 2.1 // Facteur de l'extrémité absorbante
-#define NOMBRE_MIN 2 // Nombre minimal de pendules
-#define NOMBRE 150 // Nombre implicite de pendules
-#define NOMBRE_MAX 401 // Nombre maximal de pendules
+#define ABSORPTION 2.1		// Facteur de l'extrémité absorbante
+#define NOMBRE_MIN 2		// Nombre minimal de pendules
+#define NOMBRE 150			// Nombre implicite de pendules
+#define NOMBRE_MAX 401		// Nombre maximal de pendules
 
-//#define SOLITON_MAX 19 // Nombre maximal de soliton
-#define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal
-
-
-	//	PARAMÈTRES  CHAINE ET CORDE
+#define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal entre les extrémités
 
 #define COUPLAGE_MAX 99.9		// Couplage maximal / nombre de pendule
-#define COUPLAGE_MIN 0.099	// Couplage minimal / nombre de pendule
+#define COUPLAGE_MIN 0.099		// Couplage minimal / nombre de pendule
 
 #define GRAVITATION_MAX 77.7	// Gravitation maximale
 #define GRAVITATION 9.81		// Gravitation implicite
@@ -142,7 +131,6 @@ termes.
 #define LONGUEUR_MAX 1.0	//	Longueur maximale
 #define LONGUEUR 1.0		//	Longueur implicite
 #define LONGUEUR_MIN 1.0	//	Longueur minimale
-
 
 #define DISSIPATION_MAX 333.3	//	Coeficient de frottement visqueux maximal
 #define DISSIPATION_MIN 0.033	//	Valeur minimale

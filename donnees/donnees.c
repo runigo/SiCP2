@@ -155,7 +155,7 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 		// Paramètres physiques
 
-	(*systeme).gravitation = 9.81; // 4*PI*PI
+	(*systeme).gravitation = 9.81; // 4*PI*PI = 39.478
 
 	(*systeme).masse = 1.0;
 
@@ -174,10 +174,6 @@ int donneesSysteme(systemeT * systeme, optionsT * options)
 
 int donneesGraphe(grapheT * graphe, optionsT * options)
 	{
-	(*graphe).rouge=20;
-	(*graphe).bleu=150;
-	(*graphe).vert=200;
-	(*graphe).fond=(*options).fond;	//	Couleur du fond
 	(*graphe).support=(*options).support;	//	Apparence du support
 	(*graphe).dessous = 0;	// Vue de dessous
 	(*graphe).gauche = 0;		// Vue de gauche

@@ -31,26 +31,27 @@ termes.
 
 #include "projection.h"
 
+				//		Projection de la chaîne de pendules et des
+				//		observables sur l'interface graphique
 
-float projectionAbsolue(float valeur);
-
+	//	INITIALISATION
 int projectionInitialisePointDeVue(projectionT * projection,  float r,float psi, float phi);
 int projectionReinitialiseBase(projectionT * projection);
 
+	//	PROJECTION
+float projectionValeurAbsolue(float valeur);
 int projectionPerspectiveChaine(projectionT * projection, grapheT * graphe);
 int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grapheT * graphe);
 
 int projectionInitialiseSupport(projectionT * projection, int nombre);
 int projectionPerspectiveSupport(projectionT * projection, grapheT * graphe);
 
+	//	CHANGE
+
+	//	AFFICHAGE
 
 
-float projectionAbsolue(float valeur)
-	{
-	if(valeur<0) return -valeur;
-	return valeur;
-	}
-
+	//-----------------    INITIALISATION      -----------------------//
 int projectionInitialise(projectionT * projection)
 	{
 
@@ -67,9 +68,9 @@ int projectionInitialise(projectionT * projection)
 	(*projection).logFrequence = 1.0 / log( FREQUENCE_MAX/FREQUENCE_MIN );
 
 
-	(*projection).largeur = 2100;// largeur de la chaîne
-	(*projection).ratioHL = 3.99;
-	(*projection).hauteur = (int)((*projection).largeur/(*projection).ratioHL);// hauteur de la chaîne
+	(*projection).largeur = LARGEUR_IMP;// largeur de la chaîne
+	(*projection).ratioLH = 3.99;
+	(*projection).hauteur = (int)((*projection).largeur/(*projection).ratioLH);// hauteur de la chaîne
 
 	projectionInitialisePointDeVue(projection, 3*FENETRE_Y, PI/2 - 0.27, PI/2 + 0.21);//r, psi, phi
 
@@ -87,29 +88,28 @@ int projectionInitialisePointDeVue(projectionT * projection, float r, float psi,
 
 int projectionReinitialiseBase(projectionT * projection)
 	{
-		// Reinitialise les vecteurs perpendiculaires
+		// Réinitialise les vecteurs perpendiculaires
 
 	vecteurInitialiseVecteurPhi(&(*projection).pointDeVue, &(*projection).vecteurPhi, (*projection).fenetreX*RATIO_CHAINE_FENETRE_X);
 	vecteurInitialiseVecteurPsi(&(*projection).pointDeVue, &(*projection).vecteurPsi, (*projection).fenetreY*RATIO_CHAINE_FENETRE_X*(*projection).ratioXY);
 	return 0;
 	}
 
-int projectionChangeFenetre(projectionT * projection, int x, int y)
-	{
-	(*projection).fenetreX=x;
-	(*projection).fenetreY=y;
+	//-----------------    PROJECTION      -----------------------//
 
-	(*projection).ratioXY=(float)x/(float)y;
+float projectionValeurAbsolue(float valeur) {
 
-	projectionReinitialiseBase(projection);
-	return 0;
+	if(valeur<0) return -valeur;
+	return valeur;
 	}
 
-int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
-	{		// Projette le système sur les commandes
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode) {
+
+		// Projette le système sur les commandes
+
 	float theta;
 	float ratioRotatif = 0.9;
-	float courantJosephson = projectionAbsolue((*systeme).moteurs.courantJosephson);
+	float courantJosephson = projectionValeurAbsolue((*systeme).moteurs.courantJosephson);
 
 				//	Projection sur les boutons rotatifs
 	 //	Couplage
@@ -117,12 +117,13 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
+	 //	Dissipation
 	theta = DEUXPI * (*projection).logDissipation * log( (*systeme).dissipation/DISSIPATION_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 	//	Amplitude du moteur josephson
-	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue(courantJosephson/JOSEPHSON_MIN) );
+	theta = DEUXPI * (*projection).logJosephson * log( projectionValeurAbsolue(courantJosephson/JOSEPHSON_MIN) );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -135,9 +136,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	theta = DEUXPI * (*projection).logFrequence * log( (*systeme).moteurs.frequence/FREQUENCE_MIN );
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
-
-		//int rotatifPositionX[ROTATIF_COMMANDES]; // Position du bouton rotatif
-		//int rotatifPositionY[ROTATIF_COMMANDES];
 
 
 				//	Projection sur les petits boutons de droite
@@ -171,39 +169,35 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}
-/*
-	(*commandes).boutonEtat[4]=1;
-	(*commandes).boutonEtat[5]=1;
-	(*commandes).boutonEtat[6]=1;
-*/
+
 	if((*systeme).moteurs.etatJosephson ==1)
 		{
-		(*commandes).boutonEtat[7]=1; // 284	Marche
+		(*commandes).boutonEtat[7]=1; //	Marche
 		}
 	else
 		{
-		(*commandes).boutonEtat[8]=1; // 311	Arrêt
+		(*commandes).boutonEtat[8]=1; //	Arrêt
 		}
 
 	if((*systeme).moteurs.courantJosephson < 0)
 		{
-		(*commandes).boutonEtat[10]=1; // 367	Gauche
+		(*commandes).boutonEtat[10]=1; //	Gauche
 		}
 	else
 		{
-	   	(*commandes).boutonEtat[9]=1; // 339	Droite
+	   	(*commandes).boutonEtat[9]=1; //	Droite
 	    }
 
-	switch((*systeme).moteurs.generateur)	//	0:eteint, 1:sinus, 2:carre, 3:impulsion
+	switch((*systeme).moteurs.generateur)
 		{
 		case 0:
-			(*commandes).boutonEtat[11]=1;break; // 421	Arrêt
+			(*commandes).boutonEtat[11]=1;break; //	Arrêt
 		case 1:
-			(*commandes).boutonEtat[12]=1;break; // 449	Sinus
+			(*commandes).boutonEtat[12]=1;break; //	Sinus
 		case 2:
-			(*commandes).boutonEtat[13]=1;break; // 481	Carré
+			(*commandes).boutonEtat[13]=1;break; //	Carré
 		case 3:
-			(*commandes).boutonEtat[14]=1;break; // 509	Impulsion
+			(*commandes).boutonEtat[14]=1;break; //	Impulsion
 		default:
 			;
 		}
@@ -220,25 +214,27 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		    }
 		}
 
+				//	Projection sur les petits boutons du bas
+
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 
-	switch((*projection).rotation)	//	
+		//	Rotation automatique du point de vue
+	switch((*projection).rotation)
 		{
 		case 3:
-			(*commandes).triangleEtat[0]=1;break; // 
+			(*commandes).triangleEtat[0]=1;break;
 		case 1:
-			(*commandes).triangleEtat[1]=1;break; // 
+			(*commandes).triangleEtat[1]=1;break;
 		case 0:
-			(*commandes).triangleEtat[2]=0;break; // 
+			(*commandes).triangleEtat[2]=0;break;
 		case -1:
-			(*commandes).triangleEtat[3]=1;break; // 
+			(*commandes).triangleEtat[3]=1;break;
 		case -3:
-			(*commandes).triangleEtat[4]=1;break; // 
+			(*commandes).triangleEtat[4]=1;break;
 		default:
 			;
 		}
 
-				//	Projection sur les petits boutons du bas
 		//	Vitesse de la simulation
 	if(duree<DUREE)
 		{
@@ -262,16 +258,19 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		{
 		(*commandes).triangleEtat[7]=2;
 		}
+
 	return 0;
 	}
 
-int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs)
-	{
+int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs) {
+
+		//	Projette les observables sur les capteurs
+
 	(void)projection;
 	float a;
 	int i, k, y0;
-						// 0 : Energie, 1 : Cinetique, 2 : Couplage, 3 : Rappel
-						//		0, 1, 2 : Somme, 3, 4, 5 : droite/gauche
+						//	Observables	:	0 Energie, 1 Cinetique, 2 Couplage, 3 Rappel
+						//	Capteurs	:	0, 1, 2 : Somme, 3, 4, 5 : droite/gauche
 		//	SOMME
 	if((*observables).observable[0].maximumSomme!=0.0)
 		{
@@ -279,7 +278,6 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		}
 	else
 		{
-	//fprintf(stderr, "(*observables).observable[0].maximumSomme==0.0\n");
 		a = 0.0;
 		}
 	y0 = (*capteurs).capteur[0].yZero;
@@ -289,7 +287,6 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		(*capteurs).capteur[0].somme[i].y = (int)(a*(*observables).observable[3].somme[k]) + y0;
 		(*capteurs).capteur[1].somme[i].y = (int)(a*(*observables).observable[1].somme[k]) + y0;
 		(*capteurs).capteur[2].somme[i].y = (int)(a*(*observables).observable[2].somme[k]) + y0;
-		//(*capteurs).capteur[3].somme[i].y = (int)(a*(*observables).observable[3].somme[k]) + y0;
 		}
 
 
@@ -300,7 +297,6 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		}
 	else
 		{
-	//fprintf(stderr, "(*observables).observable[0].maximumSomme==0.0\n");
 		a = 0.0;
 		}
 	y0 = (*capteurs).capteur[3].yZero;
@@ -310,151 +306,15 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		(*capteurs).capteur[3].gauche[i].y = (int)(a*(*observables).observable[0].gauche[k]) + y0;
 		(*capteurs).capteur[3].droite[i].y = (int)(a*(*observables).observable[0].droite[k]) + y0;
 		(*capteurs).capteur[3].somme[i].y = (int)(a*(*observables).observable[0].somme[k]) + y0;
-		//(*capteurs).capteur[4].gauche[i].y = (int)(a*(*observables).observable[1].gauche[k]) + y0;
-		//(*capteurs).capteur[4].droite[i].y = (int)(a*(*observables).observable[1].droite[k]) + y0;
-		//(*capteurs).capteur[5].gauche[i].y = (int)(a*(*observables).observable[2].gauche[k]) + y0;
-		//(*capteurs).capteur[5].droite[i].y = (int)(a*(*observables).observable[2].droite[k]) + y0;
 		}
 
 	return 0;
 	}
 
-int projectionChangePhi(projectionT * projection, float x)
-	{		// Change la position de l'observateur suivant phi
-	float r, psi, phi;
+int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe) {
 
-	r = (*projection).pointDeVue.r;
-	psi = (*projection).pointDeVue.psi;
-	phi = (*projection).pointDeVue.phi + x;
+		// Projection du système sur le rendu en perspective
 
-		// phi reste inférieur à PI
-	if(phi > PI)
-		{
-		phi = PI;
-		}
-
-		// phi reste supérieur à zéro
-	if(phi < 0.0)
-		{
-		phi = 0.0;
-		}
-
-	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
-	projectionReinitialiseBase(projection);
-	return 0;
-	}
-
-int projectionChangePsi(projectionT * projection, float x)
-	{		// Change la position de l'observateur suivant psi
-	float r, psi, phi;
-
-	r = (*projection).pointDeVue.r;
-	psi = (*projection).pointDeVue.psi + x;
-	phi = (*projection).pointDeVue.phi;
-
-	if(psi > PI)
-		{
-		psi = psi - DEUXPI;
-		}
-
-	if(psi < -PI)
-		{
-		psi = psi + DEUXPI;
-		}
-
-	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
-	projectionReinitialiseBase(projection);
-	return 0;
-	}
-
-int projectionChangeTaille(projectionT * projection, float x)
-	{		// Change la taille de la chaîne
-
-	int largeur = (*projection).largeur * x;
-
-	if(largeur > LARGEUR_MAX)
-		{
-		printf("Maximum de la taille ateinte\n");
-		}
-	else
-		{
-		if(largeur < LARGEUR_MIN)
-			{
-			printf("Minimum de la taille ateinte\n");
-			}
-		else
-			{
-			(*projection).largeur = largeur;
-			(*projection).hauteur = (int)(largeur/(*projection).ratioHL);
-			printf("(*projection).hauteur = %d\n", (*projection).hauteur);
-			printf("(*projection).largeur = %d\n", (*projection).largeur);
-			}
-		}
-
-	return 0;
-	}
-
-int projectionChangeDistance(projectionT * projection, float x)
-	{		// Change la distance entre la chaîne et le point de vue
-
-	float distance = (*projection).pointDeVue.r * x;
-
-	if(distance > DISTANCE_MAX)
-		{
-		printf("Distance maximum ateinte\n");
-		}
-	else
-		{
-		if(distance < DISTANCE_MIN)
-			{
-			printf("Distance minimum ateinte\n");
-			}
-		else
-			{
-			vecteurInitialisePolaire(&(*projection).pointDeVue, distance, (*projection).pointDeVue.psi, (*projection).pointDeVue.phi);
-			printf("(*projection).pointDeVue.r = %f\n", (*projection).pointDeVue.r);
-			}
-		}
-
-	return 0;
-	}
-
-/*
-int projectionChangePerspective(projectionT * projection, float x)
-	{		// Change la perspective de la chaîne
-
-		float perspective = (*projection).perspective * x;
-
-	if(perspective > PERSPECTIVE_MAX)
-		{
-		printf("Maximum de la perspective ateinte\n");
-		}
-	else
-		{
-		if(perspective < PERSPECTIVE_MIN)
-			{
-			printf("Minimum de la perspective ateinte\n");
-			}
-		else
-			{
-			(*projection).perspective = perspective;
-			printf("(*projection).perspective = %f\n", (*projection).perspective);
-			}
-		}
-
-	return 0;
-	}
-
-*/
-
-
-/*
-
-		Projection du système sur le rendu en perspective
-
-*/
-int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe)
-	{
 		// Projection du système sur la chaîne de pendule 3D
 	projectionSystemeChaine3D(systeme, projection, graphe);
 
@@ -666,8 +526,110 @@ int projectionSystemeChaine3D(systemeT * systeme, projectionT * projection, grap
 	return 0;
 	}
 
-int projectionAffichePointDeVue(projectionT * projection)
-	{		// Affiche les valeurs de psi et phi
+
+	//-----------------    CHANGE LA PROJECTION     -----------------------//
+
+int projectionChangeFenetre(projectionT * projection, int x, int y) {
+
+		//	Enregistre le changement de la taille de la fenêtre
+
+	(*projection).fenetreX=x;
+	(*projection).fenetreY=y;
+
+	(*projection).ratioXY=(float)x/(float)y;
+
+	projectionReinitialiseBase(projection);
+	return 0;
+	}
+
+int projectionChangePhi(projectionT * projection, float x) {
+
+		// Change la position de l'observateur suivant phi
+
+	float r, psi, phi;
+
+	r = (*projection).pointDeVue.r;
+	psi = (*projection).pointDeVue.psi;
+	phi = (*projection).pointDeVue.phi + x;
+
+		// phi reste inférieur à PI
+	if(phi > PI)
+		{
+		phi = PI;
+		}
+
+		// phi reste supérieur à zéro
+	if(phi < 0.0)
+		{
+		phi = 0.0;
+		}
+
+	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
+	projectionReinitialiseBase(projection);
+
+	return 0;
+	}
+
+int projectionChangePsi(projectionT * projection, float x) {
+
+		// Change la position de l'observateur suivant psi
+
+	float r, psi, phi;
+
+	r = (*projection).pointDeVue.r;
+	psi = (*projection).pointDeVue.psi + x;
+	phi = (*projection).pointDeVue.phi;
+
+	if(psi > PI)
+		{
+		psi = psi - DEUXPI;
+		}
+
+	if(psi < -PI)
+		{
+		psi = psi + DEUXPI;
+		}
+
+	vecteurInitialisePolaire(&(*projection).pointDeVue, r, psi, phi);
+	projectionReinitialiseBase(projection);
+
+	return 0;
+	}
+
+int projectionChangeTaille(projectionT * projection, float x) {
+
+		// Change la taille de la chaîne
+
+	int largeur = (*projection).largeur * x;
+
+	if(largeur > LARGEUR_MAX)
+		{
+		printf("Maximum de la taille ateinte\n");
+		}
+	else
+		{
+		if(largeur < LARGEUR_MIN)
+			{
+			printf("Minimum de la taille ateinte\n");
+			}
+		else
+			{
+			(*projection).largeur = largeur;
+			(*projection).hauteur = (int)(largeur/(*projection).ratioLH);
+			printf("(*projection).hauteur = %d\n", (*projection).hauteur);
+			printf("(*projection).largeur = %d\n", (*projection).largeur);
+			}
+		}
+
+	return 0;
+	}
+
+	//-----------------    AFFICHAGE      -----------------------//
+
+int projectionAffichePointDeVue(projectionT * projection) {
+
+		// Affiche les valeurs de psi et phi
+
 	float r, psi, phi;
 
 	r = (*projection).pointDeVue.r;
@@ -682,8 +644,8 @@ int projectionAffichePointDeVue(projectionT * projection)
 	}
 
 
-void projectionAffiche(projectionT * projection)
-	{
+void projectionAffiche(projectionT * projection) {
+
 	//	Affiche les paramètres de la projection
 
 	printf(" Point de vue\n");

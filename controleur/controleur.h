@@ -79,11 +79,12 @@ int controleurEvolutionSysteme(controleurT * controleur);
 
 int controleurDestruction(controleurT * control);
 
-int controleurCommandes(controleurT * controleur, int zone);
 
 void controleurChangeMode(controleurT * controleur);
 void controleurChangeVitesse(controleurT * controleur, float facteur);
 
 int controleurInitialiseNombre(controleurT * controleur, int nombre);
+
+void controleurPostReinitialisation(controleurT * controleur);
 
 #endif

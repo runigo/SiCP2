@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2020, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.4.4 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -30,12 +30,7 @@ termes.
 */
 
 #include "controleurClavier.h"
-/*
-int controleurClavier(controleurT * controleur);
-int controleurClavierMaj(controleurT * controleur);
-int controleurClavierCtrl(controleurT * controleur);
-int controleurClavierCtrlMaj(controleurT * controleur);
-*/
+
 int controleurClavier(controleurT * controleur)
 	{
 	switch ((*controleur).interface.evenement.key.keysym.sym)
@@ -322,12 +317,12 @@ int controleurClavierCtrl(controleurT * controleur)
 	return reinitialisation;
 	}
 
-int controleurClavierCtrlMaj(controleurT * controleur)
-	{
+int controleurClavierCtrlMaj(controleurT * controleur) {
+
+		//		Sauvegarde du système
+
 	switch ((*controleur).interface.evenement.key.keysym.sym)
 		{
-		    // Sauvegarde du système
-
 		case SDLK_a:
 			fprintf(stderr, "Sauvegarde du système\n");
 			fichierEcriture(&(*controleur).systeme, &(*controleur).graphe, "a");break;

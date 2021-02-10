@@ -31,70 +31,23 @@ termes.
 
 #include "controleur.h"
 #include "controleurClavier.h"
-#include "controleurSouris.h"
-
-	//	INITIALISATION - SUPRESSION
-
 
 	//	ÉVOLUTION
-
 
 int controleurEvolution(controleurT * controleur);
 
 int controleurProjection(controleurT * controleur);
-//int controleurEvolutionSysteme(controleurT * controleur);
+int controleurEvolutionSysteme(controleurT * controleur);
 int controleurConstructionGraphique(controleurT * controleur);
 
 int controleurTraiteEvenement(controleurT * controleur);
 
 int controleurKEYDOWN(controleurT * controleur);
 
-void controleurReinitialisationFichiers(controleurT * controleur);
+	//	CHANGE
 
-int controleurCommandes(controleurT * controleur, int zone);
-int controleurInitialiseParametres(controleurT * controleur, int forme);
-int controleurInitialiseFluxons(controleurT * controleur);
-int controleurInitialiseNulle(controleurT * controleur);
-int controleurInitialiseNombre(controleurT * controleur, int nombre);
+	//	SUPRESSION
 
-int controleurInitialiseParametres(controleurT * controleur, int forme);
-//int controleurInitialiseFluxons(controleurT * controleur);
-int controleurInitialiseNulle(controleurT * controleur);
-
-int controleurSouris(controleurT * controleur);
-int controleurDefile(controleurT * controleur);
-int controleurDefilePointDeVue(controleurT * controleur);
-int controleurDefileCommandes(controleurT * controleur, int zone);
-void controleurBoutonSouris(controleurT * controleur, int appui);
-
-
-
-	//	-------  INITIALISATION - SUPRESSION  -------  //
-
-int controleurDestruction(controleurT * control)
-	{
-
-
-	fprintf(stderr, "Suppression du système\n");
-	systemeSuppression(&(*control).systeme);
-
-	fprintf(stderr, "Suppression du graphe\n");
-	grapheSuppression(&(*control).graphe);
-
-	fprintf(stderr, "Suppression de l'horloge\n");
-	horlogeSuppression(&(*control).horloge);
-
-	fprintf(stderr, "Suppression du rendu\n");
-	graphiqueDestruction(&(*control).graphique);
-
-	fprintf(stderr, "Suppression de la fenêtre\n");
-	interfaceDestruction(&(*control).interface);
-
-	fprintf(stderr, "Sortie de la SDL\n");
-	interfaceQuitteSDL();
-
-	return 0;
-	}
 
 
 	//	-------  ÉVOLUTION  -------  //
@@ -224,13 +177,13 @@ int controleurTraiteEvenement(controleurT * controleur)
 		case SDL_QUIT:
 			(*controleur).sortie = 1;break;
 		case SDL_MOUSEWHEEL:
-			controleurDefile(controleur);break;
+			controleurSourisDefile(controleur);break;
 		case SDL_MOUSEMOTION:
 			controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
-			controleurBoutonSouris(controleur, 1);break;
+			controleurSourisBouton(controleur, 1);break;
 		case SDL_MOUSEBUTTONUP:
-			controleurBoutonSouris(controleur, 0);break;
+			controleurSourisBouton(controleur, 0);break;
 		case SDL_USEREVENT:
 			controleurEvolution(controleur);break;
 		case SDL_KEYDOWN:
@@ -273,14 +226,14 @@ int controleurKEYDOWN(controleurT * controleur)
 				{
 				if (controleurClavierMaj(controleur) == 1)
 					{
-					controleurReinitialisationFichiers(controleur);
+					controleurPostReinitialisation(controleur);
 					}
 				}
 			else
 				{
 				if (controleurClavierCtrl(controleur) == 1)
 					{
-					controleurReinitialisationFichiers(controleur);
+					controleurPostReinitialisation(controleur);
 					}
 				}
 			}
@@ -289,9 +242,9 @@ int controleurKEYDOWN(controleurT * controleur)
 	return (*controleur).sortie;
 	}
 
-void controleurReinitialisationFichiers(controleurT * controleur) {
+void controleurPostReinitialisation(controleurT * controleur) {
 
-		//fprintf(stderr, "Remise à zéro des observables temporelles\n");
+		//		Remise à zéro des observables
 
 	observablesInitialise(&(*controleur).observables);
 
@@ -299,15 +252,21 @@ void controleurReinitialisationFichiers(controleurT * controleur) {
 	}
 
 
+					//	-------  CHANGE  -------  //
+
 void controleurChangeMode(controleurT * controleur) {
+
+		//		Change le mode pause
 
 	(*controleur).options.modePause = - (*controleur).options.modePause;
 
 	return;
 	}
 
-void controleurChangeVitesse(controleurT * controleur, float facteur)
-	{
+void controleurChangeVitesse(controleurT * controleur, float facteur) {
+
+		//		Change la vitesse de la simulation
+
 	if(facteur < 0.0)
 		{
 		(*controleur).options.duree = DUREE;
@@ -347,104 +306,33 @@ void controleurChangeVitesse(controleurT * controleur, float facteur)
 	return;
 	}
 
-int controleurInitialiseParametres(controleurT * controleur, int forme)
-	{
 
-	switch(forme)
-		{
-		case 0:
-			controleurInitialiseNulle(controleur);break;
-		case 1:
-			controleurInitialiseNulle(controleur);break;
-		case 2:
-			controleurInitialiseNulle(controleur);
-			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 1);
-			changeFormeDissipation(&(*controleur).systeme, 2);break;
-		case 3:
-			controleurInitialiseFluxons(controleur);
-			changeDissipation(&(*controleur).systeme, 0.33);break;
-		case 4:
-			controleurInitialiseFluxons(controleur);
-			changeFormeDissipation(&(*controleur).systeme, 2);	// Extrémitée absorbante
-			break;
-		default:
-			controleurInitialiseNulle(controleur);break;
-		}
-	return 0;
-	}
+	//	-------  SUPRESSION  -------  //
 
-int controleurInitialiseNombre(controleurT * controleur, int nombre)
-	{
+int controleurDestruction(controleurT * control){
 
-	switch(nombre)
-		{
-		case 1:
-			controleurInitialiseNulle(controleur);break;
-		case 2:
-			controleurInitialiseNulle(controleur);
-			moteursChangeGenerateur(&(*controleur).systeme.moteurs, 1);
-			changeFormeDissipation(&(*controleur).systeme, 2);break;
-		case 3:
-			controleurInitialiseFluxons(controleur);
-			changeDissipation(&(*controleur).systeme, 0.33);break;
-		case 4:
-			controleurInitialiseFluxons(controleur);
-			changeFormeDissipation(&(*controleur).systeme, 2);	// Extrémitée absorbante
-			break;
-		default:
-			controleurInitialiseNulle(controleur);break;
-		}
+		//		Suppression du controleur
 
+	fprintf(stderr, "Suppression du système\n");
+	systemeSuppression(&(*control).systeme);
+
+	fprintf(stderr, "Suppression du graphe\n");
+	grapheSuppression(&(*control).graphe);
+
+	fprintf(stderr, "Suppression de l'horloge\n");
+	horlogeSuppression(&(*control).horloge);
+
+	fprintf(stderr, "Suppression du rendu\n");
+	graphiqueDestruction(&(*control).graphique);
+
+	fprintf(stderr, "Suppression de la fenêtre\n");
+	interfaceDestruction(&(*control).interface);
+
+	fprintf(stderr, "Sortie de la SDL\n");
+	interfaceQuitteSDL();
 
 	return 0;
 	}
 
-int controleurInitialiseNulle(controleurT * controleur)
-	{
-	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
-	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
-
-		// Condition au limites libres
-	changeConditionsLimites(&(*controleur).systeme, 1);
-
-		// Réglage du couplage
-	changeCouplageMoyenne(&(*controleur).systeme);
-
-		// Réglage de la dissipation
-	changeDissipationMoyenne(&(*controleur).systeme);
-	changeFormeDissipation(&(*controleur).systeme, 0);
-
-		// Réglage du moteur josephson
-	moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs, 0);
-	moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
-
-		// Réglage du moteur périodique
-	moteursChangeGenerateur(&(*controleur).systeme.moteurs, 0);
-
-	return 0;
-	}
-
-int controleurInitialiseFluxons(controleurT * controleur)
-	{
-			controleurInitialiseNulle(controleur);
-
-	changeDephasage(&(*controleur).systeme, -6*PI); // Ajoute 3 fluxons
-
-		// Condition au limites périodique
-	changeConditionsLimites(&(*controleur).systeme, 0);
-
-		// Réglage du couplage
-	changeCouplageMoyenne(&(*controleur).systeme);
-
-		// Réglage de la dissipation
-	changeDissipationMoyenne(&(*controleur).systeme);
-	changeFormeDissipation(&(*controleur).systeme, 1);
-
-		// Réglage du moteur josephson
-	moteursInitialiseEtatJosephson(&(*controleur).systeme.moteurs, 1);
-	moteursChangeJosephsonMoyenne(&(*controleur).systeme.moteurs);
-
-	return 0;
-	}
 
 //////////////////////////////////////////////////////////////////////////////////////

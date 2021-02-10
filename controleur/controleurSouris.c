@@ -1,7 +1,7 @@
 /*
-Copyright septembre 2020, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.4.4 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -31,86 +31,65 @@ termes.
 
 #include "controleurSouris.h"
 
+int controleurSourisCommandes(controleurT * controleur, int zone);
 int controleurSourisDefilePointDeVue(controleurT * controleur);
 int controleurSourisDefileCommandes(controleurT * controleur, int zone);
-
-int controleurSourisCommandes(controleurT * controleur, int zone);
-
-
-int controleurSouris(controleurT * controleur);
-int controleurDefile(controleurT * controleur);
-int controleurDefilePointDeVue(controleurT * controleur);
-int controleurDefileCommandes(controleurT * controleur, int zone);
-void controleurBoutonSouris(controleurT * controleur, int appui);
+void controleurSourisInitialisePosition(controleurT * controleur, int position);
 
 int controleurSouris(controleurT * controleur)
 	{
 				// Action des mouvements de la souris
-	float x, y;
+
 	if((*controleur).appui==1)
 		{
 		if( (*controleur).commandes.sourisX < (*controleur).commandes.rotatifs && (*controleur).commandes.sourisY < (*controleur).commandes.bas )
 			{
-			//fprintf(stderr, "controleurSouris xrel = %d\n", (*controleur).interface.evenement.motion.xrel);
-			x=-0.0031*(float)((*controleur).interface.evenement.motion.xrel);
-			y=0.0031*(float)((*controleur).interface.evenement.motion.yrel);
-				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-				//fprintf(stderr, "controleurSouris yrel = %d\n", (*controleur).interface.evenement.motion.yrel);
-			projectionChangePsi(&(*controleur).projection, x);
-			projectionChangePhi(&(*controleur).projection, y);
+			projectionChangePsi(&(*controleur).projection, (-0.0031*(float)((*controleur).interface.evenement.motion.xrel)));
+			projectionChangePhi(&(*controleur).projection, (0.0031*(float)((*controleur).interface.evenement.motion.yrel)));
 			}
 		}
-	return (*controleur).sortie;
+	return 0;
 	}
 
-int controleurDefile(controleurT * controleur)
+int controleurSourisDefile(controleurT * controleur)
 	{
 				// Action des mouvements de la mollette
 
 	if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
 		{
-		controleurDefileCommandes(controleur, 1);
+		controleurSourisDefileCommandes(controleur, 1);
 		}
 	else
 		{
 		if((*controleur).commandes.sourisY>(*controleur).commandes.bas)
 			{
-			controleurDefileCommandes(controleur, 3);
+			controleurSourisDefileCommandes(controleur, 3);
 			}
 		else
 			{
-			controleurDefilePointDeVue(controleur);
+			controleurSourisDefilePointDeVue(controleur);
 			}
 		}
 	return 0;
 	}
 
-int controleurDefilePointDeVue(controleurT * controleur)
+int controleurSourisDefilePointDeVue(controleurT * controleur)
 	{
 				// Action des mouvements de la mollette dans la zone 1
 
 	if((*controleur).interface.evenement.wheel.y > 0) // scroll up
 		{
-		//projectionChangeDistance(&(*controleur).projection, 1.1);
 		projectionChangeTaille(&(*controleur).projection, 1.03);
-		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
-		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
 	else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
 		{
-		//projectionChangeDistance(&(*controleur).projection, 0.9);
 		projectionChangeTaille(&(*controleur).projection, 0.97);
-		//fprintf(stderr, "evenement.wheel.y = %d\n", (*controleur).interface.evenement.wheel.y);
-		//fprintf(stderr, "Distance = %f\n", (*controleur).projection.pointDeVue.r);
 		}
-
-	//if(event.wheel.x > 0) // scroll right{}
-	//else if(event.wheel.x < 0) // scroll left{}
 
 	return 0;
 	}
 
-void controleurBoutonSouris(controleurT * controleur, int appui)
+void controleurSourisBouton(controleurT * controleur, int appui)
 	{
 				// Action du bouton gauche de la souris
 
@@ -122,29 +101,29 @@ void controleurBoutonSouris(controleurT * controleur, int appui)
 			{
 			if((*controleur).commandes.sourisX>(*controleur).commandes.boutons)
 				{
-				controleurCommandes(controleur, 2);
+				controleurSourisCommandes(controleur, 2);
 				}
 			else
 				{
-				controleurCommandes(controleur, 1);
+				controleurSourisCommandes(controleur, 1);
 				}
 			}
 		else
 			{
 			if((*controleur).commandes.sourisY>(*controleur).commandes.bas)
 				{
-				controleurCommandes(controleur, 3);
+				if(controleurSourisCommandes(controleur, 3)==1) controleurPostReinitialisation(controleur);
 				}
 			else
 				{
-				controleurCommandes(controleur, 0);
+				controleurSourisCommandes(controleur, 0);
 				}
 			}
 		}
 	return;
 	}
 
-int controleurCommandes(controleurT * controleur, int zone)
+int controleurSourisCommandes(controleurT * controleur, int zone)
 	{
 				// Action du bouton gauche de la souris
 				// dans les zones 2 et 3
@@ -193,6 +172,9 @@ int controleurCommandes(controleurT * controleur, int zone)
 				;
 			}
 		}
+
+	int reinitialisation;
+
 	if(zone==3)
 		{
 		commande = commandeTriangles(&(*controleur).commandes);
@@ -221,37 +203,59 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 10:
 				controleurChangeVitesse(controleur, 3.1);break;
 			case 11:
-				systemeInitialisePosition(&(*controleur).systeme, 1);break;
+				controleurSourisInitialisePosition(controleur, 1);
+				reinitialisation = 1; break;
 			case 12:
-				systemeInitialisePosition(&(*controleur).systeme, 2);break;
+				controleurSourisInitialisePosition(controleur, 2);
+				reinitialisation = 1; break;
 			case 13:
-				systemeInitialisePosition(&(*controleur).systeme, 3);break;
+				controleurSourisInitialisePosition(controleur, 3);
+				reinitialisation = 1; break;
 			case 14:
-				systemeInitialisePosition(&(*controleur).systeme, 4);break;
+				controleurSourisInitialisePosition(controleur, 4);
+				reinitialisation = 1; break;
 			case 15:
-				systemeInitialisePosition(&(*controleur).systeme, 5);break;
+				controleurSourisInitialisePosition(controleur, 5);
+				reinitialisation = 1; break;
 			case 16:
-				systemeInitialisePosition(&(*controleur).systeme, 6);break;
+				controleurSourisInitialisePosition(controleur, 6);
+				reinitialisation = 1; break;
 			case 17:
-			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "aaa");break;
+			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "aaa");
+				reinitialisation = 1; break;
 				//controleurInitialiseNombre(controleur, 1);break;
 			case 18:
-			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "bbb");break;
+			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "bbb");
+				reinitialisation = 1; break;
 				//controleurInitialiseNombre(controleur, 2);break;
 			case 19:
-			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "ccc");break;
+			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "ccc");
+				reinitialisation = 1; break;
 				//controleurInitialiseNombre(controleur, 3);break;
 			case 20:
-			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "ddd");break;
+			    fichierLecture(&(*controleur).systeme, &(*controleur).graphe, "ddd");
+				reinitialisation = 1; break;
 				//controleurInitialiseNombre(controleur, 4);break;
 			default:
 				;
 			}
 		}
-	return 0;
+	return reinitialisation;
 	}
 
-int controleurDefileCommandes(controleurT * controleur, int zone)
+void controleurSourisInitialisePosition(controleurT * controleur, int position) {
+
+		//	Supprime les solitons, libère les extrémités
+		//		et réinitialise les positions.
+
+	changeFixeDephasage(&(*controleur).systeme, 0);
+	changeConditionsLimites(&(*controleur).systeme, 1);
+	systemeInitialisePosition(&(*controleur).systeme, position);
+
+	return;
+	}
+
+int controleurSourisDefileCommandes(controleurT * controleur, int zone)
 	{
 	int commande = -1;
 	if(zone==1)
@@ -303,9 +307,9 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 			switch(commande)
 				{
 				case 0:
-					controleurDefilePointDeVue(controleur);break;
+					controleurSourisDefilePointDeVue(controleur);break;
 				case 1:
-					controleurDefilePointDeVue(controleur);break;
+					controleurSourisDefilePointDeVue(controleur);break;
 				case 2:
 					controleurChangeVitesse(controleur, 1.1);break;
 				case 3:
@@ -319,9 +323,9 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 			switch(commande)	
 				{
 				case 0:
-					controleurDefilePointDeVue(controleur);break;
+					controleurSourisDefilePointDeVue(controleur);break;
 				case 1:
-					controleurDefilePointDeVue(controleur);break;
+					controleurSourisDefilePointDeVue(controleur);break;
 				case 2:
 					controleurChangeVitesse(controleur, 0.91);break;
 				case 3:

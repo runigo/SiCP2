@@ -334,4 +334,22 @@ void changeDephasage(systemeT * systeme, int fluxon) {
 	return;
 	}
 
+void changeFixeDephasage(systemeT * systeme, int fluxon) {
+
+	// Fixe le déphasage du premier pendule
+
+	float nouveau =  fluxon*DEUXPI;
+
+	if(nouveau>(-DEPHASAGE_MAX) && nouveau<DEPHASAGE_MAX)
+		{
+		(*systeme).premier->pendule.dephasage = nouveau;
+		}
+	else
+		{
+		printf("Dephasage limite atteinte. \n");
+		}
+
+	return;
+	}
+
 //////////////////////////////////////////////////////////////////////////

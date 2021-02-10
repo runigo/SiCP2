@@ -49,5 +49,6 @@ void changeFormeDissipation(systemeT * systeme, int forme);
 int changeConditionsLimites(systemeT * systeme, int libreFixe);
 void changeLimite(systemeT * systeme);
 void changeDephasage(systemeT * systeme, int fluxon);
+void changeFixeDephasage(systemeT * systeme, int fluxon);
 
 #endif

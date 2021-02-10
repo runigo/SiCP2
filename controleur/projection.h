@@ -38,33 +38,33 @@ termes.
 #include "../interface/commandes.h"
 #include "../interface/capteurs.h"
 
+				//		Projection de la chaîne de pendules et des
+				//		observables sur l'interface graphique
+
 typedef struct ProjectionT projectionT;
 	struct ProjectionT
 		{
-		// Support fixe
-		vecteurT support[14];
 
-		// Position observateur
-		vecteurT pointDeVue;
+		vecteurT support[14];	// Support fixe
 
-		// Vecteurs perpendiculaires
+
+		vecteurT pointDeVue;	// Position observateur
+
+			// Vecteurs perpendiculaires à pointDeVue
 		vecteurT vecteurPhi;
 		vecteurT vecteurPsi;
 
 		int hauteur;	// hauteur de la chaîne
 		int largeur;	// largeur de la chaîne
-		float ratioHL;
+		float ratioLH;	// rapport largeur / hauteur
 
 		int fenetreX;	// hauteur de la fenêtre
 		int fenetreY;	// largeur de la fenêtre
-		float ratioXY;
+		float ratioXY;	// rapport largeur / hauteur
 
+		int rotation;	// rotation automatique du point de vue
 
-		//float perspective;
-
-		int rotation;	// rotation du point de vue
-
-		// facteurs entre les grandeurs et la position des boutons rotatifs
+			// facteurs entre les grandeurs et la position des boutons rotatifs
 		float logCouplage;
 		float logDissipation;
 		float logJosephson;
@@ -72,24 +72,24 @@ typedef struct ProjectionT projectionT;
 		float logFrequence;
 		};
 
+
+	//-----------------    INITIALISATION      -----------------------//
 int projectionInitialise(projectionT * projection);
-//int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur);
+void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);
 
-
-int projectionChangeFenetre(projectionT * projection, int x, int y);
-
+	//-----------------    PROJECTION      -----------------------//
 int projectionSystemeChaineDePendule(systemeT * systeme, projectionT * projection, grapheT * graphe);
 int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs);
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
 
-void projectionInitialiseAxeFixe(grapheT * fixe, int nombre);
-
+	//-----------------    CHANGE      -----------------------//
+int projectionChangeFenetre(projectionT * projection, int x, int y);
 int projectionChangePhi(projectionT * projection, float x);
 int projectionChangePsi(projectionT * projection, float x);
 int projectionChangeTaille(projectionT * projection, float x);
-int projectionChangeDistance(projectionT * projection, float x);
-//int projectionChangePerspective(projectionT * projection, float x);
 
+	//-----------------    AFFICHAGE      -----------------------//
 int projectionAffichePointDeVue(projectionT * projection);
 void projectionAffiche(projectionT * projection);
+
 #endif

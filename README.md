@@ -1,10 +1,11 @@
 # SiCP2
 Simulateur de chaîne de pendules
 
-Ce programme sert à simuler l'équation d'une chaîne de pendules
-et à en donner une représentation graphique.
+Ce programme simule l'équation de Sine-Gordon,
+ donne une représentation graphique, 
+ et permet une interaction dynamique.
 
-Il est écrit en C et nécessite l'installation de la librairie graphique SDL 2
+Il est écrit en C et sa compilation nécessite la présence de la librairie graphique SDL2
 
 
 INSTALLATION
@@ -23,22 +24,25 @@ Placez-vous dans le répertoire des sources, effectuez la compilation,
 
 Lancer l'exécutable créé :
 
-	$ ./SiCP
+	$ ./SiCP2
 
 Lancer l'exécutable avec d'éventuelles options :
 
-	$ ./SiCP fond 10
+	$ ./SiCP2 nombre 10
 
 
 OPTION DE LA LIGNE DE COMMANDE
 
-	aide			Affiche l'aide de SiCP
 
-	fond			Couleur du fond de l'affichage
-	dt			Discrétisation du temps 
-	pause			Pause entre les affichages en ms
+	dt				Discrétisation du temps [0.0003 ~ 0.003]
+	duree			Nombre d'incrémentation entre deux affichages [1 ~ 600]
+	modePause		pause(-1) ou simulation (1)
+
 	soliton			Nombre de solitons initiales
-	nombre			Nombre de pendules
+	nombre			Nombre de pendules [1 ~ 400]
+
+	support			graphisme du support [-1 0 1]
+	aide			Affiche l'aide de SiCP
 
 UTILISATION
 
@@ -81,11 +85,17 @@ la chaîne.
 Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci
 permettent la rotation du point de vue de l'observateur.
 
+La molette de la souris permet de régler les paramètres des boutons rotatifs
+ et de changer la distance du point de vue
+
+Le bouton de la souris permet de sélectionner les paramètres du panneau de droite
+ et de celui du bas.
+
 LICENCE
 
-Copyright mars 2018, Stephan Runigo
+Copyright fevrier 2021, Stephan Runigo
 runigo@free.fr
-SiCP 2.0 simulateur de chaîne de pendules
+SiCP 2.5 simulateur de chaîne de pendules
 Ce logiciel est un programme informatique servant à simuler l'équation
 d'une chaîne de pendules et à en donner une représentation graphique.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
@@ -95,10 +105,10 @@ de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 En contrepartie de l'accessibilité au code source et des droits de copie,
 de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
+offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
 seule une responsabilité restreinte pèse sur l'auteur du programme, le
 titulaire des droits patrimoniaux et les concédants successifs.
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
+A cet égard l'attention de l'utilisateur est attirée sur les risques
 associés au chargement, à l'utilisation, à la modification et/ou au
 développement et à la reproduction du logiciel par l'utilisateur étant
 donné sa spécificité de logiciel libre, qui peut le rendre complexe à
@@ -111,4 +121,5 @@ sécurité de leurs systèmes et ou de leurs données et, plus généralement,
 Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
 pris connaissance de la licence CeCILL, et que vous en avez accepté les
 termes.
+
 ////////////////////////////////////////////////////////////////

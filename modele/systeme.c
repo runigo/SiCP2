@@ -31,22 +31,21 @@ termes.
 
 #include "systeme.h"
 
-/*------------------------  ÉVOLUTION TEMPORELLE  -------------------------*/
+	//		ÉVOLUTION TEMPORELLE
 void systemeIncremente(systemeT * systeme);
 void systemeCouplage(systemeT * systeme);
 void systemeInertie(systemeT * systeme);
 void systemeCourantLimite(systemeT * systeme);
 
-/*----------------JAUGE ET NORMALISATION-------------------*/
+	//		JAUGE ET NORMALISATION
 void systemeJaugeZero(systemeT * systeme);
 
-/*----------------CREATION SUPPRESSION-------------------*/
+	//		CREATION SUPPRESSION
 
-/*----------------  INITIALISATION  -------------------*/
+	//		INITIALISATION
 void systemeInitialisePendule(systemeT * systeme);
 void systemeInitialiseLimiteInfini(systemeT * systeme);
 
-/*--------------------------------------------------------------*/
 
 
 /*------------------------  ÉVOLUTION TEMPORELLE  -------------------------*/
@@ -54,22 +53,22 @@ void systemeInitialiseLimiteInfini(systemeT * systeme);
 void systemeEvolution(systemeT * systeme, int duree) {
 	int i;
 
-	//	Évolution du système pendant duree*dt
+		//	Évolution du système pendant duree*dt
 	for(i=0;i<duree;i++) {
 		systemeCouplage(systeme);
 		systemeInertie(systeme);
 		systemeIncremente(systeme);
 		}
 
-	//	Limite la valeur des paramètres croissants
+		//	Limite la valeur des paramètres croissants
 	if((*systeme).moteurs.generateur==0)
 		{
-		//	Rapproche la position du premier pendule de zéro
+			//	Rapproche la position du premier pendule de zéro
 		systemeJaugeZero(systeme);
 		}
 	else
 		{
-		//	Rapproche les compteurs des moteurs de zéro
+			//	Rapproche les compteurs des moteurs de zéro
 		moteurJaugeZero(&(*systeme).moteurs);
 		}
 	return;
@@ -77,7 +76,7 @@ void systemeEvolution(systemeT * systeme, int duree) {
 
 void systemeCouplage(systemeT * systeme) {
 
-		//	Calcul les forces de couplage,
+		//	Calcule les forces de couplage,
 
 	chaineT *iter;
 	iter=(*systeme).premier;
@@ -99,8 +98,9 @@ void systemeInertie(systemeT * systeme) {
 	float courantJosephson = (*systeme).moteurs.courantJosephson * (*systeme).moteurs.dt * (*systeme).moteurs.dt * (*systeme).moteurs.etatJosephson;
 	float generateur = moteursGenerateur(&(*systeme).moteurs);
 
-			//	Cas des extrémitées
+		//	Cas des extrémitées
 			//  0 : periodiques 1 : libres, 2 : fixes, 3 libre-fixe, 4 fixe-libre
+
 		// Cas du premier pendule
 	if ((*systeme).moteurs.generateur != 0)
 		{
@@ -209,8 +209,6 @@ int systemeCreation(systemeT * systeme)
 
 	systemeInitialisePendule(systeme);
 
-	//systemeChangeLimite(systeme);
-
 	systemeInitialiseLimiteInfini(systeme);
 
 	return 0;
@@ -223,7 +221,6 @@ void systemeSuppression(systemeT * systeme)
 	return;
 	}
 
-/*------------------------------------------------------------------*/
 
 /*----------------  INITIALISATION  -------------------*/
 
@@ -310,7 +307,7 @@ int systemeInitialiseLongueur(systemeT * systeme, float longueur)
 
 int systemeInitialiseDissipation(systemeT * systeme, float dissipation)
 	{
-	if(dissipation>DISSIPATION_MIN && dissipation<DISSIPATION_MAX)
+	if(dissipation>=DISSIPATION_MIN && dissipation<=DISSIPATION_MAX)
 		{
 		(*systeme).dissipation = dissipation;
 		printf("(*systeme).dissipation = %f\n", (*systeme).dissipation);
@@ -345,7 +342,7 @@ int systemeInitialiseCouplage(systemeT * systeme, float couplage)
 	float couplageReduit = 0;
 	int nombre = (*systeme).nombre;
 
-	if(nombre < NOMBRE_MIN || nombre > NOMBRE_MAX)
+	if(nombre <= NOMBRE_MIN || nombre >= NOMBRE_MAX)
 		{
 		nombre = NOMBRE;
 		printf("ERREUR systemeInitialise() (*systeme).nombre = %d\n", (*systeme).nombre);
@@ -353,7 +350,7 @@ int systemeInitialiseCouplage(systemeT * systeme, float couplage)
 
 	couplageReduit = couplage / nombre;
 
-	if(couplageReduit < COUPLAGE_MAX && couplageReduit > COUPLAGE_MIN)
+	if(couplageReduit <= COUPLAGE_MAX && couplageReduit >= COUPLAGE_MIN)
 		{
 		(*systeme).couplage = couplage;
 		printf("(*systeme).couplage = %f\n", (*systeme).couplage);
@@ -369,7 +366,7 @@ int systemeInitialiseCouplage(systemeT * systeme, float couplage)
 
 int systemeInitialiseDephasage(systemeT * systeme, float dephasage)
 	{
-	if(dephasage>=-DEPHASAGE_MAX && dephasage<DEPHASAGE_MAX)
+	if(dephasage>=-DEPHASAGE_MAX && dephasage<=DEPHASAGE_MAX)
 		{
 		(*systeme).dephasage = dephasage;
 		printf("(*systeme).dephasage = %f\n", (*systeme).dephasage);

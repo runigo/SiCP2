@@ -53,25 +53,23 @@ termes.
 
 	//	PARAMÈTRES GRAPHIQUES
 
-#define FENETRE_X 868 // Largeur de la fenêtre
-#define FENETRE_Y 626 // Hauteur de la fenêtre
+#define FENETRE_X 868	// Largeur de la fenêtre
+#define FENETRE_Y 626	// Hauteur de la fenêtre
 
 #define RATIO_CHAINE_FENETRE_X 0.000317 // Vecteur Psi et Phi
-//#define RATIO_CHAINE_FENETRE_Y 0.000677 // Vecteur Psi et Phi
 
 	//	PARAMÈTRES DES CAPTEURS
 
-#define GRAPHES 2 // Nombres de graphes
+#define GRAPHES 2	// Nombres de graphes
 
-#define OBSERVABLES 4 // Nombres d'observables
-#define CAPTEURS 6 // Nombres de capteurs
-#define DUREE_CAPTEURS 128 // Nombre de points en mémoire
+#define OBSERVABLES 4		// Nombres d'observables
+#define CAPTEURS 6			// Nombres de capteurs
+#define DUREE_CAPTEURS 128	// Nombre de points en mémoire
 
-#define BOUTON_COMMANDES 17 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
-
-#define LINEAIRE_COMMANDES 4 // Nombres de commandes linéaires
-#define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
+#define BOUTON_COMMANDES 17 // Nombres de petits boutons
+#define LINEAIRE_COMMANDES 4	// Nombres de commandes linéaires
+#define TRIANGLE_COMMANDES 21	// Nombres de commandes triangulaires
 
 #define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
 
@@ -96,16 +94,16 @@ termes.
 
 	//	Temps réèl : DT * DUREE = TEMPS_AFFICHAGE
 
-#define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
+#define TEMPS_AFFICHAGE 110	// Durée entre les affichages en ms
 
-#define MEMOIRE_CHRONO 10 // 
+#define MEMOIRE_CHRONO 10	// 
 
-#define DUREE 100 // Nombre implicite d'incrémentation du système entre deux affichages.
-#define DUREE_MAX 599 // Nombre maximal d'incrémentation du système entre deux affichages.
+#define DUREE 100		// Nombre implicite d'incrémentation du système entre deux affichages.
+#define DUREE_MAX 600	// Nombre maximal d'incrémentation du système entre deux affichages.
 
-#define DT_MIN 0.0003 // Discrétisation minimale du temps
+#define DT_MIN 0.000299	// Discrétisation minimale du temps
 #define DT 0.0011
-#define DT_MAX 0.003		//	discrétisation maximale du temps
+#define DT_MAX 0.00301	//	discrétisation maximale du temps
 
 
 	//	PARAMÈTRES PHYSIQUE DE LA CHAINE
@@ -113,7 +111,7 @@ termes.
 #define ABSORPTION 2.1		// Facteur de l'extrémité absorbante
 #define NOMBRE_MIN 2		// Nombre minimal de pendules
 #define NOMBRE 150			// Nombre implicite de pendules
-#define NOMBRE_MAX 401		// Nombre maximal de pendules
+#define NOMBRE_MAX 400		// Nombre maximal de pendules
 
 #define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal entre les extrémités
 

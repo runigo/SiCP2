@@ -342,7 +342,7 @@ int systemeInitialiseCouplage(systemeT * systeme, float couplage)
 	float couplageReduit = 0;
 	int nombre = (*systeme).nombre;
 
-	if(nombre <= NOMBRE_MIN || nombre >= NOMBRE_MAX)
+	if(nombre < NOMBRE_MIN || nombre > NOMBRE_MAX)
 		{
 		nombre = NOMBRE;
 		printf("ERREUR systemeInitialise() (*systeme).nombre = %d\n", (*systeme).nombre);

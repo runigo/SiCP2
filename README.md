@@ -5,30 +5,36 @@ Ce programme simule l'équation de Sine-Gordon,
  donne une représentation graphique, 
  et permet une interaction dynamique.
 
-Il est écrit en C et sa compilation nécessite la présence de la librairie graphique SDL2
+Il est écrit en C et utilise la librairie graphique SDL2.
 
 
-INSTALLATION
+INSTALLATION LINUX
 
 Pour installer ce programme sur votre ordinateur, vous devez avoir
 installé la librairie graphique SDL ainsi que les outils permettant
-la compilation :
-Par exemple, avec une distribution basée sur debian, dans un terminal avec les
+la compilation. Par exemple, avec une distribution basée sur debian, dans un terminal avec les
 droits de l'administrateur :
 
 	# apt-get install gcc make libsdl2-dev
 
-Placez-vous dans le répertoire des sources, effectuez la compilation,
+La compilation peut alors être effectuée : placez-vous dans le répertoire contenant les fichiers sources puis lancer la commande make :
 
 	$ make
 
-Lancer l'exécutable créé :
+Le fichier exécutable est alors créé. il suffit alors de l'exécuter :
 
 	$ ./SiCP2
 
-Lancer l'exécutable avec d'éventuelles options :
+Il est possible de lancer l'exécutable avec d'éventuelles options :
 
 	$ ./SiCP2 nombre 10
+
+
+INSTALLATION WINDOWS
+
+La compilation nécessite l'installation et la connaissance des outils de compilation de windows.
+
+L'utilisation sous windows de SiCP2 est également possible en utilisant les fichiers exécutables diponibles sur https://cphysique.github.io/
 
 
 OPTION DE LA LIGNE DE COMMANDE
@@ -39,7 +45,7 @@ OPTION DE LA LIGNE DE COMMANDE
 	modePause		pause(-1) ou simulation (1)
 
 	soliton			Nombre de solitons initiales
-	nombre			Nombre de pendules [1 ~ 400]
+	nombre			Nombre de pendules [1 ~ 600]
 
 	support			graphisme du support [-1 0 1]
 	aide			Affiche l'aide de SiCP
@@ -49,6 +55,8 @@ UTILISATION
 Le terminal dans lequel est lancé l'exécutable affiche des informations
 lors de l'exécution, la fenêtre graphique doit être active pour piloter
 la chaîne.
+
+Le clavier permet de faire varier les paramètres physiques de la chaîne :
 
 	a, q : augmenter, diminuer le couplage
 	z, s : augmenter, diminuer la masse
@@ -81,6 +89,8 @@ la chaîne.
 
 	F9, F10 : diminuent la vitesse de la simulation
 	F11, F12 : augmentent la vitesse de la simulation
+
+Lorsque la touche "majuscule" est enfoncée, les touches alphabétiques réinitialisent la chaîne dans les configurations enregistrées. Lorsque les touche "majuscule" et "contrôle" sont enfoncées, les touches alphabétiques permettent l'enregistrement de la chaîne dans la configuration courante.
 
 Lorsque le bouton de la souris est maintenu, les mouvements de celle-ci
 permettent la rotation du point de vue de l'observateur.

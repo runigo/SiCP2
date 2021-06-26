@@ -99,7 +99,7 @@ termes.
 #define MEMOIRE_CHRONO 10	// 
 
 #define DUREE 100		// Nombre implicite d'incrémentation du système entre deux affichages.
-#define DUREE_MAX 600	// Nombre maximal d'incrémentation du système entre deux affichages.
+#define DUREE_MAX 601	// Nombre maximal d'incrémentation du système entre deux affichages.
 
 #define DT_MIN 0.000299	// Discrétisation minimale du temps
 #define DT 0.0011
@@ -111,7 +111,7 @@ termes.
 #define ABSORPTION 2.1		// Facteur de l'extrémité absorbante
 #define NOMBRE_MIN 2		// Nombre minimal de pendules
 #define NOMBRE 150			// Nombre implicite de pendules
-#define NOMBRE_MAX 400		// Nombre maximal de pendules
+#define NOMBRE_MAX 601		// Nombre maximal de pendules
 
 #define DEPHASAGE_MAX 49*DEUXPI // Déphasage maximal entre les extrémités
 

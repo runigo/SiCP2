@@ -65,8 +65,10 @@ void grapheSuppression(grapheT * graphe)
 	printf("Graphe supprimé\n");
 	}
 
-void grapheChangeSupport(grapheT * graphe)
-	{
+void grapheChangeSupport(grapheT * graphe){
+
+	// Change la représentation graphique du support
+
 	if((*graphe).support==1)
 		{(*graphe).support=0;
 		printf("Support invisible\n");}

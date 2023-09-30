@@ -41,7 +41,7 @@ typedef struct GrapheT grapheT;
 		int supporX[14];
 		int supporY[14];
 
-		int support;
+		int support;	// Change la représentation graphique du support
 
 		int dessous;	// Vue de dessous
 		int arriere;	// Vue de derrière
